@@ -1,0 +1,142 @@
+# Documents:
+*.pdf
+*.csv
+*.xlsx
+*.ini
+*.dat
+*.bak
+*.pov
+*.txt
+*.orig
+*CMakeSettings.json
+
+# Images/Media:
+*.jpeg
+*.jpg
+*.png
+*.pov
+*.bmp
+*.assets
+*.mp4
+*.psd
+*.svg
+*.avi
+*.eps
+*.gif
+
+# Archive/misc:
+*.npz
+*.zip
+*.pyc
+*.bin
+*.dat
+*.npy
+
+# IDE Files:
+*.vcxproj
+*.filters
+*.sln
+*.db
+*.opendb
+*.tlog
+*.cmake
+*.rej
+*.mtl
+*.pyc
+*.user
+
+# Folders:
+**/build
+**/Build
+**/.vs
+**/.vscode
+**/Release
+**/x64
+**/_icons
+**/out
+**/results
+**/Results
+**/.idea
+**/__pycache__
+**/phasesim*
+
+PyChrono/robosoft-Qiyuan/revisions/results1_friction_normalized/
+PyChrono/robosoft-Qiyuan/revisions/results2_friction_constant/
+PyChrono/robosoft-Qiyuan/revisions_aspect_ratio/
+PyChrono/robosoft-Qiyuan/revisions_jamming/k.npy
+PyChrono/robosoft-Qiyuan/revisions_jamming/
+PyChrono/robosoft-Qiyuan/revisions_locomotion/
+python/Pychrono/local_sensing/gnss-ins-sim-master/
+python/Reinforcement_Learning/PyMunk/Esteban/utils/conversion.py
+python/Reinforcement_Learning/Martin Code/fixed_coward1.py
+python/Reinforcement_Learning/PyMunk/Amin/Real_World_Data/
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Create_Expert Trajectories.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/grabbing_env_params.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Grabbing_Environment.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Grabbing_Environment_Playground.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/pretrain_model_sb2.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/pretrain_model_sb3.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Expert_Trajectory_1/Environment_Expert_Trajectory_1.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Expert_Trajectory_1/Expert_Trajectory_1_env_params.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Expert_Trajectory_2/Environment_Expert_Trajectory_2.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Expert_Trajectory_2/Expert_Trajectory_2_env_params.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Expert_Trajectory_BAD/Environment_Expert_Trajectory_BAD.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Imitation_Learning/Expert_Trajectory_BAD/Expert_Trajectory_BAD_env_params.py
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Stars/Experiments/
+python/Reinforcement_Learning/PyMunk/Esteban/Test Environment/PotField Testing/
+python/David/test.ipynb
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/PyMunk_Env/First_Multiagent_Test/.data-00000-of-00001
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/PyMunk_Env/First_Multiagent_Test/.index
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/PyMunk_Env/First_Multiagent_Test/.meta
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/PyMunk_Env/First_Multiagent_Test/checkpoint
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/PyMunk_Env/First_Multiagent_Test/Training_Outputs.interactive
+python/Reinforcement_Learning/PyMunk/Aditya/pymunkEnvTestRun.py
+python/Amin/Real_World_Data/bag_reader.py
+python/Amin/Real_World_Data/data_investigation.ipynb
+python/Amin/Real_World_Data/straight_line/2021-05-16 21h43/_2021-05-16-21-44-05.bag
+python/Amin/Real_World_Data/straight_line/2021-05-16 21h49/_2021-05-16-21-50-01.bag
+python/Amin/Real_World_Data/straight_line_rotating/2021-05-16 21h23/_2021-05-16-21-24-31.bag
+python/Amin/Real_World_Data/straight_line_rotating/2021-05-16 21h30_0/_2021-05-16-21-31-35.bag
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/Basic_Tests/Test_2/.data-00000-of-00001
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/Basic_Tests/Test_2/.index
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/Basic_Tests/Test_2/.meta
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/Basic_Tests/Test_2/checkpoint
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/Basic_Tests/Test_3/.data-00000-of-00001
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/Basic_Tests/Test_3/.index
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/Basic_Tests/Test_3/.meta
+python/Reinforcement_Learning/MultiAgent-Particle/MultiAgentRL_Practice/Basic_Tests/Test_3/checkpoint
+python/Reinforcement_Learning/MultiAgent-Particle/Repos/maddpg_master/.gitignore
+python/Reinforcement_Learning/MultiAgent-Particle/Repos/maddpg_master/README.md
+python/Reinforcement_Learning/MultiAgent-Particle/Repos/maddpg_master/setup.py
+python/Reinforcement_Learning/MultiAgent-Particle/Repos/multiagent-particle-envs-master/.gitignore
+python/Reinforcement_Learning/MultiAgent-Particle/Repos/multiagent-particle-envs-master/README.md
+python/Reinforcement_Learning/MultiAgent-Particle/Repos/multiagent-particle-envs-master/setup.py
+python/Reinforcement_Learning/MultiAgent-Particle/Repos/multiagent-particle-envs-master/bin/__init__.py
+python/Reinforcement_Learning/MultiAgent-Particle/Repos/multiagent-particle-envs-master/bin/interactive.py
+python/Reinforcement_Learning/PyMunk/.ipynb_checkpoints/matplotlib_util_demo-checkpoint.ipynb
+python/Reinforcement_Learning/PyMunk/.ipynb_checkpoints/newtons_cradle_Example-checkpoint.ipynb
+python/Reinforcement_Learning/PyMunk/Esteban/Examples/conversion.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/~WRL2704.tmp
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/test.ipynb
+python/Reinforcement_Learning/PyMunk/Esteban/Test Environment/ClassActionLawsuit.py
+python/Reinforcement_Learning/PyMunk/Esteban/Test Environment/.ipynb_checkpoints/Analytic Analytic Fields-checkpoint.ipynb
+python/Reinforcement_Learning/PyMunk/Esteban/Test Environment/.ipynb_checkpoints/Analytic_fields-checkpoint.ipynb
+python/Reinforcement_Learning/PyMunk/Esteban/Experiment 248 2021-04-28/Strings_Environment_Experiment_248.py
+python/Reinforcement_Learning/PyMunk/Esteban/Experiment 248 2021-04-28/PPO2_1/events.out.tfevents.1619624564.ESTEBANS-LAPTOP
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Experiment 25 2021-10-28/Environment_Experiment_25.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Experiment 25 2021-10-28/Experiment_25_env_params.py
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Experiment 25 2021-10-28/Experiment_25_RL_params.py
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Stars/cont_training/Experiment 6 2021-10-17/Environment_Experiment_6.py
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Stars/cont_training/Experiment 6 2021-10-17/Experiment_6_env_params.py
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Stars/cont_training/Experiment 6 2021-10-17/Experiment_6_RL_params.py
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Stars/cont_training/Experiment 6 2021-10-17/PPO_1/events.out.tfevents.1634499587.DESKTOP-D3SPALP.17340.0
+python/Reinforcement_Learning/PyMunk/Esteban/Test Environment/JAMoEBA PlayGround/JAMoEBA_utils.py
+C++/Phase_Sim_Sqr/Testing .dat files.ipynb
+C++/Phase_Sim_Sqr/.ipynb_checkpoints/Testing .dat files-checkpoint.ipynb
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/MultiAgent_Tunnel/Experiments/
+python/Reinforcement_Learning/PyMunk/Esteban/Grabbing/Pot_Fields/Experiment 27 2022-01-01/
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Stars/Experiment 12c 2022-01-01/
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Stars/Experiment 13b 2022-01-01/
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Stars/Experiment 13c 2022-01-01/
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Tunnel/Experiment 15_Friction 2021-12-09/
+python/Reinforcement_Learning/PyMunk/Esteban/Obstacle_Field/Tunnel/Experiment 15_Friction_64 2021-12-09/

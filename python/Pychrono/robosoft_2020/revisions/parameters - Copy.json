@@ -1,0 +1,18 @@
+{
+  "sliding_friction": 0.1,
+  "rolling_friction": 0.01,
+  "spinning_friction": 0.001,
+
+  "spring_constant": 200,
+  "interior_mass": 0.04,
+  "interior_diameter":0.05,
+  "data_path": "C:/Chrono/Builds/chrono-develop/bin/data/",
+  "boundary_mass":0.18,
+  "wall_x": 0.5,
+  "height": 0.125,
+  "boundary_bots": 60,
+  "boundary_diameter": 0.07,
+  "data_path": 1,
+  "run_mode": 1,
+  "t_step": 1e-3
+}
