@@ -35,7 +35,7 @@ from scipy.interpolate import RegularGridInterpolator
 from sympy import Plane, Point3D
 from sympy import *
 from scipy.spatial import Delaunay
-# In[]
+
 ###############################################################################
 class robots:
     def __init__(self,name,my_system,body_floor,path):
@@ -4118,6 +4118,26 @@ class import_data:
          
          self.MAG_pressure=np.zeros((self.nb+self.ni,len(self.time)-1))
          self.MAG_pressure_no_boundary=np.zeros((self.ni,len(self.time)-1))
+         
+         
+         
+         
+         
+         
+         self.temp_offset_theta = []
+         self.temp_frames = []
+         self.temp_theta = []
+         self.temp_id = []
+         self.temp_position_x = []
+         self.temp_position_z = []
+         self.temp_force_x = []
+         self.temp_force_z = []  
+         self.temp_vx = []
+         self.temp_vy = []
+         self.temp_c1 = []
+         self.temp_c2 = []
+         
+
          self.Grasp_analysis()
 
 
@@ -4138,23 +4158,26 @@ class import_data:
          if exists(self.mainDirectory+self.name+"/graspParams.npy")==False:
              print("calculating")
              
-             print("extract_contact_forces_ball")
-             self.extract_contact_forces_ball()
-             
-             print("extract_control_forces_ball")
-             self.extract_control_forces_ball()
-             
              print("find_contact_forces_2")
              self.find_contact_forces_2()
              
-             print("find_pressure")
-             self.find_pressure()
+             print("extract_contact_forces_ball")
+             self.extract_contact_forces_ball_2()
              
-             print("find_pressure_mag")
-             self.find_pressure_mag()
+             #print("extract_control_forces_ball")
+             #self.extract_control_forces_ball()
              
-             print("set_up_wrenches")
-             self.set_up_wrenches()
+             #print("find_contact_forces_2")
+             #self.find_contact_forces_2()
+             
+            # print("find_pressure")
+             #self.find_pressure()
+             
+             #print("find_pressure_mag")
+             #self.find_pressure_mag()
+             
+             #print("set_up_wrenches")
+             #self.set_up_wrenches()
              
              #print("calculate_epsilon")
              #self.calculate_epsilon()
@@ -4162,12 +4185,12 @@ class import_data:
              #print("calculate_wrench_components")
              #self.calculate_wrench_components()
              
-             print("save_grasp_parameters")
-             self.save_grasp_parameters()
-             self.graspParams = {}
+            # print("save_grasp_parameters")
+             #self.save_grasp_parameters()
+             #self.graspParams = {}
          else:
              print("calculated")
-             self.load_grasp_parameters()
+             #self.load_grasp_parameters()
      
             
      
@@ -4307,7 +4330,161 @@ class import_data:
 
 
 
+     def extract_contact_forces_ball_2(self):
+         for i in range(len(self.time)-2):
+             print("i:",i)
+             F_contact_ballx_entry=self.Force_x_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
+             F_contact_ballz_entry=self.Force_z_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
 
+             #print(F_contact_ballx_entry)
+             F_contact_ballx_entry=F_contact_ballx_entry[0]['ballx'] #  FURTHER EXTRACTION 
+             F_contact_ballz_entry=F_contact_ballz_entry[0]['ballz'] #  FURTHER EXTRACTION 
+ 
+             Position_x_contact_entry=self.position_x_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
+             Position_z_contact_entry=self.position_z_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
+
+             #print(Position_x_contact_entry)
+             Position_x_contact_entry=Position_x_contact_entry[0]['ballx'] #  FURTHER EXTRACTION 
+             Position_z_contact_entry=Position_z_contact_entry[0]['ballz'] #  FURTHER EXTRACTION 
+
+             dir_xx_contact_ball_entry=self.dir_xx_contact_ball["time_contact"+str(i)]
+             dir_xz_contact_ball_entry=self.dir_xz_contact_ball["time_contact"+str(i)]
+             dir_zx_contact_ball_entry=self.dir_zx_contact_ball["time_contact"+str(i)]
+             dir_zz_contact_ball_entry=self.dir_zz_contact_ball["time_contact"+str(i)]
+
+
+             dir_xx_contact_ball_entry=dir_xx_contact_ball_entry[0]['ballx']
+             dir_xz_contact_ball_entry=dir_xz_contact_ball_entry[0]['ballz']
+             dir_zx_contact_ball_entry=dir_zx_contact_ball_entry[0]['ballx']
+             dir_zz_contact_ball_entry=dir_zz_contact_ball_entry[0]['ballz']      
+             
+             
+             
+             x0b,y0b=self.ballx_position[i],self.ballz_position[i]
+             const=self.ball_radius*2-.01
+             rx=const
+             ry=const
+             w=rx/2
+             h=ry/2                    
+
+             x__=[w,-w,-w,w,w]
+             y__=[h,h,-h,-h,h]
+             (segments)=self.create_segment(x__,y__) 
+             const_=self.ball_radius*2
+             xb,yb=0-const_/2,0 - const_/2
+             x0_=xb
+             y0_=yb
+
+            
+             X=[]
+             Y=[]
+             theta=[]
+            
+             temp_position_x = []
+             temp_position_z = []
+             temp_force_x = []
+             temp_force_z = []  
+             temp_vx = []
+             temp_vy = []
+             temp_c1 = []
+             temp_c2 = []
+             temp_id = []
+             temp_theta = []
+             temp_frames=[]
+             temp_offset_theta=[]
+
+
+
+             frames = np.zeros((len(Position_x_contact_entry),3))
+             Vx=np.zeros((len(Position_x_contact_entry),2))
+             Vy=np.zeros((len(Position_x_contact_entry),2))
+             C1=np.zeros((2,len(Position_x_contact_entry))) # positive cone
+             C2=np.zeros((2,len(Position_x_contact_entry))) # negative cone  
+             
+             for j in range(len(Position_x_contact_entry)):
+                x0,y0=Position_x_contact_entry[j],Position_z_contact_entry[j]
+                Fx1=self.PHIDX(x0-x0b,y0-y0b,segments)
+                Fy1=self.PHIDY(x0-x0b,y0-y0b,segments)
+                mag=np.sqrt(Fx1**2 + Fy1**2)
+                Fx1=-Fx1/mag
+                Fy1=-Fy1/mag
+                X.append(x0-x0b)
+                Y.append(y0-y0b)
+                theta1=np.arctan2(.2,1) #+ frames[j,2]
+                t=self.angle(Fx1, Fy1)-np.pi/2
+                theta.append(t)
+                
+                frames[j,0]=x0-x0b
+                frames[j,1]=y0-y0b
+                frames[j,2]=t
+                
+                T=np.array([[np.cos(t),-np.sin(t)],[np.sin(t),np.cos(t)]]) # transformation matrix   
+                VYpp=T@np.array([[0],[1]]) # transform coordinates X
+                VXpp=T@np.array([[1],[0]]) # transform coordinates Y
+                VXpp=VXpp.flatten() # flatten the matrix
+                VYpp=VYpp.flatten() # flatten the matrix
+            
+                Vx[j,:]=VXpp # Save the array X
+                Vy[j,:]=VYpp  # save the array Y     
+                
+                T1=np.array([[np.cos(theta1),-np.sin(theta1)],[np.sin(theta1),np.cos(theta1)]]) # transformation matrix   
+                T2=np.array([[np.cos(-theta1),-np.sin(-theta1)],[np.sin(-theta1),np.cos(-theta1)]])    
+                tem=Vy[j,:].T
+                C1[:,j]=T1@tem
+                C2[:,j]=T2@tem
+            
+            
+                
+                mag1 = np.sqrt(F_contact_ballx_entry[j]**2 + F_contact_ballz_entry[j]**2)
+                mag2=np.sqrt(dir_xx_contact_ball_entry[j]**2 + dir_xz_contact_ball_entry[j]**2)
+                mag3=np.sqrt(dir_zx_contact_ball_entry[j]**2 + dir_zz_contact_ball_entry[j]**2) 
+                temp_dirr=[dir_xx_contact_ball_entry[j]/mag2,dir_xz_contact_ball_entry[j]/mag2]
+            
+                theta1=np.arctan2(.2,1) #+ frames[j,2]
+                temp=np.round(np.nan_to_num(np.arccos(np.dot(VYpp ,temp_dirr))),2)
+                fx=F_contact_ballx_entry[j]
+                fy=F_contact_ballz_entry[j]
+                
+                mag_=np.sqrt(fx**2 +fy**2)
+                f_=np.array([fx/mag_,fy/mag_])
+                temp2=np.round(np.nan_to_num(np.arccos(np.dot(f_ ,Vy[j,:]))),2)
+                #print(j,temp2<theta1)
+                if temp<=theta1:
+                    
+                    if temp2<theta1:
+                    #print(frames[j,:])
+                    #print(j,"angle:",np.round(temp,2),"FVYdot",np.round(np.dot(F,VYpp),2),"F",np.round(F,2),"Vy",VYpp)
+                        #calculate_wrenches(frames,F_mag,time,mu) 
+                        
+                        temp_offset_theta.append(theta1)
+                        temp_frames.append(frames[j,:])
+                        temp_theta.append(frames[j,2])
+                        temp_id.append(j)
+                        temp_position_x.append(X[j])
+                        temp_position_z.append(Y[j])
+                        temp_force_x.append(fx)
+                        temp_force_z.append(fy)       
+                        temp_vx.append(Vx[j,:])
+                        temp_vy.append(Vy[j,:])
+                        temp_c1.append(C1[:,j])
+                        temp_c2.append(C2[:,j])  
+                        
+             
+             self.temp_offset_theta.append(temp_offset_theta)
+             self.temp_frames.append(temp_frames)
+             self.temp_theta.append(temp_theta)
+             self.temp_id.append(temp_id)
+             self.temp_position_x.append(temp_position_x)
+             self.temp_position_z.append(temp_position_z)
+             self.temp_force_x.append(temp_force_x)
+             self.temp_force_z.append(temp_force_z)     
+             self.temp_vx.append(temp_vx)
+             self.temp_vy.append(temp_vy)
+             self.temp_c1.append(temp_c1)
+             self.temp_c2.append(temp_c2)        
+             #print("frames:",len(temp_frames))        
+                        
+         
      def extract_control_forces_ball(self):
          "extract control forces method "
          for i in range(len(self.time)):
@@ -4433,7 +4610,13 @@ class import_data:
                  self.FCplus.append(np.linalg.norm(F)*C1)  
                  self.FCinus.append(np.linalg.norm(F)*C2)
                  self.ANGLE_CHECK.append(temp_angle_check)
-                                         
+      
+
+
+
+
+         
+         
      def extract_contact_forces_ball(self):
          ''' extract contact forces on the ball  ''' 
          for i in range(len(self.time_contact)):
@@ -4463,8 +4646,6 @@ class import_data:
                          # F=np.array([Fx,Fy])
                          # temp=np.arccos(np.dot(F,VYpp)/np.linalg.norm(F)*np.linalg.norm(VYpp))
                          # if temp<theta1: 
-                             
-                             
                              mag.append(np.sqrt(self.Contact_force_x[j,i]**2 + self.Contact_force_z[j,i]**2))                     
                              fbx.append(self.Contact_force_x[j,i])
                              fbz.append(self.Contact_force_z[j,i])
@@ -4505,6 +4686,8 @@ class import_data:
              self.contact_points_ball_x.append(cbx)
              self.contact_points_ball_z.append(cbz)
              self.magnitude_forces_on_ball.append(mag) 
+             
+             
 
      def in_hull(self,p, hull):
  

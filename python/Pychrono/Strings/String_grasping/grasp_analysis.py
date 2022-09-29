@@ -32,7 +32,7 @@ name = files[-1]
 
 #name="23_09_2022_16_51_45"
 #name="28_09_2022_08_34_33"
-name="28_09_2022_08_35_52"
+#name="28_09_2022_08_35_52"
 d=2.5
 snap_shot=False
 membrane=True
@@ -76,8 +76,8 @@ sim_data.save_grasp_parameters()
 # sim_data.create_frames(membrane,d)
 # sim_data.create_video()
 
-sim_data.create_frames_zoomed_in(membrane,1)
-sim_data.create_video_zoomed_in()
+#sim_data.create_frames_zoomed_in(membrane,1)
+#sim_data.create_video_zoomed_in()
 
 # sim_data.Forcechains_arrows(0.4)
 # sim_data.create_video_contact_arrow()
