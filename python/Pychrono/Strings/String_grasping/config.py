@@ -17,7 +17,7 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.001 # time step 
-time_end = 25
+time_end = 6
 save_rate = 100 #save every n number of steps
 visual = 'irr'
 

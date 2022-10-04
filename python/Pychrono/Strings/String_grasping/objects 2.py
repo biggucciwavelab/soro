@@ -5,7 +5,7 @@ Created on Wed Jul 21 14:14:49 2021
 @author: dmulr
 """
 
-# In[]
+
 import pychrono as chrono
 import pychrono.irrlicht as chronoirr
 import pychrono.postprocess as postprocess
@@ -132,7 +132,7 @@ class robots:
         self.skin_y_total_forces = {}   # y position
         self.skin_z_total_forces = {}   # z position
                                       
-        
+# In[]        
         
         for i in range(self.nb):
             
@@ -3743,7 +3743,7 @@ class import_data:
          parameters=np.load(self.mainDirectory+self.name+'/Parameters.npy',allow_pickle=True)
          data=np.load(self.mainDirectory+self.name+'/Radii'+self.name+'.npz',allow_pickle=True) 
          self.Rm=data['Rm'] 
-         self.wxmin = wxmin
+         self.wxmin = wxmin 
          self.wxmax = wxmax
          self.wymin = wymin
          self.wymax = wymax
@@ -3754,25 +3754,28 @@ class import_data:
          self.wymax2 = d
 
          
-         self.parameters=parameters.tolist()           
+         self.parameters=parameters.tolist()    # loads saved parameters        
          self.nb=self.parameters['nb'] # number of bots
          self.ni=self.parameters['total_particles']
          self.ns=self.parameters['ns']
-         self.nm=self.nb*self.ns
+         self.nm=self.nb*self.ns # total membrane particles 
          self.bot_width=self.parameters['bot_width']
          self.geom = self.parameters['ball_geometry']
          self.particle_width=self.parameters['particle_width']
-         self.radius2=self.particle_width/2
+         self.radius2=self.particle_width/2 # radius of particles
          self.control_mode=self.parameters['control_mode']
          self.skin_width=self.parameters['skin_width']
          self.height=self.parameters['bot_height']
          
+         # if control mode is shape formation
          if self.control_mode=="shape_formation":
              self.geometry = self.parameters['geometry']
              data2=np.load(self.mainDirectory+self.name+'/outline'+self.geometry+'.npz',allow_pickle=True)
              self.xp=data2['xp']
              self.yp=data2['yp']
-                  
+         
+             
+         # if control mode is shape morphing
          if self.control_mode=="shape_morphing":
              self.geometry1=self.parameters['geometry1']
              self.geometry2=self.parameters['geometry2']
@@ -3780,7 +3783,7 @@ class import_data:
              self.xp=data2['xp']
              self.yp=data2['yp']
          
-            
+         # if control mode is grasping  
          if self.control_mode=="grasping":
              self.a2 = self.parameters['a2']
              self.b2 = self.parameters['b2']
@@ -3820,11 +3823,6 @@ class import_data:
          self.bot_total_forces_z=self.bot_total_forces[(2*self.nb)+1:3*self.nb+1,:]          
 
 
-
-
-
-
-
          # membrane_positions
          self.membrane_position=np.genfromtxt(self.files[self.files.index('membrane_position.csv') ] ,delimiter=',')
          (m,n)=np.shape(self.membrane_position)
@@ -3843,6 +3841,7 @@ class import_data:
          self.control_forces_z=self.control_forces[self.nb+1:2*self.nb+1,:]
        
         
+         # These were saved directly from chrono.; It calculuaedc the sum of contact forces on the ball
          self.ball_contact_forces=np.genfromtxt(self.files[self.files.index('ball_contact_forces.csv') ] ,delimiter=',')
          (m,n)=np.shape(self.ball_contact_forces)
          self.ball_contact_forces=self.ball_contact_forces[:,1:n]
@@ -3872,7 +3871,7 @@ class import_data:
              self.particle_position_y=self.particle_position[self.ni+1:2*self.ni+1,:]
              self.particle_position_z=self.particle_position[(2*self.ni)+1:3*self.ni+1,:]
          
-             # robot contact forces
+             # particle contact forces these were calulculated by chrono
              self.particle_contact_forces=np.genfromtxt(self.files[self.files.index('particle_contact_forces.csv') ] ,delimiter=',')
              (self.m1,self.n1)=np.shape(self.particle_contact_forces)
              self.particle_contact_forces=self.particle_contact_forces[:,1:self.n1]
@@ -3881,7 +3880,7 @@ class import_data:
              self.particle_contact_forces_z=self.particle_contact_forces[(2*self.ni)+1:3*self.ni+1,:]          
 
 
-             # robot total forces
+             # particle total forces 
              self.particle_total_forces=np.genfromtxt(self.files[self.files.index('particle_total_forces.csv') ] ,delimiter=',')
              (self.m1,self.n1)=np.shape(self.particle_total_forces)
              self.particle_total_forces=self.particle_total_forces[:,1:self.n1]
@@ -3891,7 +3890,7 @@ class import_data:
          
          
          
-        # Contact Points 
+         ### Contact Points and forces collected from chrono.
          self.time_contact = np.genfromtxt(self.files[self.files.index('time_contact.csv') ] ,delimiter=',')
          self.number_contacts = np.genfromtxt(self.files[self.files.index('number_contacts.csv') ] ,delimiter=',')
         
@@ -3899,19 +3898,21 @@ class import_data:
          self.Contact_points_y = np.genfromtxt(self.files[self.files.index('y_contact_points.csv') ] ,delimiter=',')
          self.Contact_points_z = np.genfromtxt(self.files[self.files.index('z_contact_points.csv') ] ,delimiter=',')
         
+         # These were the ones in refenece to the local frame of the contact
          self.Contact_force_x = np.genfromtxt(self.files[self.files.index('x_contact_force.csv') ] ,delimiter=',')
          self.Contact_force_y = np.genfromtxt(self.files[self.files.index('y_contact_force.csv') ] ,delimiter=',')
          self.Contact_force_z = np.genfromtxt(self.files[self.files.index('z_contact_force.csv') ] ,delimiter=',') 
          
+         # These were the ones in refenece to the global frame 
          self.x_contact_force2=np.genfromtxt(self.files[self.files.index('x_contact_force2.csv') ] ,delimiter=',') 
          self.y_contact_force2=np.genfromtxt(self.files[self.files.index('y_contact_force2.csv') ] ,delimiter=',') 
          self.z_contact_force2=np.genfromtxt(self.files[self.files.index('z_contact_force2.csv') ] ,delimiter=',') 
         
-         #self.AN = np.genfromtxt(self.files[self.files.index('AN.csv') ] ,delimiter=',') 
-         #self.BN = np.genfromtxt(self.files[self.files.index('BN.csv') ] ,delimiter=',') 
-         self.AID = np.genfromtxt(self.files[self.files.index('AID.csv') ] ,delimiter=',') 
-         self.BID = np.genfromtxt(self.files[self.files.index('BID.csv') ] ,delimiter=',') 
+         # These were the ID's of the bodys that were in contact 
+         self.AID = np.genfromtxt(self.files[self.files.index('AID.csv') ] ,delimiter=',')  # Body A
+         self.BID = np.genfromtxt(self.files[self.files.index('BID.csv') ] ,delimiter=',')  # Body B
          
+         # We are now sorting them into lists. Its makes it easier to access. 
          self.AN=[] # empty array of contact ID A
          self.BN=[] # empty array of contact ID B
          infile = open(self.files[self.files.index('AN.csv') ], 'r') # now we fill the array AN
@@ -3921,22 +3922,25 @@ class import_data:
          for row in csv.reader(infile):
              self.BN.append(row[1:])         
          
+         
+         # These are the global vecotrs of the x direction of the contact frame 
          self.Dirxx_=np.genfromtxt(self.files[self.files.index('contact_dirxx.csv') ] ,delimiter=',') 
          self.Dirxy_=np.genfromtxt(self.files[self.files.index('contact_dirxy.csv') ] ,delimiter=',') 
          self.Dirxz_=np.genfromtxt(self.files[self.files.index('contact_dirxz.csv') ] ,delimiter=',') 
 
+         # These are the global vecotrs of the y direction of the contact frame 
          self.Diryx_=np.genfromtxt(self.files[self.files.index('contact_diryx.csv') ] ,delimiter=',') 
          self.Diryy_=np.genfromtxt(self.files[self.files.index('contact_diryy.csv') ] ,delimiter=',') 
          self.Diryz_=np.genfromtxt(self.files[self.files.index('contact_diryz.csv') ] ,delimiter=',') 
 
+         # These are the global vecotrs of the z direction of the contact frame 
          self.Dirzx_=np.genfromtxt(self.files[self.files.index('contact_dirzx.csv') ] ,delimiter=',') 
          self.Dirzy_=np.genfromtxt(self.files[self.files.index('contact_dirzy.csv') ] ,delimiter=',') 
          self.Dirzz_=np.genfromtxt(self.files[self.files.index('contact_dirzz.csv') ] ,delimiter=',')       
         
 
+         # If the control modeis set for grasping. 
          if self.control_mode=="grasping":
-             
-             
              self.geom = self.parameters['ball_geometry'] 
              self.ball_radius = self.parameters['ball_radius']
              self.mu = self.parameters['lateralFriction']
@@ -3956,6 +3960,8 @@ class import_data:
              y=y + ycenter*np.ones(len(x))
              (self.segments)=self.create_segment(x,y)             
   
+            
+             # Ball position 
              self.ball_position=np.genfromtxt(self.files[self.files.index('ball_position.csv') ] ,delimiter=',')            
              m,n=np.shape(self.ball_position)
              self.ball_position=self.ball_position[:,1:n]
@@ -3963,8 +3969,9 @@ class import_data:
              self.ballx_position=self.ball_position[0,:]
              self.ballz_position=self.ball_position[1,:]
              
-             self.F_control = []
              
+             
+             self.F_control = []
              self.Forces_ball_x = []
              self.Forces_ball_z = []
              
@@ -3973,9 +3980,9 @@ class import_data:
              
              self.magnitude_forces_on_ball = []  
              self.torque_ball = []
-             
-             
-             
+
+
+             # PRESSURE empty arrays
              self.Pressure_x_bots = np.zeros((self.nb,len(self.time_contact))) # empty array for the pressure of each bot in the x direction 
              self.Pressure_z_bots = np.zeros((self.nb,len(self.time_contact))) # empty array for the pressure of each bot in the z direction
              
@@ -3983,45 +3990,52 @@ class import_data:
              self.Pressure_z_particles = np.zeros((self.ni,len(self.time_contact))) # empty array for the pressure of each particle in the z direction 
 
 
-             #self.Forces_x_contact_particles = np.zeros((self.ni,len(self.time_contact)))
-             #self.Forces_z_contact_particles = np.zeros((self.ni,len(self.time_contact)))
-
+             
              self.Forces_x_contact_bots = np.zeros((self.nb,len(self.time_contact)))
              self.Forces_z_contact_bots = np.zeros((self.nb,len(self.time_contact)))
 
+
+             #### EMPTY ARRAYs FOR CALCULATING ALL THE CONTACT FORCES ####
+             
+             # empty list for contact forces on particle
              self.Forces_x_contact_particles={}
              self.Forces_z_contact_particles={}
-        
+             
+             # empty list for contact forces on boundary robots
              self.Forces_x_contact_bots={}
              self.Forces_z_contact_bots={}    
         
-        
-             self.Force_x_contact_ball={}
+             # empty list for contact forces on ball
+             self.Force_x_contact_ball={} 
              self.Force_z_contact_ball={}
         
-        
+             # empty list for contact positions on ball
              self.position_x_contact_ball={}
              self.position_z_contact_ball={}
         
+             # empty list for contact directions on ball x direction
              self.dir_xx_contact_ball={}
              self.dir_xz_contact_ball={}
-        
+             
+             # empty list for contact directions on ball z direction
              self.dir_zx_contact_ball={}
              self.dir_zz_contact_ball={}        
         
+             # empty list for contact positions on bot
              self.position_x_contact_bot={}
              self.position_z_contact_bot={}
         
+             # empty list of forces that the robot is applying on the ball 
              self.Forces_x_ball_bot={}
              self.Forces_z_ball_bot={}
         
+             # empty list of positions that the robot is applying on the ball 
              self.position_x_ball_bot={}
              self.position_z_ball_bot={}
         
         
-        
+             # FILL THE EMPTY ARRAYS
              for i in range(len(self.time_contact)):
-            
                  # positions
                  self.Forces_x_contact_particles["time_contact{0}".format(i)]=[]  #x position
                  self.Forces_z_contact_particles["time_contact{0}".format(i)]=[]  #x position
@@ -4051,25 +4065,25 @@ class import_data:
                  self.dir_zz_contact_ball["time_contact{0}".format(i)]=[]          
             
 
-             self.grasp_id = [] # append index 
+             # THERESE CORRESPOND TO THE FORCES THE ROBOT IS APPLY ONLY
+             self.grasp_id = [] #  id of the robots in contact applying forces  
+             self.grasp_position_x = [] # positon x
+             self.grasp_position_z = [] # position z
              
-             self.grasp_position_x = [] # append positon x
-             self.grasp_position_z = [] # append position z
+             self.grasp_force_x = [] # force x in contact
+             self.grasp_force_z = [] # forces z in contact   
+             self.grasp_torque = []   # toruqes being applied  
              
-             self.grasp_force_x = [] # append force x
-             self.grasp_force_z = [] # append force z      
-             self.grasp_torque = []   # append torque  
-             
-             self.WRENCHES = 0
+             self.WRENCHES = 0    
              self.WRENCH_NORM = 0
              
              self.G = []
              
-             self.FRAMES=[]
-             
-             self.EPSILON=[]
-             self.HULLWRENCHNORM=[]
-             self.HULLWRENCHMAGS=[]
+             self.FRAMES=[] # empty array of the contact frames
+              
+             self.EPSILON=[] # empty array of the epsilon metric
+             self.HULLWRENCHNORM=[] # empty array of the wrench norm
+             self.HULLWRENCHMAGS=[] # empty array of the magnitude of the wrench magnitutudes
              
              self.framex = []
              self.framez = []
@@ -4079,7 +4093,7 @@ class import_data:
              self.Cplus = []
              self.Cminus = [] 
              
-             self.FCplus = []  
+             self.FCplus = []
              self.FCinus = []
              
              self.F_mag = []
@@ -4096,6 +4110,7 @@ class import_data:
 
              self.ANGLE_CHECK=[]
 
+            # import the 
              self.pull_data=np.genfromtxt(self.files[self.files.index('pull_force.csv') ] ,delimiter=',')            
              (self.m6a,self.n6a)=np.shape(self.pull_data)
              self.pull_data=self.pull_data[:,1:self.n6a]
@@ -4104,63 +4119,41 @@ class import_data:
              self.PZ=self.pull_data[2,:]
              self.FB=self.pull_data[3,:]            
 
-        
 
-
-         self.AID=np.genfromtxt(self.files[self.files.index('AID.csv') ] ,delimiter=',')                     
-         self.BID=np.genfromtxt(self.files[self.files.index('BID.csv') ] ,delimiter=',')  
-         
-         self.number_contacts=np.genfromtxt(self.files[self.files.index('number_contacts.csv') ] ,delimiter=',') 
-         self.x_contact_force=np.genfromtxt(self.files[self.files.index('x_contact_force.csv') ] ,delimiter=',') 
-         self.y_contact_force=np.genfromtxt(self.files[self.files.index('y_contact_force.csv') ] ,delimiter=',') 
-         self.z_contact_force=np.genfromtxt(self.files[self.files.index('z_contact_force.csv') ] ,delimiter=',') 
-        
-         self.x_contact_points=np.genfromtxt(self.files[self.files.index('x_contact_points.csv') ] ,delimiter=',') 
-         self.y_contact_points=np.genfromtxt(self.files[self.files.index('y_contact_points.csv') ] ,delimiter=',') 
-         self.z_contact_points=np.genfromtxt(self.files[self.files.index('z_contact_points.csv') ] ,delimiter=',')          
-         
-         self.MAG_pressure=np.zeros((self.nb+self.ni,len(self.time)-1))
-         self.MAG_pressure_no_boundary=np.zeros((self.ni,len(self.time)-1))
-         
-         
+             self.temp_offset_theta = []
+             self.temp_frames = []
+             self.temp_theta = []
+             self.temp_id = []
+             self.temp_position_x = []
+             self.temp_position_z = []
+             self.temp_force_x = []
+             self.temp_force_z = []  
+             self.temp_vx = []
+             self.temp_vy = []
+             self.temp_c1 = []
+             self.temp_c2 = []
+             self.temp_force_m = []
+             self.temp_wrenches = []
+             self.temp_wrenches_norm = []
          
          
+             self.EPSILON2=[]
+             self.HULL2=[]
+             self.HULLWRENCHNORM2=[]
+             self.HULLWRENCHMAGS2=[]
          
          
-         self.temp_offset_theta = []
-         self.temp_frames = []
-         self.temp_theta = []
-         self.temp_id = []
-         self.temp_position_x = []
-         self.temp_position_z = []
-         self.temp_force_x = []
-         self.temp_force_z = []  
-         self.temp_vx = []
-         self.temp_vy = []
-         self.temp_c1 = []
-         self.temp_c2 = []
-         self.temp_force_m = []
-         self.temp_wrenches = []
-         self.temp_wrenches_norm = []
-         
-         
-         self.EPSILON2=[]
-         self.HULL2=[]
-         self.HULLWRENCHNORM2=[]
-         self.HULLWRENCHMAGS2=[]
-         
-         
-         self.WRENCHXY2=[]
-         self.HULLXY2=[]
+             self.WRENCHXY2=[]
+             self.HULLXY2=[]
                  
-         self.WRENCHXT2=[]
-         self.HULLXT2=[]
+             self.WRENCHXT2=[]
+             self.HULLXT2=[]
 
-         self.WRENCHYT2=[]
-         self.HULLYT2=[]     
+             self.WRENCHYT2=[]
+             self.HULLYT2=[]     
          
          
-         self.Grasp_analysis()
+             self.Grasp_analysis()
 
 
 
@@ -4206,7 +4199,7 @@ class import_data:
              self.calculate_epsilon2()            
              
              
-             # print("find_pressure")
+            # print("find_pressure")
              #self.find_pressure()
              
              #print("find_pressure_mag")
@@ -4436,225 +4429,6 @@ class import_data:
          phi=np.linalg.norm(np.maximum(q,0)) - np.minimum(np.amax(q),0)   
          return(phi)
 
-
-
-
-
-     def extract_contact_forces_ball_2(self):
-         for i in range(len(self.time)-2):
-             #print("i:",i)
-             F_contact_ballx_entry=self.Force_x_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
-             F_contact_ballz_entry=self.Force_z_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
-
-             #print(F_contact_ballx_entry)
-             F_contact_ballx_entry=F_contact_ballx_entry[0]['ballx'] #  FURTHER EXTRACTION 
-             F_contact_ballz_entry=F_contact_ballz_entry[0]['ballz'] #  FURTHER EXTRACTION 
- 
-             Position_x_contact_entry=self.position_x_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
-             Position_z_contact_entry=self.position_z_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
-
-             #print(Position_x_contact_entry)
-             Position_x_contact_entry=Position_x_contact_entry[0]['ballx'] #  FURTHER EXTRACTION 
-             Position_z_contact_entry=Position_z_contact_entry[0]['ballz'] #  FURTHER EXTRACTION 
-
-             dir_xx_contact_ball_entry=self.dir_xx_contact_ball["time_contact"+str(i)]
-             dir_xz_contact_ball_entry=self.dir_xz_contact_ball["time_contact"+str(i)]
-             dir_zx_contact_ball_entry=self.dir_zx_contact_ball["time_contact"+str(i)]
-             dir_zz_contact_ball_entry=self.dir_zz_contact_ball["time_contact"+str(i)]
-
-
-             dir_xx_contact_ball_entry=dir_xx_contact_ball_entry[0]['ballx']
-             dir_xz_contact_ball_entry=dir_xz_contact_ball_entry[0]['ballz']
-             dir_zx_contact_ball_entry=dir_zx_contact_ball_entry[0]['ballx']
-             dir_zz_contact_ball_entry=dir_zz_contact_ball_entry[0]['ballz']      
-             
-             
-             
-             x0b,y0b=self.ballx_position[i],self.ballz_position[i]
-             const=self.ball_radius*2-.01
-             rx=const
-             ry=const
-             w=rx/2
-             h=ry/2                    
-
-             x__=[w,-w,-w,w,w]
-             y__=[h,h,-h,-h,h]
-             (segments)=self.create_segment(x__,y__) 
-             const_=self.ball_radius*2
-             xb,yb=0-const_/2,0 - const_/2
-             x0_=xb
-             y0_=yb
-
-            
-             X=[]
-             Y=[]
-             theta=[]
-            
-             temp_position_x = []
-             temp_position_z = []
-             temp_force_x = []
-             temp_force_z = []  
-             temp_vx = []
-             temp_vy = []
-             temp_c1 = []
-             temp_c2 = []
-             temp_id = []
-             temp_theta = []
-             temp_frames=[]
-             temp_offset_theta=[]
-             temp_force_m=[]
-             temp_wrenches=[]
-             temp_wrenches_norm=[]
-             #frames = np.zeros((len(Position_x_contact_entry),3))
-             Vx=np.zeros((len(Position_x_contact_entry),2))
-             Vy=np.zeros((len(Position_x_contact_entry),2))
-             C1=np.zeros((2,len(Position_x_contact_entry))) # positive cone
-             C2=np.zeros((2,len(Position_x_contact_entry))) # negative cone  
-             
-             for j in range(len(Position_x_contact_entry)):
-                x0,y0=Position_x_contact_entry[j],Position_z_contact_entry[j]
-                
-                qr=np.array([x0-x0b,y0-y0b])
-                
-                Fx1=self.PHIDX(x0-x0b,y0-y0b,segments)
-                Fy1=self.PHIDY(x0-x0b,y0-y0b,segments)
-                mag=np.sqrt(Fx1**2 + Fy1**2)
-                Fx1=-Fx1/mag
-                Fy1=-Fy1/mag
-                X.append(x0-x0b)
-                Y.append(y0-y0b)
-                t=self.angle(Fx1, Fy1)-np.pi/2
-                #theta.append(t)
-                Fx1_=self.PHIDX(X[j],Y[j],self.segments)
-                Fy1_=self.PHIDY(X[j],Y[j],self.segments)
-                x0=X[j]-(X[j]-Fx1_)
-                y0=Y[j]-(Y[j]-Fy1_)
-          
-                theta=np.arctan2(y0,x0) # calculate theta
-                T=np.array([[-np.sin(theta),-np.cos(theta)],[np.cos(theta),-np.sin(theta)]]) 
-                VYpp=T@np.array([[0],[1]]) # transform coordinates X
-                VXpp=T@np.array([[1],[0]]) # transform coordinates Y
-                
-                VXpp=VXpp.flatten() # flatten the matrix
-                VYpp=VYpp.flatten() # flatten the matrix
-            
-                Vx[j,:]=VXpp # Save the array X
-                Vy[j,:]=VYpp  # save the array Y     
-                
-                theta1=np.arctan2(self.mu,1) #+ frames[j,2]
-                T1=np.array([[np.cos(theta1),-np.sin(theta1)],[np.sin(theta1),np.cos(theta1)]]) # transformation matrix   
-                T2=np.array([[np.cos(-theta1),-np.sin(-theta1)],[np.sin(-theta1),np.cos(-theta1)]])    
-                tem=Vy[j,:].T
-                C1[:,j]=T1@tem
-                C2[:,j]=T2@tem
-
-                mag2=np.sqrt(dir_xx_contact_ball_entry[j]**2 + dir_xz_contact_ball_entry[j]**2)
-                temp_dirr=[dir_xx_contact_ball_entry[j]/mag2,dir_xz_contact_ball_entry[j]/mag2]
-            
-                temp=np.round(np.nan_to_num(np.arccos(np.dot(VYpp ,temp_dirr))),2)
-                fx=F_contact_ballx_entry[j]
-                fy=F_contact_ballz_entry[j]
-             
-                m=np.cross(qr,np.array([fx,fy]))
-                m=m.flatten()
-                mag_=np.sqrt(fx**2 +fy**2)
-                f_=np.array([fx/mag_,fy/mag_])
-                temp2=np.round(np.nan_to_num(np.arccos(np.dot(f_ ,Vy[j,:]))),2)
-                
-                if temp<=theta1:
-                    if temp2<theta1:
-                        #x0_=Position_x_contact_entry[j]-(Position_x_contact_entry[j]+Fx1)
-                        #y0_=Position_z_contact_entry[j]-(Position_z_contact_entry[j]+Fy1)
-                        #theta_=np.arctan2(y0_,x0_) # calculate theta
-                        temp_frames.append(np.array([X[j],Y[j],theta]))
-                        temp_offset_theta.append(theta1)
-                        temp_theta.append(theta)
-                        temp_id.append(j)
-                        temp_position_x.append(X[j])
-                        temp_position_z.append(Y[j])
-                        temp_force_x.append(fx)
-                        temp_force_z.append(fy) 
-                        temp_force_m.append(m[0])
-                        
-                        phi = np.arctan(self.mu)
-                        #fl = np.array([-np.cos(phi), -np.sin(phi), 0])
-                        #fr = np.array([-np.cos(phi),np.sin(phi), 0])
-                        #Jb = self.PTrans(X[j],Y[j],theta)  #WrenchUtils.py
-                        #Jbtrans = Jb.transpose()
-                        if self.geom=="square":
-                            k=(self.ball_radius*2)/(2*np.sqrt(3))
-             
-                        if self.geom=="circle":
-                            k = self.ball_radius/np.sqrt(2)  
-                            
-                        t_wrench1=Jbtrans.dot(fl)
-                        temp_wrenches.append(t_wrench1)
-    
-                        wrench_norm=np.zeros(3)
-                        wrench_norm[0]=t_wrench1[0]
-                        wrench_norm[1]=t_wrench1[1]
-                        wrench_norm[2]=t_wrench1[2]/k
-                        mag=np.sqrt(wrench_norm[0]**2 + wrench_norm[1]**2 + wrench_norm[2]**2)
-                        wrench_norm[0]=wrench_norm[0]/mag
-                        wrench_norm[1]=wrench_norm[1]/mag
-                        wrench_norm[2]=wrench_norm[2]/mag
-                        temp_wrenches_norm.append(wrench_norm)
-                
-                        t_wrench2=Jbtrans.dot(fr)
-                        temp_wrenches.append(t_wrench2)
-                        
-                        wrench_norm=np.zeros(3)
-                        wrench_norm[0]=t_wrench2[0]
-                        wrench_norm[1]=t_wrench2[1]
-                        wrench_norm[2]=t_wrench2[2]/k
-                        mag=np.sqrt(wrench_norm[0]**2 + wrench_norm[1]**2 + wrench_norm[2]**2)
-                        wrench_norm[0]=wrench_norm[0]/mag
-                        wrench_norm[1]=wrench_norm[1]/mag
-                        wrench_norm[2]=wrench_norm[2]/mag
-                        temp_wrenches_norm.append(wrench_norm)
-                        
-                        #self.FRAMES.append(frames)
-                        temp_vx.append(Vx[j,:])
-                        temp_vy.append(Vy[j,:])
-                        temp_c1.append(C1[:,j])
-                        temp_c2.append(C2[:,j])  
-                        
-    
-             if len(temp_position_x)!=0:
-                 self.temp_offset_theta.append(temp_offset_theta)
-                 self.temp_frames.append(temp_frames)
-                 self.temp_theta.append(temp_theta)
-                 self.temp_id.append(temp_id)
-                 self.temp_position_x.append(temp_position_x)
-                 self.temp_position_z.append(temp_position_z)
-                 self.temp_force_x.append(temp_force_x)
-                 self.temp_force_z.append(temp_force_z)     
-                 self.temp_wrenches.append(np.asarray(temp_wrenches))
-                 self.temp_wrenches_norm.append(np.asarray(temp_wrenches_norm))
-                 self.temp_vx.append(temp_vx)
-                 self.temp_vy.append(temp_vy)
-                 self.temp_c1.append(temp_c1)
-                 self.temp_c2.append(temp_c2) 
-                 self.temp_force_m.append(temp_force_m)
-                 
-             else:
-                 self.temp_offset_theta.append([])
-                 self.temp_frames.append([])
-                 self.temp_theta.append([])
-                 self.temp_id.append([])
-                 self.temp_position_x.append([])
-                 self.temp_position_z.append([])
-                 self.temp_force_x.append([])
-                 self.temp_force_z.append([])   
-                 self.temp_wrenches.append([])
-                 self.temp_wrenches_norm.append([])
-                 self.temp_vx.append([])
-                 self.temp_vy.append([])
-                 self.temp_c1.append([])
-                 self.temp_c2.append([])
-                 self.temp_force_m.append([])  
-      
-         
 
      def extract_contact_forces_ball_3(self):
 
@@ -4999,85 +4773,8 @@ class import_data:
                  self.ANGLE_CHECK.append(temp_angle_check)
       
 
-
-
-
-         
-         
-     def extract_contact_forces_ball(self):
-         ''' extract contact forces on the ball  ''' 
-         for i in range(len(self.time_contact)):
-             #print(i)
-             fbx=[]
-             fbz=[]
-             cbx=[]
-             cbz=[]
-             mag=[]
-             tbz=[]
-             tempA=self.AID[:,i]
-             tempB=self.BID[:,i]            
-             for j in range(int(self.number_contacts[i])):
-                 entryA=tempA[j]
-                 entryB=tempB[j] 
-                 if entryB==10000 or entryA==10000:
-                     if self.geom=="circle":
-                         if np.sqrt((self.Contact_points_x[j,i]-self.ballx_position[i])**2 + (self.Contact_points_z[j,i]-self.ballz_position[i])**2)> 0.95*self.ball_radius:
-                         # theta1=np.arctan(self.mu)
-                         # x0,y0=self.Contact_points_x[j,i]-self.ballx_position[i],self.Contact_points_z[j,i]-self.ballz_position[i] # initia positions
-                         # theta=np.arctan2(y0,x0) # calculate theta
-                         # T=np.array([[-np.sin(theta),-np.cos(theta)],[np.cos(theta),-np.sin(theta)]]) # transformation matrix 
-                         # VXpp=T@np.array([[1],[0]]) # transform coordinates X
-                         # VYpp=T@np.array([[0],[1]]) # transform coordinates Y
-                         # VXpp=VXpp.flatten() # flatten the matrix
-                         # VYpp=VYpp.flatten() # flatten the matrix
-                         # F=np.array([Fx,Fy])
-                         # temp=np.arccos(np.dot(F,VYpp)/np.linalg.norm(F)*np.linalg.norm(VYpp))
-                         # if temp<theta1: 
-                             mag.append(np.sqrt(self.Contact_force_x[j,i]**2 + self.Contact_force_z[j,i]**2))                     
-                             fbx.append(self.Contact_force_x[j,i])
-                             fbz.append(self.Contact_force_z[j,i])
-                             cbx.append(self.Contact_points_x[j,i])
-                             cbz.append(self.Contact_points_z[j,i])                    
-                             qr=np.array([[self.Contact_points_x[j,i]-self.ballx_position[i],self.Contact_points_z[j,i]-self.ballz_position[i],0]])
-                             Fr=np.array([[self.Contact_force_x[j,i],self.Contact_force_z[j,i],0]])
-                             tbz.append(np.cross(qr,Fr))
-                     if self.geom=="square":
-                         xcenter=self.ballx_position[i]
-                         ycenter=self.ballz_position[i]
-            
-                         const=self.ball_radius*2
-                         rx=const
-                         ry=const
-                         w=rx/2
-                         h=ry/2                    
-                         x=[w+xcenter,-w+xcenter,-w+xcenter,w+xcenter,w+xcenter]
-                         y=[h+ycenter,h+ycenter,-h+ycenter,-h+ycenter,h+ycenter]
-      
-
-                         (self.segments)=self.create_segment(x,y) 
-  
-                         if self.PHI(self.Contact_force_x[j,i],self.Contact_force_z[j,i],self.segments)<.1:
-                             mag.append(np.sqrt(self.Contact_force_x[j,i]**2 + self.Contact_force_z[j,i]**2))                     
-                             fbx.append(self.Contact_force_x[j,i])
-                             fbz.append(self.Contact_force_z[j,i])
-                             cbx.append(self.Contact_points_x[j,i])
-                             cbz.append(self.Contact_points_z[j,i])                    
-                             qr=np.array([[self.Contact_points_x[j,i]-self.ballx_position[i],self.Contact_points_z[j,i]-self.ballz_position[i],0]])
-                             Fr=np.array([[self.Contact_force_x[j,i],self.Contact_force_z[j,i],0]])
-                             tbz.append(np.cross(qr,Fr))
-
-                             
-             self.Forces_ball_x.append(fbx)
-             self.Forces_ball_z.append(fbz)
-             self.torque_ball.append(tbz)
-             self.contact_points_ball_x.append(cbx)
-             self.contact_points_ball_z.append(cbz)
-             self.magnitude_forces_on_ball.append(mag) 
-             
-             
-
      def in_hull(self,p, hull):
- 
+         """ Create hull """
          from scipy.spatial import Delaunay
          if not isinstance(hull,Delaunay):
              hull = Delaunay(hull)
@@ -5753,7 +5450,7 @@ class import_data:
          
          
          
-     def create_frames(self,membrane,d):
+     def create_frames(self,membrane):
         ''' Create frames for a video '''
         fm._rebuild()
         plt.rcParams['font.family'] = 'Times New Roman'
@@ -5844,1720 +5541,23 @@ class import_data:
             count=count+1 
             
             plt.close('all')          
+        self.create_video('_frames','frames')
 
 
-
-
-     def create_video_zoomed_in(self):
+     def create_video(self,framename,videoname):
          #import pdb    
          img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_frames_zoomed_in/'+'/*.jpg')):
+         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/'+framename+'/'+'/*.jpg')):
              #pdb.set_trace()
              img = cv2.imread(filename)
              height, width, layers = img.shape
              size = (width,height)
              img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/zoomed_in_video.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release()   
-         
-         
-     def create_frames_zoomed_in(self,membrane,d):
-        ''' Create frames for a video '''
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        direct = os.path.join(self.mainDirectory+self.name,'_frames_zoomed_in')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-        count=0
-        x0b,y0b=self.ballx_position[0],self.ballz_position[0]
-        for i in range(len(self.time)-2):   
-            
-            #x0,y0=self.ballx_position[i],self.ballz_position[i]
-            #d=1
-            wxmax=x0b+d
-            wxmin=x0b-d
-            wymax=y0b+d
-            wymin=y0b-d
-            const=(wxmax-wxmin)/(wymax-wymin)
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(const*4, 4)
-            #ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-            #fig = plt.figure(dpi=300)
-            #fig.set_size_inches(4, 4)
-            
-            ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-            xcenter=self.ballx_position[i]
-            ycenter=self.ballz_position[i]
-            
-            const=self.ball_radius*2
-            rx=const
-            ry=const
-            w=rx/2
-            h=ry/2                    
-            x=[w+xcenter,-w+xcenter,-w+xcenter,w+xcenter,w+xcenter]
-            y=[h+ycenter,h+ycenter,-h+ycenter,-h+ycenter,h+ycenter]
-            #x = x + xcenter*np.ones(len(x))
-            #y = y + ycenter*np.ones(len(x))
-            (self.segments)=self.create_segment(x,y) 
-                
-            #ax.plot(x,y)
-            for j in range(0,self.nb):
-                x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]
-                if self.geom=="square":
-                    if self.PHI(x0,y0,self.segments)<.1:
-                        patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
-                        ax.add_patch(patch)
-                   
-                    else:
-                        patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
-                        ax.add_patch(patch)                    
-                if self.geom=="circle":
-                    
-                    q=np.sqrt((x0-self.ballx_position[i])**2 + (y0-self.ballz_position[i])**2)
-                    if q<=(2 * self.bot_width/2 + self.ball_radius):
-                        patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
-                        ax.add_patch(patch)
-                   
-                    else:
-                        patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
-                        ax.add_patch(patch)               
-            if membrane==True:
-                for j in range(0,self.nm):
-                    
-                    x0,y0=self.membrane_position_x[j,i],self.membrane_position_z[j,i]  
-                    patch = plt.Circle((x0, y0),self.skin_width/2, fc='tab:red')
-                    ax.add_patch(patch)
-                
-                
-
-            for j in range(self.ni):
-                x0,y0=self.particle_position_x[j,i],self.particle_position_z[j,i]
-
-                if self.Rm[j]==self.particle_width/2:
-                    c='tab:blue'
-                if self.Rm[j]==self.particle_width*np.sqrt(2)/2:
-                    c='tab:green'
-                patch = plt.Circle((x0, y0),self.Rm[j], fc=c)
-                ax.add_patch(patch)         
-     
-            if self.control_mode=="grasping":
-                if self.geom=="circle":
-                    x0,y0=self.ballx_position[i],self.ballz_position[i]
-                    patch = plt.Circle((x0, y0),self.ball_radius,fc='none',edgecolor='black',linewidth=1)
-                    ax.add_patch(patch)
-            
-                if self.geom=="square":
-                    const_=self.ball_radius*2
-                    x0,y0=self.ballx_position[i] - const_/2,self.ballz_position[i] - const_/2
-                    patch = matplotlib.patches.Rectangle((x0, y0),const_, const_,fc='tab:grey')     
-                    ax.add_patch(patch)     
-        
-            #ax.plot(self.xp,self.yp,color='tab:red',linestyle='dashed',linewidth=2,zorder=0)
-            plt.title('Time= ' + str(np.round(self.time[i],0)),fontsize=12)
-            plt.gca().set_aspect('equal', adjustable='box')
-            
-            plt.savefig(direct+"/frame%04d.jpg" % count)
-                 
-            count=count+1 
-            
-            plt.close('all')   
-            
-            
-
-     def create__frames_robot_forces(self):
-        ''' Create frames for for total forces '''
-        
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        direct = os.path.join(self.mainDirectory+self.name,'_forces_frames')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-        count=0
-        for i in range(len(self.time)-1):    
-            x0,y0=self.ballx_position[i],self.ballz_position[i]
-            d=1
-            wxmax=x0+d
-            wxmin=x0-d
-            wymax=y0+d
-            wymin=y0-d
-            const=(wxmax-wxmin)/(wymax-wymin)
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(const*4, 4)
-            ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-            # BOUNDARY ROBOTS
-            for j in range(0,self.nb):
-                x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]  
-                patch = plt.Circle((x0, y0),self.bot_width/2, fc='none',edgecolor='k',lw=1)
-                ax.add_patch(patch)
-                #ax.quiver(x0,y0, self.control_forces_x[j,i],self.control_forces_z[j,i], color="tab:purple", scale=10,width=0.005)
-                mag1 = np.sqrt(self.bot_contact_forces_x[j,i]**2 + self.bot_contact_forces_z[j,i]**2)
-                mag2 = np.sqrt(self.bot_total_forces_x[j,i]**2 + self.bot_total_forces_z[j,i]**2)
-                ax.quiver(x0,y0, self.bot_contact_forces_x[j,i]/mag1,self.bot_contact_forces_z[j,i]/mag1, color="tab:orange", scale=10,width=0.007)            
-                ax.quiver(x0,y0, self.bot_total_forces_x[j,i]/mag2,self.bot_total_forces_z[j,i]/mag2, color="tab:purple", scale=10,width=0.007)            
-
-            if self.geom=="circle":
-                x0,y0=self.ballx_position[i],self.ballz_position[i]
-                patch = plt.Circle((x0, y0),self.ball_radius,fc='tab:gray',edgecolor='black',linewidth=1)
-                ax.add_patch(patch)
-            
-            if self.geom=="square":
-                const_=self.ball_radius*2
-                x0,y0=self.ballx_position[i]-const_/2,self.ballz_position[i] - const_/2
-                
-                patch = patches.Rectangle((x0, y0),const_, const_,fc='none',edgecolor='tab:grey')     
-                ax.add_patch(patch)
-                
-                patch = plt.Circle((self.xc2, self.yc2),self.a2,fc='none',edgecolor='blue',linewidth=1)    
-                ax.add_patch(patch)
-            if self.geom=="triangle":
-                const_=self.ball_radius*2*np.pi/3
-                r=const_*np.sqrt(3)/3
-                x0,y0=self.ballx_position[i],self.ballz_position[i]
-                patch = RegularPolygon((x0,y0),3,r,orientation=-np.pi/2,fc='tab:gray',edgecolor='tab:grey')
-                ax.add_patch(patch)  
-                
-            if self.grasp_id[i]!=[]:
-                
-                xo=self.grasp_position_x[i]
-                zo=self.grasp_position_z[i]
-                
-                Fx=self.grasp_force_x[i]
-                Fz=self.grasp_force_z[i]
-                #print("Fx:",np.round(Fx,2))
-                #print("Fz:",np.round(Fz,2))
-                vx=self.framex[i]
-                vz=self.framez[i]
-                cp=self.Cplus[i]
-                cm=self.Cminus[i]   
-                #F=self.F_control[i]
-                #F=F.flatten()
-                #print(F)
-                #Fx=F[0]
-                #Fy=F[1]
-                #vxn=self.FRAMENX[i]            
-            #print('vx',vx,'vxn',vxn)
-            #print('sum',vx+vxn)
-                #plt.quiver(xo,zo, Fx,Fz, color="tab:purple", scale=10,width=0.002)  
-                #ax.quiver(xo,zo, self.control_forces_x[self.grasp_id[i],i],self.control_forces_z[self.grasp_id[i],i], color="tab:purple", scale=10,width=0.005)
-                plt.quiver(xo,zo, vx[:,0], vx[:,1], color="tab:blue", scale=10,width=0.007,label='controller dir')  
-                plt.quiver(xo,zo, vz[:,0], vz[:,1], color="tab:green", scale=10,width=0.007,label='controller dir') 
-                plt.quiver(xo,zo, cp[:,0], cp[:,1], color="tab:red", scale=10,width=0.007)   
-                plt.quiver(xo,zo, cm[:,0], cm[:,1], color="tab:red", scale=10,width=0.007)               
-            fig.suptitle('Time= ' + str(np.round(self.time[i],0)))
-            plt.savefig(direct+"/frame%04d.jpg" % count) 
-            count=count+1 
-            
-            plt.close('all')  
-            
-            
-     def create_video_forcechain(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_forcechains/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/_forcechains.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release() 
-        
-
-     def Forcechains(self,d):
-        """ create plot force chains"""
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        direct = os.path.join(self.mainDirectory+self.name,'_forcechains')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-        count=0
-        for i in range(len(self.time)-2):
-            x0,y0=self.ballx_position[i],self.ballz_position[i]
-            
-
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(4, 4)
-            
-            ax = plt.axes(xlim=(self.wxmin,self.wxmax), ylim=(self.wymin, self.wymax))
-            cmap = plt.cm.get_cmap('seismic')
-            boundaries=np.arange(1,100,1)
-                           
-            norm = colors.BoundaryNorm(boundaries, cmap.N, [boundaries[0], 100])
-            #count=0
-            #for i in range(1,len(self.time)-1):
-            Fx=self.x_contact_force[0:int(self.number_contacts[i]),i]
-            Fz=self.z_contact_force[0:int(self.number_contacts[i]),i]
-    
-            #Fy=Fcy[0:nc[i],i]
-            abs_force=np.power(np.add(np.power(Fx,2),np.power(Fz,2)),.5)
-    
-    
-            x=self.x_contact_points[0:int(self.number_contacts[i]),i]
-            y=self.z_contact_points[0:int(self.number_contacts[i]),i]
-            x2=[]
-            y2=[]
-            F2=[]
-            for j in range(len(abs_force)):
-                x2.append(x[j])
-                y2.append(y[j])
-                F2.append(abs_force[j])
-    
-            #plt.figure(figsize=(2,2),dpi=300)
-            plt.scatter(x2,y2,s=2*np.power(F2,.65),c=F2,cmap=cmap,norm=norm)
-            plt.grid(True)
-            plt.colorbar()         
-            fig.suptitle('Time= ' + str(np.round(self.time[i],0)))
-            plt.savefig(direct+"/frame%04d.jpg" % count)
-                 
-            count=count+1 
-            
-            plt.close('all')
-        
-
-     def Forcechains_arrows(self,d):
-        """ create plot force chains"""
-        membrane=True
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        direct = os.path.join(self.mainDirectory+self.name,'_contact_arrow_frames')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-        count=0
-        for i in range(len(self.time)-1): 
-            x0,y0=self.ballx_position[i],self.ballz_position[i]
-            
-            wxmax=x0+d
-            wxmin=x0-d
-            wymax=y0+d
-            wymin=y0-d
-            const=(wxmax-wxmin)/(wymax-wymin)
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(const*4, 4)
-            ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-            const=self.ball_radius*2
-            rx=const
-            ry=const
-            w=rx/2
-            h=ry/2          
-            xcenter=self.ballx_position[i]
-            ycenter=self.ballz_position[i]
-            x=[w+xcenter,-w+xcenter,-w+xcenter,w+xcenter,w+xcenter]
-            y=[h+ycenter,h+ycenter,-h+ycenter,-h+ycenter,h+ycenter]
-            (self.segments)=self.create_segment(x,y) 
-            x0,y0=self.ballx_position[i],self.ballz_position[i]
-        
-            for j in range(0,self.nb):
-                x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]  
-                if self.PHI(x0,y0,self.segments)<.1:
-                    patch = plt.Circle((x0, y0),self.bot_width/2, fc='none',edgecolor='tab:orange')
-                    ax.add_patch(patch)
-                else:
-                    patch = plt.Circle((x0, y0),self.bot_width/2, fc='none',edgecolor="k")
-                    ax.add_patch(patch) 
-    
-            if membrane==True:
-                for j in range(0,self.nm):
-    
-                    x0,y0=self.membrane_position_x[j,i],self.membrane_position_z[j,i]  
-                    patch = plt.Circle((x0, y0),self.skin_width/2, fc='none',edgecolor='tab:red')
-                    ax.add_patch(patch)
-                                
-            
-            if self.geom=="circle":
-                x0,y0=self.ballx_position[i],self.ballz_position[i]
-                patch = plt.Circle((x0, y0),self.ball_radius, fc='tab:grey')
-                ax.add_patch(patch)
-                
-            if self.geom=="square":
-                const_=self.ball_radius*2
-                x0,y0=self.ballx_position[i]-const_/2,self.ballz_position[i] - const_/2
-                
-                patch = matplotlib.patches.Rectangle((x0, y0),const_, const_,fc='none',edgecolor='tab:grey')     
-                ax.add_patch(patch)
-                
-            if self.geom=="triangle":
-                const_=self.ball_radius*2*np.pi/3
-                r=const_*np.sqrt(3)/3
-                x0,y0=self.ballx_position[i],self.ballz_position[i]
-                patch = RegularPolygon((x0,y0),3,r,orientation=-np.pi/2,fc='none',edgecolor='tab:grey')
-                ax.add_patch(patch)             
-    
-                                
-            for j in range(self.ni):
-                x0,y0=self.particle_position_x[j,i],self.particle_position_z[j,i]
-    
-                if np.round(self.Rm[j],4)==0.0508:
-                    c='tab:blue'
-                else:
-                    c='tab:green'
-                patch = plt.Circle((x0, y0),self.Rm[j], fc="none",edgecolor=c)
-                ax.add_patch(patch)          
-            
-            
-            
-            
-            
-            Dirxx=self.Dirxx_[0:int(self.number_contacts[i]),i]
-            Dirxz=self.Dirxz_[0:int(self.number_contacts[i]),i]
-    
-     
-            
-            Dirzx=self.Dirzx_[0:int(self.number_contacts[i]),i]
-            Dirzz=self.Dirzz_[0:int(self.number_contacts[i]),i]         
-    
-            Fx=self.x_contact_force2[0:int(self.number_contacts[i]),i]
-            Fz=self.z_contact_force2[0:int(self.number_contacts[i]),i]
-    
-            abs_force=np.power(np.add(np.power(Fx,2),np.power(Fz,2)),.5)
-    
-    
-            x=self.x_contact_points[0:int(self.number_contacts[i]),i]
-            y=self.z_contact_points[0:int(self.number_contacts[i]),i]
-    
-        
-            x0,y0=self.ballx_position[i],self.ballz_position[i]
-    
-            for j in range(len(abs_force)):
-                mag=np.sqrt(Fx[j]**2 + Fz[j]**2)
-                ax.quiver(x[j],y[j],Fx[j]/mag,Fz[j]/mag,color="purple",scale=10,width=0.005,zorder=1)
-                mag2=np.sqrt(Dirxx[j]**2+Dirxz[j]**2)
-                mag3=np.sqrt(Dirzx[j]**2+Dirzz[j]**2)
-                
-                ax.quiver(x[j],y[j],Dirxx[j]/mag2,Dirxz[j]/mag2,color="red",scale=20,width=0.005,zorder=2)
-                ax.quiver(x[j],y[j],Dirzx[j]/mag3,Dirzz[j]/mag3,color="blue",scale=20,width=0.005,zorder=2)
-    
-            fig.suptitle('Time= ' + str(np.round(self.time[i],0)))
-            plt.savefig(direct+"/frame%04d.jpg" % count)
-                 
-            count=count+1 
-            
-            plt.close('all')  
-
-
-     def create_contact_forces_video(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_contact_forces_all/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/_contact_forces_all.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release() 
-
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_contact_forces_within_cone/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/_contact_forces_within_cone.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release() 
-         
-            
-
-     def create_frames_contact_forces(self,d):
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        
-        direct1 = os.path.join(self.mainDirectory+self.name,'_contact_forces_all')    
-        if not os.path.isdir(direct1):
-            os.makedirs(direct1)
-            
-            
-        direct2 = os.path.join(self.mainDirectory+self.name,'_contact_forces_within_cone')    
-        if not os.path.isdir(direct2):
-            os.makedirs(direct2)
-                       
-        count=0
-
-        for i in range(len(self.time)-2):
-            #print(i)
-            
-            
-            
-            #Force_x_contact_ball=sim_data1.Force_x_contact_ball # THIS IS THE CONTACT FORCES WHICH WERE IN CONTACT WITH THE BALL X
-            #Force_z_contact_ball=sim_data1.Force_z_contact_ball # THIS IS THE CONTACT FORCES WHICH WERE IN CONTACT WITH THE BALL Z
-
-
-            F_contact_ballx_entry=self.Force_x_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
-            F_contact_ballz_entry=self.Force_z_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
-
-            #print(F_contact_ballx_entry)
-            F_contact_ballx_entry=F_contact_ballx_entry[0]['ballx'] #  FURTHER EXTRACTION 
-            F_contact_ballz_entry=F_contact_ballz_entry[0]['ballz'] #  FURTHER EXTRACTION 
-            
-            
-            #position_x_contact_ball=self.position_x_contact_ball # THIS IS THE CONTACT POSITION WHICH WERE IN CONTACT WITH THE BALL X
-            #position_z_contact_ball=self.position_z_contact_ball # THIS IS THE CONTACT POSITION WHICH WERE IN CONTACT WITH THE BALL Z
-            #print(position_x_contact_ball)
-
-            Position_x_contact_entry=self.position_x_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
-            Position_z_contact_entry=self.position_z_contact_ball["time_contact"+str(i)] # EXTRACT THE ENTRY
-
-            #print(Position_x_contact_entry)
-            Position_x_contact_entry=Position_x_contact_entry[0]['ballx'] #  FURTHER EXTRACTION 
-            Position_z_contact_entry=Position_z_contact_entry[0]['ballz'] #  FURTHER EXTRACTION 
-
-
-            #dir_xx_contact_ball=self.dir_xx_contact_ball
-            #dir_xz_contact_ball=self.dir_xz_contact_ball
-            #dir_zx_contact_ball=self.dir_zx_contact_ball
-            #dir_zz_contact_ball=self.dir_zz_contact_ball
-
-
-            dir_xx_contact_ball_entry=self.dir_xx_contact_ball["time_contact"+str(i)]
-            dir_xz_contact_ball_entry=self.dir_xz_contact_ball["time_contact"+str(i)]
-            dir_zx_contact_ball_entry=self.dir_zx_contact_ball["time_contact"+str(i)]
-            dir_zz_contact_ball_entry=self.dir_zz_contact_ball["time_contact"+str(i)]
-
-
-            dir_xx_contact_ball_entry=dir_xx_contact_ball_entry[0]['ballx']
-            dir_xz_contact_ball_entry=dir_xz_contact_ball_entry[0]['ballz']
-            dir_zx_contact_ball_entry=dir_zx_contact_ball_entry[0]['ballx']
-            dir_zz_contact_ball_entry=dir_zz_contact_ball_entry[0]['ballz']
-            
-            
-            x0b,y0b=self.ballx_position[i],self.ballz_position[i]
-            const=self.ball_radius*2-.01
-            rx=const
-            ry=const
-            w=rx/2
-            h=ry/2                    
-
-            x__=[w,-w,-w,w,w]
-            y__=[h,h,-h,-h,h]
-            (segments)=self.create_segment(x__,y__) 
-
-
-            wxmax=d
-            wxmin=-d
-            wymin=-d
-            wymax=d
-            const=(wxmax-wxmin)/(wymax-wymin)
-
-
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(const*3,3)
-            ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-            const_=self.ball_radius*2
-            xb,yb=0-const_/2,0 - const_/2
-            x0_=xb
-            y0_=yb
-            patch = matplotlib.patches.Rectangle((x0_, y0_),const_, const_,fc='none',edgecolor='tab:grey')     
-            ax.add_patch(patch)
-            
-            X=[]
-            Y=[]
-            theta=[]
-            
-            temp_position_x = []
-            temp_position_z = []
-            temp_force_x = []
-            temp_force_z = []  
-            temp_vx = []
-            temp_vy = []
-            temp_c1 = []
-            temp_c2 = []
-            temp_id = []
-            temp_theta = []
-            temp_frames=[]
-            temp_offset_theta=[]
-
-
-
-            frames = np.zeros((len(Position_x_contact_entry),3))
-            Vx=np.zeros((len(Position_x_contact_entry),2))
-            Vy=np.zeros((len(Position_x_contact_entry),2))
-            C1=np.zeros((2,len(Position_x_contact_entry))) # positive cone
-            C2=np.zeros((2,len(Position_x_contact_entry))) # negative cone 
-            for j in range(len(Position_x_contact_entry)):
-                #fig = plt.figure(dpi=300)
-                #fig.set_size_inches(const*3,3)
-                #ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-                #patch = matplotlib.patches.Rectangle((x0_, y0_),const_, const_,fc='none',edgecolor='tab:grey')     
-                #ax.add_patch(patch)
-                x0,y0=Position_x_contact_entry[j],Position_z_contact_entry[j]
-                ax.text(x0-x0b,y0-y0b,str(j),size=8)
-                Fx1=self.PHIDX(x0-x0b,y0-y0b,segments)
-                Fy1=self.PHIDY(x0-x0b,y0-y0b,segments)
-                mag=np.sqrt(Fx1**2 + Fy1**2)
-                Fx1=-Fx1/mag
-                Fy1=-Fy1/mag
-                F_t=np.array([Fx1,Fy1])
-                X.append(x0-x0b)
-                Y.append(y0-y0b)
-                theta1=np.arctan2(.2,1) #+ frames[j,2]
-                t=self.angle(Fx1, Fy1)-np.pi/2
-                theta.append(t)
-                
-                frames[j,0]=x0-x0b
-                frames[j,1]=y0-y0b
-                frames[j,2]=t
-                
-                T=np.array([[np.cos(t),-np.sin(t)],[np.sin(t),np.cos(t)]]) # transformation matrix   
-                VYpp=T@np.array([[0],[1]]) # transform coordinates X
-                VXpp=T@np.array([[1],[0]]) # transform coordinates Y
-                VXpp=VXpp.flatten() # flatten the matrix
-                VYpp=VYpp.flatten() # flatten the matrix
-            
-                Vx[j,:]=VXpp # Save the array X
-                Vy[j,:]=VYpp  # save the array Y     
-                
-                T1=np.array([[np.cos(theta1),-np.sin(theta1)],[np.sin(theta1),np.cos(theta1)]]) # transformation matrix   
-                T2=np.array([[np.cos(-theta1),-np.sin(-theta1)],[np.sin(-theta1),np.cos(-theta1)]])    
-                tem=Vy[j,:].T
-                C1[:,j]=T1@tem
-                C2[:,j]=T2@tem
-            
-            
-                
-                mag1 = np.sqrt(F_contact_ballx_entry[j]**2 + F_contact_ballz_entry[j]**2)
-                mag2=np.sqrt(dir_xx_contact_ball_entry[j]**2 + dir_xz_contact_ball_entry[j]**2)
-                mag3=np.sqrt(dir_zx_contact_ball_entry[j]**2 + dir_zz_contact_ball_entry[j]**2) 
-                temp_dirr=[dir_xx_contact_ball_entry[j]/mag2,dir_xz_contact_ball_entry[j]/mag2]
-            
-                
-                ax.quiver(x0-x0b,y0-y0b, dir_xx_contact_ball_entry[j]/mag2,dir_xz_contact_ball_entry[j]/mag2,scale=20,color="k",width=.007,zorder=3)    
-                ax.quiver(x0-x0b,y0-y0b, F_contact_ballx_entry[j]/mag1,F_contact_ballz_entry[j]/mag1,scale=10, color="tab:orange",width=.007,zorder=5)      
-                ax.quiver(x0-x0b,y0-y0b, Fx1,Fy1,scale=10, color="green",width=.007,zorder=1)
-                ax.quiver(x0-x0b,y0-y0b,C1[0,j],C1[1,j] ,color="magenta", scale=10,label='Positive cone')     
-                ax.quiver(x0-x0b,y0-y0b,C2[0,j],C2[1,j] ,color="magenta", scale=10,label='negative cone')
-                ax.quiver(x0-x0b,y0-y0b, VXpp[0],VXpp[1],scale=15,color="b",width=.007,zorder=2)  
-                ax.quiver(x0-x0b,y0-y0b, VYpp[0],VYpp[1],scale=15,color="r",width=.007,zorder=2)  
-            
-                #print("j",str(j),np.round(t,2),"Fx:",np.round(Fx1,2),"Fy:",np.round(Fy1,2),"Fxf:",np.round(F_contact_ballx_91[j]/mag1,2),"Fyf:",np.round(F_contact_ballz_91[j]/mag1,2))
-                
-                theta1=np.arctan2(.2,1) #+ frames[j,2]
-                temp=np.round(np.nan_to_num(np.arccos(np.dot(VYpp ,temp_dirr))),2)
-                fx=F_contact_ballx_entry[j]
-                fy=F_contact_ballz_entry[j]
-                
-                mag_=np.sqrt(fx**2 +fy**2)
-                f_=np.array([fx/mag_,fy/mag_])
-                temp2=np.round(np.nan_to_num(np.arccos(np.dot(f_ ,Vy[j,:]))),2)
-                #print(j,temp2<theta1)
-                if temp<=theta1:
-                    
-                    if temp2<theta1:
-                    #print(frames[j,:])
-                    #print(j,"angle:",np.round(temp,2),"FVYdot",np.round(np.dot(F,VYpp),2),"F",np.round(F,2),"Vy",VYpp)
-                        temp_offset_theta.append(theta1)
-                        temp_frames.append(frames[j,:])
-                        temp_theta.append(frames[j,2])
-                        temp_id.append(j)
-                        temp_position_x.append(X[j])
-                        temp_position_z.append(Y[j])
-                        temp_force_x.append(fx)
-                        temp_force_z.append(fy)       
-                        temp_vx.append(Vx[j,:])
-                        temp_vy.append(Vy[j,:])
-                        temp_c1.append(C1[:,j])
-                        temp_c2.append(C2[:,j])
-                    #temp_c1.append([Vy[j,0]*np.cos(theta1),Vy[j,0]*np.cos(theta1)]
-                    #temp_c2.append(C2[:,j])    
-                
-    
-    #ax.scatter(x0,y0,color="tab:blue")
-            plt.title('Time= ' + str(np.round(self.time[i],0)),fontsize=12)
-            plt.gca().set_aspect('equal', adjustable='box')
-            
-            plt.savefig(direct1+"/frame%04d.jpg" % count)
-                 
-            #count=count+1 
-            
-            plt.close('all') 
-
-
-            wxmax=d
-            wxmin=-d
-            wymin=-d
-            wymax=d
-            const=(wxmax-wxmin)/(wymax-wymin)
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(const*3,3)
-            ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-            const_=self.ball_radius*2
-            xb,yb=0-const_/2,0 - const_/2
-            x0_=xb
-            y0_=yb
-            patch = matplotlib.patches.Rectangle((x0_, y0_),const_, const_,fc='none',edgecolor='tab:grey')     
-            ax.add_patch(patch)
-
-            for j in range(len(temp_id)):
-                x0,y0=temp_position_x[j],temp_position_z[j]
-                vx=temp_vx[j]
-                vy=temp_vy[j]
-                c1=temp_c1[j]
-                c2=temp_c2[j]
-                fx=temp_force_x[j]
-                fy=temp_force_z[j]    
-                ax.text(x0,y0,str(j),size=10)
-                mag=np.sqrt(fx**2 + fy**2)
-                ax.quiver(x0,y0, fx/mag,fy/mag,scale=10,color="g",width=.007,zorder=1)  
-                ax.quiver(x0,y0, vx[0],vx[1],scale=15,color="b",width=.005,zorder=2)  
-                ax.quiver(x0,y0, vy[0],vy[1],scale=15,color="r",width=.005,zorder=2) 
-                ax.quiver(x0,y0,c1[0],c1[1] ,color="magenta",width=.002, scale=10,label='Positive cone')     
-                ax.quiver(x0,y0,c2[0],c2[1] ,color="magenta",width=.002, scale=10,label='negative cone')
-
-            plt.title('Time= ' + str(np.round(self.time[i],0)),fontsize=12)
-            plt.gca().set_aspect('equal', adjustable='box')
-            
-            plt.savefig(direct2+"/frame%04d.jpg" % count)
-                 
-            count=count+1 
-            
-            plt.close('all') 
-
-     def create_frames_pressure_no_boundary(self):
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        
-        
-        direct = os.path.join(self.mainDirectory+self.name,'_pressure_no_boundary_frames')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-
-        FX=np.vstack([self.Pressure_x_particles])
-        FZ=np.vstack([self.Pressure_z_particles])
-        X=np.vstack([self.particle_position_x])
-        Z=np.vstack([self.particle_position_z])  
-        
-        count=0
-        
-        #self.MAG_pressure_no_boundary=np.zeros((self.ni,len(self.time)-1))
-
-        for j in range(len(self.time)-1):
-            for i in range(self.ni-1):
-                self.MAG_pressure_no_boundary[i,j]=np.sqrt(FZ[i,j]**2+FX[i,j]**2)    
-
-
-        for i in range(len(self.time)-1):    
-            plt.figure(i,figsize=(4,4),dpi=300)
-            plt.tricontourf(X[:,i],Z[:,i],self.MAG_pressure_no_boundary[:,i],cmap='jet')
-            #plt.plot(X[0:self.nb,i],Z[0:self.nb,i], 'ko ')
-            #plt.plot(X[self.nb:self.ni+self.nb,i],Z[self.nb:self.ni+self.nb,i], 'ro ')
-            plt.grid(True)
-            plt.colorbar()
-            plt.xlabel('x position(m)')
-            plt.ylabel('z position(m)')
-            plt.title('t='+str(round(self.time[i],3)))
-            plt.savefig(direct+"/frame%04d.jpg" % count) 
-            print(str(i)+ "of"+ str(len(self.time)))
-            plt.close('all')
-            count=count+1   
-
-
-
-
-     def create_frames_pressure(self):
-     
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        direct = os.path.join(self.mainDirectory+self.name,'_pressure_frames')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-
-        FX=np.vstack([self.Pressure_x_bots,self.Pressure_x_particles])
-        FZ=np.vstack([self.Pressure_z_bots,self.Pressure_z_particles])
-        X=np.vstack([self.bot_position_x,self.particle_position_x])
-        Z=np.vstack([self.bot_position_z,self.particle_position_z])  
-        
-        count=0
-        
-        #self.MAG_pressure=np.zeros((self.nb+self.ni,len(self.time)-1))
-        #print(self.MAG_pressure.shape)
-        #print(FX.shape)
-        #print(len(self.time)-1)
-        #print(self.nb+self.ni-1)
-        for j in range(len(self.time)-1):
-            for i in range(self.nb+self.ni-1):
-                self.MAG_pressure[i,j]=np.sqrt(FZ[i,j]**2+FX[i,j]**2)    
-
-
-        for i in range(len(self.time)-1):    
-            plt.figure(i,figsize=(4,4),dpi=300)
-            plt.tricontourf(X[:,i],Z[:,i],self.MAG_pressure[:,i],cmap='jet')
-            plt.plot(X[0:self.nb,i],Z[0:self.nb,i], 'ko ')
-            plt.plot(X[self.nb:self.ni+self.nb,i],Z[self.nb:self.ni+self.nb,i], 'ro ')
-            plt.grid(True)
-            plt.colorbar()
-            plt.xlabel('x position(m)')
-            plt.ylabel('z position(m)')
-            plt.title('t='+str(round(self.time[i],3)))
-            plt.savefig(direct+"/frame%04d.jpg" % count) 
-            print(str(i)+ "of"+ str(len(self.time)))
-            plt.close('all')
-            count=count+1   
-            
-            
-        #name=self.name+'_pressure_anim_wo_points'
-        #self.create_video(name,direct,self.results_dir,'jpg')
-    
-     def create_frames_wrench(self):
-        ''' Create frames for a video '''
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        direct = os.path.join(self.mainDirectory+self.name,'_grasping_frames_wrench')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-        count=0
-        for i in range(len(self.time)-1):    
-            #fig = plt.figure(dpi=300)
-            #fig.set_size_inches(4, 4)
-            #self.wxmin=np.min(self.bot_position_x[:,i])
-            
-            
-            const=(self.wxmax2-self.wxmin2)/(self.wymax2-self.wymin2)
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(const*4, 4)
-            ax = plt.axes(xlim=(self.wxmin2,self.wxmax2), ylim=(self.wymin2, self.wymax2))
-
-
-            #patch = plt.Circle((0, 0),self.ball_radius, fc='none',edgecolor='tab:grey', lw=1)
-            #ax.add_patch(patch)
-            const_=self.ball_radius*2*np.pi/4
-            
-            patch = matplotlib.patches.Rectangle((-const_/2,-const_/2),const_, const_,fc='none',edgecolor='tab:grey', lw=1)     
-            ax.add_patch(patch)   
-            if self.grasp_id[i]!=[]:
-                frames=self.FRAMES[i]
-                n = frames.shape[0]
-                cp=self.Cplus[i]
-                cm=self.Cminus[i]
-                vx=self.framex[i]
-                vz=self.framez[i]
-                
-                for j in range(n):
-                    x0,y0=frames[j,0],frames[j,1]    
-                    patch = plt.Circle((x0, y0),self.bot_width/2, fc='none',edgecolor='k',lw=1)
-                    ax.add_patch(patch)
-
-                #ax.quiver(x0,y0, self.control_forces_x[self.grasp_id[i],i],self.control_forces_z[self.grasp_id[i],i], color="tab:purple", scale=10,width=0.002)
-                x0,y0=frames[:,0],frames[:,1] 
-                ax.quiver(x0,y0, vx[:,0], vx[:,1], color="tab:blue", scale=10,width=0.005,label='controller dir')  
-                ax.quiver(x0,y0, vz[:,0], vz[:,1], color="tab:green", scale=10,width=0.005,label='controller dir') 
-                ax.quiver(x0,y0, cp[:,0], cp[:,1], color="tab:red", scale=10,width=0.005)   
-                ax.quiver(x0,y0, cm[:,0], cm[:,1], color="tab:red", scale=10,width=0.005)   
-         
-            #     xo=self.grasp_position_x[i]
-            #     zo=self.grasp_position_z[i]
-                
-            #     Fx=self.grasp_force_x[i]
-            #     Fz=self.grasp_force_z[i]
-            #     #print("Fx:",np.round(Fx,2))
-            #     #print("Fz:",np.round(Fz,2))
-            #     vx=self.framex[i]
-            #     vz=self.framez[i]
-            #     cp=self.Cplus[i]
-            #     cm=self.Cminus[i]   
-            #     #F=self.F_control[i]
-            #     #F=F.flatten()
-            #     #print(F)
-            #     #Fx=F[0]
-            #     #Fy=F[1]
-            #     #vxn=self.FRAMENX[i]            
-            # #print('vx',vx,'vxn',vxn)
-            # #print('sum',vx+vxn)
-            #     #plt.quiver(xo,zo, Fx,Fz, color="tab:purple", scale=10,width=0.002)  
-            #     ax.quiver(xo,zo, self.control_forces_x[self.grasp_id[i],i],self.control_forces_z[self.grasp_id[i],i], color="tab:purple", scale=10,width=0.002)
-            #     plt.quiver(xo,zo, vx[:,0], vx[:,1], color="tab:blue", scale=10,width=0.001,label='controller dir')  
-            #     plt.quiver(xo,zo, vz[:,0], vz[:,1], color="tab:green", scale=10,width=0.001,label='controller dir') 
-            #     plt.quiver(xo,zo, cp[:,0], cp[:,1], color="tab:red", scale=10,width=0.001)   
-            #     plt.quiver(xo,zo, cm[:,0], cm[:,1], color="tab:red", scale=10,width=0.001)   
-            
-            #plt.quiver(zo,xo, vxn[:,1], vxn[:,0], color="tab:pink", scale=10)
-            #for k in self.GRASP_CON[i]:
-                #plt.quiver(Yo[k],Xo[k], FY[k],FX[k],color="tab:orange", scale=10)
-        # lists=self.GRASP_CON[i]
-        # lists=np.asarray(lists)
-        # for k in range(len(self.Xb)):
-        #     res=np.where(lists==k)
-        #     print(res[0])
-        #     if len(res[0])==0:
-        #         print('plotted')
-        #         plt.quiver(Yo[k],Xo[k], FY[k],FX[k],color="tab:red", scale=20)
-        #     else:
-
-                #plt.quiver(Yo[k],Xo[k], FY[k],FX[k],color="tab:green", scale=15)
-            plt.title('Time= ' + str(np.round(self.time[i],0))+"  $\epsilon$="+str(self.EPSILON[i]),fontsize=12)
-            #plt.gca().set_aspect('equal', adjustable='box')
-            
-            plt.savefig(direct+"/frame%04d.jpg" % count)
-                 
-            count=count+1 
-            
-            plt.close('all')   
-
-
-     def create_wrenches_slices_frames(self):
-         fm._rebuild()
-         plt.rcParams['font.family'] = 'Times New Roman'
-         plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-         plt.rcParams['font.size'] = 8
-         plt.rcParams['axes.linewidth'] = .1
-         direct = os.path.join(self.mainDirectory+self.name,'_grasping_frames_wrenches_slices')    
-         if not os.path.isdir(direct):
-             os.makedirs(direct)
-         count=0
-         for i in range(len(self.time)-1):    
-                    #fig = plt.figure(dpi=300)
-                    #fig.set_size_inches(4, 4)
-                    #self.wxmin=np.min(self.bot_position_x[:,i])
-                    
-             fig, axs = plt.subplots(nrows=1, ncols=3,figsize=(5,2),dpi=300)   
-             #print(self.grasp_id[i])
-             if self.grasp_id[i]!=[] and len(self.grasp_id[i])>1:
-                 Wrenchxy=self.WRENCHXY[i]
-                 #print(Wrenchxy)
-                 hullxy=self.HULLXY[i]
-                 
-                 Wrenchxt=self.WRENCHXT[i]
-                 hullxt=self.HULLXT[i]
-                 
-                 Wrenchyt=self.WRENCHYT[i]
-                 hullyt=self.HULLYT[i]
-                 epsilon1=self.EPSILON[i]
-        
-                
-            
-                 axs[0].set_aspect('equal', adjustable='box')
-                 axs[0].scatter(Wrenchxy[:,0],Wrenchxy[:,1],color='k',s=1)
-                 axs[0].fill(Wrenchxy[hullxy.vertices,0], Wrenchxy[hullxy.vertices,1], 'tab:red', alpha=0.3)
-                 for j in range((Wrenchxy.shape[0])):
-                     axs[0].arrow(0,0,Wrenchxy[j,0],Wrenchxy[j,1],color="green",zorder=3,head_width=0.05,head_length=0.03)
-                    
-                 #for i in range((minnorm.shape[0])): 
-                     #axs[0].arrow(0,0,epsilon1*minnorm[i,0],epsilon1*minnorm[i,1],color="orange",zorder=3,head_width=0.05,head_length=0.03)    
-                    
-                 patch = plt.Circle((0,0),epsilon1 , fc='tab:blue',alpha=0.5)
-                 axs[0].add_patch(patch)
-                 axs[0].set_title(r'$x-y$')
-                 axs[0].set_xlabel('$x$',labelpad=1)
-                 axs[0].set_ylabel('$y$',labelpad=-2)
-                 axs[0].xaxis.set_tick_params(width=.25,length=2,pad=1)
-                 axs[0].yaxis.set_tick_params(width=.25,length=2,pad=1)
-                 xticks=[-1,-0.5,0,0.5,1]
-                 yticks=[-1,-0.5,0,0.5,1]
-                 #xticks=[-1,-0.5,0,0.5,1]
-                 #yticks=[-2,-1,0,1,2]
-                 axs[0].set_xticks(np.round(xticks,1))
-                 axs[0].set_yticks(np.round(yticks,1))
-                 #axs[0].set_xlim([-1,1])
-                 #axs[0].set_ylim([-2,2])
-                 axs[0].grid(True,linewidth=0.5)  
-                
-                
-                
-                
-                 axs[1].set_aspect('equal', adjustable='box')
-                 axs[1].scatter(Wrenchxt[:,0],Wrenchxt[:,1],color='k',s=1)
-                 axs[1].fill(Wrenchxt[hullxt.vertices,0], Wrenchxt[hullxt.vertices,1], 'tab:red', alpha=0.3)
-                 patch = plt.Circle((0,0),epsilon1 , fc='tab:blue',alpha=0.5)
-                 for j in range((Wrenchxt.shape[0])):
-                     axs[1].arrow(0,0,Wrenchxt[j,0],Wrenchxt[j,1],color="green",zorder=3,head_width=0.05,head_length=0.03)
-                    
-                    
-                 #for i in range((minnorm.shape[0])): 
-                     #axs[1].arrow(0,0,epsilon1*minnorm[i,0],epsilon1*minnorm[i,2],color="orange",zorder=3,head_width=0.05,head_length=0.03)    
-                    
-                 axs[1].add_patch(patch)
-                 axs[1].set_title(r'$x-\tau$')
-                 axs[1].set_xlabel('$x$',labelpad=1)
-                 axs[1].set_ylabel(r'$\tau$',labelpad=-2)
-                 axs[1].xaxis.set_tick_params(width=.25,length=2,pad=1)
-                 axs[1].yaxis.set_tick_params(width=.25,length=2,pad=1)
-                 xticks=[-1,-0.5,0,0.5,1]
-                 yticks=[-1,-0.5,0,0.5,1]
-                 #yticks=[-2,-1,0,1,2]
-                 axs[1].set_xticks(np.round(xticks,1))
-                 axs[1].set_yticks(np.round(yticks,1))
-                 #axs[1].set_xlim([-1,1])
-                 #axs[1].set_ylim([-2,2])
-                 axs[1].grid(True,linewidth=0.5)  
-                
-                
-                 axs[2].set_aspect('equal', adjustable='box')
-                 axs[2].scatter(Wrenchyt[:,0],Wrenchyt[:,1],color='k',s=1)
-                 axs[2].fill(Wrenchyt[hullyt.vertices,0], Wrenchyt[hullyt.vertices,1], 'tab:red', alpha=0.3)
-                 patch = plt.Circle((0,0),epsilon1 , fc='tab:blue',alpha=0.5)
-                 for j in range((Wrenchyt.shape[0])):
-                     axs[2].arrow(0,0,Wrenchyt[j,0],Wrenchyt[j,1],color="green",zorder=3,head_width=0.05,head_length=0.03)
-                    
-                 #for i in range((minnorm.shape[0])): 
-                     #axs[2].arrow(0,0,epsilon1*minnorm[i,1],epsilon1*minnorm[i,2],color="orange",zorder=3,head_width=0.05,head_length=0.03)    
-                    
-                 axs[2].add_patch(patch)
-                 axs[2].set_title(r'$y-\tau$')
-                 axs[2].set_xlabel('$y$',labelpad=1)
-                 axs[2].set_ylabel(r'$\tau$',labelpad=0)
-                 axs[2].xaxis.set_tick_params(width=.25,length=2,pad=1)
-                 axs[2].yaxis.set_tick_params(width=.25,length=2,pad=1)
-                 xticks=[-1,-0.5,0,0.5,1]
-                 yticks=[-1,-0.5,0,0.5,1]
-                 axs[2].set_xticks(np.round(xticks,1))
-                 axs[2].set_yticks(np.round(yticks,1))
-                 #axs[2].set_xlim([-1,1])
-                 #axs[2].set_ylim([-2,2])
-                 fig.suptitle('Time= ' + str(np.round(self.time[i],0))+"  $\epsilon$="+str(epsilon1),fontsize=12)
-                 plt.tight_layout()
-                 axs[2].grid(True,linewidth=0.5) 
-                 plt.savefig(direct+"/frame%04d.jpg" % count)  
-                 count=count+1 
-                 plt.close('all') 
-
-             else:
-                 fig.suptitle('Time= ' + str(np.round(self.time[i],0))+"  $\epsilon$="+str(0),fontsize=12)
-                 plt.savefig(direct+"/frame%04d.jpg" % count)  
-                 count=count+1 
-                 plt.close('all') 
-
-
-     def create_frames_control_forces(self):
-        ''' Create frames for a video '''
-        fm._rebuild()
-        plt.rcParams['font.family'] = 'Times New Roman'
-        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-        plt.rcParams['font.size'] = 8
-        plt.rcParams['axes.linewidth'] = .1
-        direct = os.path.join(self.mainDirectory+self.name,'_control_frames')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-        count=0
-        for i in range(len(self.time)-1):    
-            x0,y0=self.ballx_position[i],self.ballz_position[i]
-            d=1
-            wxmax=x0+d
-            wxmin=x0-d
-            wymax=y0+d
-            wymin=y0-d
-            const=(wxmax-wxmin)/(wymax-wymin)
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(const*4, 4)
-            ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-            # BOUNDARY ROBOTS
-            for j in range(0,self.nb):
-                x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]  
-                patch = plt.Circle((x0, y0),self.bot_width/2, fc='black')
-                ax.add_patch(patch)
-                ax.quiver(x0,y0, self.control_forces_x[j,i],self.control_forces_z[j,i], color="tab:purple", scale=10,width=0.002)
-                ax.quiver(x0,y0, self.bot_contact_forces_x[j,i],self.bot_contact_forces_z[j,i], color="tab:blue", scale=1000,width=0.002)            
-                ax.quiver(x0,y0, self.bot_total_forces_x[j,i],self.bot_total_forces_z[j,i], color="tab:red", scale=10,width=0.002)            
-
-            if self.geom=="circle":
-                x0,y0=self.ballx_position[i],self.ballz_position[i]
-                patch = plt.Circle((x0, y0),self.ball_radius,fc='tab:gray',edgecolor='black',linewidth=1)
-                ax.add_patch(patch)
-            
-            if self.geom=="square":
-                const_=self.ball_radius*2
-                x0,y0=self.ballx_position[i]-const_/2,self.ballz_position[i] - const_/2
-                patch = patches.Rectangle((x0, y0),const_, const_,fc='none',edgecolor='tab:grey')     
-                ax.add_patch(patch)
-                patch = plt.Circle((x0, y0),self.a2,fc='none',edgecolor='tab:blue',linewidth=1)
-                ax.add_patch(patch)
-            if self.geom=="triangle":
-                const_=self.ball_radius*2*np.pi/3
-                r=const_*np.sqrt(3)/3
-                x0,y0=self.ballx_position[i],self.ballz_position[i]
-                patch = RegularPolygon((x0,y0),3,r,orientation=-np.pi/2,fc='tab:gray',edgecolor='tab:grey')
-                ax.add_patch(patch)  
-              
-            fig.suptitle('Time= ' + str(np.round(self.time[i],0)))
-            plt.savefig(direct+"/frame%04d.jpg" % count)
-                 
-            count=count+1 
-            
-            plt.close('all')         
-        
-
-     def create_frames_grasping(self):
-        ''' Create frames for a video '''
-
-        direct = os.path.join(self.mainDirectory+self.name,'_grasping_frames')    
-        if not os.path.isdir(direct):
-            os.makedirs(direct)
-        count=0
-        for i in range(len(self.time)-1):    
-            #fig = plt.figure(dpi=300)
-            #fig.set_size_inches(4, 4)
-            #self.wxmin=np.min(self.bot_position_x[:,i])
-            x0,y0=self.ballx_position[i],self.ballz_position[i]
-            d=1
-            wxmax=x0+d
-            wxmin=x0-d
-            wymax=y0+d
-            wymin=y0-d
-            const=(wxmax-wxmin)/(wymax-wymin)
-            fig = plt.figure(dpi=300)
-            fig.set_size_inches(const*4, 4)
-            ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-
-            #fig, ax = plt.subplots(figsize=(2,2*const),dpi=300,constrained_layout=True)
-            #ax = plt.axes(xlim=(self.wxmin,self.wxmax), ylim=(self.wymin, self.wymax))
-
-            # BOUNDARY ROBOTS
-            for j in range(0,self.nb):
-                x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]  
-                patch = plt.Circle((x0, y0),self.bot_width/2, fc='black')
-                ax.add_patch(patch)
-                #ax.quiver(x0,y0, self.control_forces_x[j,i],self.control_forces_z[j,i], color="tab:purple", scale=10,width=0.002)
-   
-            if self.geom=="circle":
-                x0,y0=self.ballx_position[i],self.ballz_position[i]
-                patch = plt.Circle((x0, y0),self.ball_radius,fc='none',edgecolor='black',linewidth=1)
-                ax.add_patch(patch)
-            
-            if self.geom=="square":
-                const_=self.ball_radius*2
-                x0,y0=self.ballx_position[i]-const_/2,self.ballz_position[i] - const_/2
-                patch = matplotlib.patches.Rectangle((x0, y0),const_, const_,fc='none',edgecolor='black')     
-                ax.add_patch(patch)
-            
-            if self.geom=="triangle":
-                const_=self.ball_radius*2*np.pi/3
-                r=const_*np.sqrt(3)/3
-                x0,y0=self.ballx_position[i],self.ballz_position[i]
-                patch = RegularPolygon((x0,y0),3,r,orientation=-np.pi/2,fc='tab:grey',edgecolor='tab:grey')
-                ax.add_patch(patch) 
-                
-            if self.grasp_id[i]!=[]:
-                
-                xo=self.grasp_position_x[i]
-                zo=self.grasp_position_z[i]
-                
-                Fx=self.grasp_force_x[i]
-                Fz=self.grasp_force_z[i]
-                #print("Fx:",np.round(Fx,2))
-                #print("Fz:",np.round(Fz,2))
-                vx=self.framex[i]
-                vz=self.framez[i]
-                cp=self.Cplus[i]
-                cm=self.Cminus[i]   
-                #F=self.F_control[i]
-                #F=F.flatten()
-                #print(F)
-                #Fx=F[0]
-                #Fy=F[1]
-                #vxn=self.FRAMENX[i]            
-            #print('vx',vx,'vxn',vxn)
-            #print('sum',vx+vxn)
-                #plt.quiver(xo,zo, Fx,Fz, color="tab:purple", scale=10,width=0.002)  
-                ax.quiver(xo,zo, self.control_forces_x[self.grasp_id[i],i],self.control_forces_z[self.grasp_id[i],i], color="tab:purple", scale=10,width=0.005)
-                plt.quiver(xo,zo, vx[:,0], vx[:,1], color="tab:blue", scale=10,width=0.002,label='controller dir')  
-                plt.quiver(xo,zo, vz[:,0], vz[:,1], color="tab:green", scale=10,width=0.002,label='controller dir') 
-                plt.quiver(xo,zo, cp[:,0], cp[:,1], color="tab:red", scale=10,width=0.002)   
-                plt.quiver(xo,zo, cm[:,0], cm[:,1], color="tab:red", scale=10,width=0.002) 
-            fig.suptitle('Time= ' + str(np.round(self.time[i],0)))
-            plt.savefig(direct+"/frame%04d.jpg" % count)
-            count=count+1 
-            plt.close('all')   
-
-
-     # def create_frames_grasping(self):
-     #    ''' Create frames for a video '''
-
-     #    direct = os.path.join(self.mainDirectory+self.name,'_grasping_frames')    
-     #    if not os.path.isdir(direct):
-     #        os.makedirs(direct)
-     #    count=0
-     #    TEMP=[]
-     #    VY=[]
-     #    F_=[]
-     #    for i in range(len(self.time)-1):    
-     #        #fig = plt.figure(dpi=300)
-     #        #fig.set_size_inches(4, 4)
-     #        #self.wxmin=np.min(self.bot_position_x[:,i])
-     #        temp=[]
-     #        vy_=[]
-     #        f_=[]
-     #        x0,y0=self.ballx_position[i],self.ballz_position[i]
-     #        d=1
-     #        wxmax=x0+d
-     #        wxmin=x0-d
-     #        wymax=y0+d
-     #        wymin=y0-d
-     #        const=(wxmax-wxmin)/(wymax-wymin)
-     #        fig = plt.figure(dpi=300)
-     #        fig.set_size_inches(const*4, 4)
-     #        ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
-
-     #        #fig, ax = plt.subplots(figsize=(2,2*const),dpi=300,constrained_layout=True)
-     #        #ax = plt.axes(xlim=(self.wxmin,self.wxmax), ylim=(self.wymin, self.wymax))
-
-     #        # BOUNDARY ROBOTS
-     #        for j in range(0,self.nb):
-     #            x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]  
-     #            patch = plt.Circle((x0, y0),self.bot_width/2, fc='black')
-     #            ax.add_patch(patch)
-     #            #ax.quiver(x0,y0, self.control_forces_x[j,i],self.control_forces_z[j,i], color="tab:purple", scale=10,width=0.002)
-   
-     #        if self.geom=="circle":
-     #            x0,y0=self.ballx_position[i],self.ballz_position[i]
-     #            patch = plt.Circle((x0, y0),self.ball_radius,fc='none',edgecolor='black',linewidth=1)
-     #            ax.add_patch(patch)
-            
-     #        if self.geom=="square":
-     #            const_=self.ball_radius*2
-     #            x0,y0=self.ballx_position[i]-const_/2,self.ballz_position[i] - const_/2
-     #            patch = matplotlib.patches.Rectangle((x0, y0),const_, const_,fc='none',edgecolor='black')     
-     #            ax.add_patch(patch)
-            
-     #        if self.geom=="triangle":
-     #            const_=self.ball_radius*2*np.pi/3
-     #            r=const_*np.sqrt(3)/3
-     #            x0,y0=self.ballx_position[i],self.ballz_position[i]
-     #            patch = RegularPolygon((x0,y0),3,r,orientation=-np.pi/2,fc='tab:grey',edgecolor='tab:grey')
-     #            ax.add_patch(patch)  
-     #        if self.grasp_id[i]!=[]:
-                
-     #             xo=self.grasp_position_x[i]
-     #             zo=self.grasp_position_z[i]
-                
-     #             Fx=self.grasp_force_x[i]
-     #             Fz=self.grasp_force_z[i]
-     #        #    #print("Fx:",np.round(Fx,2))
-     #        #    #print("Fz:",np.round(Fz,2))
-     #             vx=self.framex[i]
-     #             vz=self.framez[i]
-     #             cp=self.Cplus[i]
-     #             cm=self.Cminus[i]   
-     #        #     #F=self.F_control[i]
-     #        #     #F=F.flatten()
-     #        #     #print(F)
-     #        #     #Fx=F[0]
-     #        #     #Fy=F[1]
-     #        #     #vxn=self.FRAMENX[i]            
-     #        # #print('vx',vx,'vxn',vxn)
-     #        # #print('sum',vx+vxn)
-     #        #     #plt.quiver(xo,zo, Fx,Fz, color="tab:purple", scale=10,width=0.002)  
-     #        #     ref=np.arctan2(self.mu,1)
-     #        #     #print(ref)
-     #        #     Fx=self.control_forces_x[self.grasp_id[i],i]
-     #        #     Fz=self.control_forces_z[self.grasp_id[i],i]
-     #        #     #print(Fx)
-     #        #     #print(vz)
-                
-     #        #     for i in range(len(Fx)):
-     #        #         F=np.array([Fx[i],Fz[i]])
-     #        #         vy=np.array([vz[i,0],vz[i,1]])
-     #        #         vy_.append(vy)
-     #        #         temp.append(np.arccos(np.dot(F,vy)/(np.linalg.norm(F)*np.linalg.norm(vy))))
-     #        #         f_.append(F)
-     #            ax.quiver(xo,zo, self.control_forces_x[self.grasp_id[i],i],self.control_forces_z[self.grasp_id[i],i], color="tab:purple", scale=10,width=0.002)
-     #            ax.quiver(xo,zo, vx[:,0], vx[:,1], color="tab:blue", scale=10,width=0.001,label='controller dir')  
-     #            ax.quiver(xo,zo, vz[:,0], vz[:,1], color="tab:green", scale=10,width=0.001,label='controller dir') 
-     #            ax.quiver(xo,zo, cp[:,0], cp[:,1], color="tab:red", scale=10,width=0.001)   
-     #            ax.quiver(xo,zo, cm[:,0], cm[:,1], color="tab:red", scale=10,width=0.001)   
-     #        TEMP.append(temp) 
-     #        VY.append(vy_)
-     #        F_.append(f_)
-     #        fig.suptitle('Time= ' + str(np.round(self.time[i],0)))
-     #        plt.savefig(direct+"/frame%04d.jpg" % count)
-     #        count=count+1 
-     #        plt.close('all')   
-     #    return(TEMP,ref,VY,F_)   
-
-            
-     def plot_field_values(self):
-         import matplotlib.font_manager as fm
-         # Rebuild the matplotlib font cache
-         fm._rebuild()
-         plt.rcParams['font.family'] = 'Times New Roman'
-         plt.rcParams['mathtext.fontset'] = 'dejavuserif'
-         plt.rcParams['font.size'] = 6
-         plt.rcParams['axes.linewidth'] = .1
-         plt.rcParams["text.usetex"] = True
-         fig, ax = plt.subplots(figsize=(2, 2),dpi=300)
-
-
-                
-         ax.plot(self.time,self.Field_value_sum,color='red',linewidth=1)
-        
-         x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-         y_ticks = np.linspace(np.min(self.Field_value_sum), np.max(self.Field_value_sum),5,endpoint=True)
-         ax.set_xticks(np.round(x_ticks,2))
-         ax.set_yticks(np.round(y_ticks,2))
-         ax.xaxis.set_tick_params(width=.25,length=2)
-         ax.yaxis.set_tick_params(width=.25,length=2)
-         ax.set_ylabel(r"$\Sigma \phi$")
-         ax.set_xlabel("Time (seconds)")
-         ax.set_title("Field Values")
-         ax.grid(True)
-         plt.tight_layout()
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'field_value.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'field_value.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'field_value.pdf')        
-
-
-     def plot_Wrench_space_3D(self,entry):
-         """ Plot the 3D wrench space visual for a specified entry """
-         i = entry
-         epsilon1=self.EPSILON[i]
-         hullwrenchmags=self.HULLWRENCHMAGS[i]
-         hullwrenchnorm=self.WRENCH_NORM[i]
-         Wrench=self.WRENCH_NORM[i]
-         hull=self.HULL[i]
-         res=np.where(hullwrenchmags==np.amin(hullwrenchmags))
-         #print(res)
-         
-         #minnorm=hullwrenchnorm[res[0],:]
-         #minnorm=np.asarray(minnorm[0])
-         #minnorm=np.round(minnorm,3)
-         #print(minnorm)
-         #or i in range(minnorm.shape[0]):
-             #print("MINNORM_x : {}, MINNORM_y :{} , MINNORM_z : {}".format(minnorm[i,0], minnorm[i,1],minnorm[i,2]))    
-             
-         fig3D = plt.figure(figsize=(3,3),dpi=300)
-         ax3D = fig3D.add_subplot(111, projection='3d')
-         ax3D.set_box_aspect((1, 1, 1)) 
-         i=0
-         for s in hull.simplices:
-        
-             s = np.append(s, s[0])  # Cycle back to the first coordinate
-             ax3D.plot(Wrench[s, 0], Wrench[s, 1], Wrench[s, 2], "r-")
-             ax3D.scatter(Wrench[s, 0], Wrench[s, 1], Wrench[s, 2], marker='o')
-             ax3D.scatter([0], [0], [0], marker='x')
-            
-         #for i in range(minnorm.shape[0]):
-         #    ax3D.plot([0,epsilon1*minnorm[i,0]],[0,epsilon1*minnorm[i, 1]], [0,epsilon1*minnorm[i, 2]], "k-")
-         r=epsilon1
-         u, v = np.mgrid[0:2*np.pi:20j, 0:np.pi:10j]
-         x = r*np.cos(u)*np.sin(v)
-         y = r*np.sin(u)*np.sin(v)
-         z = r*np.cos(v)
-         ax3D.plot_wireframe(x, y, z, color="tab:green",linewidth=.25)
-         for i in ["x", "y", "z"]:
-             eval("ax3D.set_{:s}label('{:s}')".format(i, i))
-         ax3D.set_xlim3d(-1.0,1.0)
-         ax3D.set_ylim3d(-1.0,1.0)
-         ax3D.set_zlim3d(-1.0,1.0)
-         plt.show()
-         
-     
-     def plot_Wrench_space_3D2(self,entry):
-         """ Plot the 3D wrench space visual for a specified entry """
-         i = entry
-         #epsilon1=self.EPSILON[i]
-         #hullwrenchmags=self.HULLWRENCHMAGS2[i]
-         #hullwrenchnorm=self.WRENCH_NORM2[i]
-         Wrench=self.temp_wrenches_norm[i]
-         hull=self.HULL2[i]
-         #res=np.where(hullwrenchmags==np.amin(hullwrenchmags))
-         #print(res)
-         
-         #minnorm=hullwrenchnorm[res[0],:]
-         #minnorm=np.asarray(minnorm[0])
-         #minnorm=np.round(minnorm,3)
-         #print(minnorm)
-         #or i in range(minnorm.shape[0]):
-             #print("MINNORM_x : {}, MINNORM_y :{} , MINNORM_z : {}".format(minnorm[i,0], minnorm[i,1],minnorm[i,2]))    
-             
-         fig3D = plt.figure(figsize=(3,3),dpi=300)
-         ax3D = fig3D.add_subplot(111, projection='3d')
-         ax3D.set_box_aspect((1, 1, 1)) 
-         i=0
-         #print(Wrench)
-         #print(hull.simplices)
-         for s in hull.simplices:
-             #print(s)
-             s = np.append(s, s[0])  # Cycle back to the first coordinate
-             ax3D.plot(Wrench[s, 0], Wrench[s, 1], Wrench[s, 2], "r-")
-             ax3D.scatter(Wrench[s, 0], Wrench[s, 1], Wrench[s, 2], marker='o')
-             ax3D.scatter([0], [0], [0], marker='x')
-            
-         #for i in range(minnorm.shape[0]):
-         #    ax3D.plot([0,epsilon1*minnorm[i,0]],[0,epsilon1*minnorm[i, 1]], [0,epsilon1*minnorm[i, 2]], "k-")
-         #r=epsilon1
-         #u, v = np.mgrid[0:2*np.pi:20j, 0:np.pi:10j]
-         #x = r*np.cos(u)*np.sin(v)
-         #y = r*np.sin(u)*np.sin(v)
-         #z = r*np.cos(v)
-         #ax3D.plot_wireframe(x, y, z, color="tab:green",linewidth=.25)
-         for i in ["x", "y", "z"]:
-             eval("ax3D.set_{:s}label('{:s}')".format(i, i))
-         ax3D.set_xlim3d(-1.0,1.0)
-         ax3D.set_ylim3d(-1.0,1.0)
-         ax3D.set_zlim3d(-1.0,1.0)
-         plt.show()
-             
-     
-        
-     
-     def plot_control_forces(self):
-         ''' plot the control forces'''
-         direct = os.path.join(self.mainDirectory+'/'+self.name+'/'+'_force_analysis')    
-         if not os.path.isdir(direct):
-             os.makedirs(direct)         
-         fig, axs = plt.subplots(nrows=2, ncols=1,figsize=(5,4),dpi=300)
-         FX=[]
-         FY=[]
-         for i in range(len(self.time)):
-             fxtemp=[]
-             fytemp=[]
-             for j in range(0,self.nb):
-                 Fx,Fy=self.control_forces_x[j,i],self.control_forces_z[j,i]  
-                 fxtemp.append(Fx)
-                 fytemp.append(Fy)
-             FX.append(np.sum(fxtemp))
-             FY.append(np.sum(fytemp)) 
-               
-         axs[0].plot(self.time,FX,color='tab:red',linewidth=1,label='x')
-         x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-         y_ticks = np.linspace(np.min(FX), np.max(FX),5,endpoint=True)
-         axs[0].xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[0].yaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[0].set_xticks(np.round(x_ticks,1))
-         axs[0].set_yticks(np.round(y_ticks,1))
-         axs[0].set_title(r'$\Sigma F_{cx}$'+" vs time" )
-         axs[0].set_ylabel('$\Sigma F_{cx}$',labelpad=1)         
-         axs[0].grid(True)        
-     # axs[0].set_xlim([2.5,10])  
-        
-         axs[1].plot(self.time,FY,color='tab:blue',linewidth=1,label='y')
-         x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-         y_ticks = np.linspace(np.min(FY), np.max(FY),5,endpoint=True)
-         axs[1].xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[1].yaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[1].set_xticks(np.round(x_ticks,1))
-         axs[1].set_yticks(np.round(y_ticks,1))
-         axs[1].set_title(r'$\Sigma F_{cy}$'+" vs time" )
-         axs[1].set_ylabel('$\Sigma F_{cy}$',labelpad=1)
-         axs[1].set_xticks(np.round(x_ticks,2))
-         axs[1].grid(True)   
-     # axs[1].set_xlim([2.5,10])  
-        
-
-         
-     # axs[2].set_xlim([2.5,10]) 
-         #fig.suptitle('Control forces', fontsize=16)        
-         plt.tight_layout()
-         plt.savefig(direct+"/control forces.jpg")
-         plt.savefig(direct+"/control forces.pdf")
-         plt.savefig(direct+"/control forces.svg")
-         plt.savefig(direct+"/control forces.eps")
-         plt.close('all')        
-       
-     def plot_ball_contact_forces(self):
-         ''' plot the control forces'''
-         direct = os.path.join(self.mainDirectory+'/'+self.name+'/'+'_force_analysis')    
-         if not os.path.isdir(direct):
-             os.makedirs(direct)         
-         fig, axs = plt.subplots(nrows=3, ncols=1,figsize=(5,4),dpi=300)
-         from scipy.ndimage import gaussian_filter1d
-         self.bFx= gaussian_filter1d(self.bFx[80:-1], 50)      
-         self.bFz= gaussian_filter1d(self.bFz[80:-1], 50) 
-         axs[0].plot(self.time[80:-1],self.bFx,color='tab:red',linewidth=1,label='x')
-         #x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-         #y_ticks = np.linspace(np.min(self.bFx), np.max(self.bFx),5,endpoint=True)
-         axs[0].xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[0].yaxis.set_tick_params(width=.25,length=2,pad=1)
-         #axs[0].set_xticks(np.round(x_ticks,2))
-         #axs[0].set_yticks(np.round(y_ticks,2))
-         axs[0].set_title('ball Force [x]'+" vs time" )
-         axs[0].set_ylabel('ball Force  [x]',labelpad=1)         
-         axs[0].grid(True)        
-     # axs[0].set_xlim([2.5,10])  
-        
-         axs[1].plot(self.time[80:-1],self.bFz,color='tab:blue',linewidth=1,label='x')
-         #x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-         #y_ticks = np.linspace(np.min(self.bFz), np.max(self.bFz),5,endpoint=True)
-         axs[1].xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[1].yaxis.set_tick_params(width=.25,length=2,pad=1)
-         #axs[1].set_xticks(np.round(x_ticks,2))
-         #axs[1].set_yticks(np.round(y_ticks,2))
-         axs[1].set_title('ball Force [z]'+" vs time" )
-         axs[1].set_ylabel('ball Force  [z]',labelpad=1)         
-         axs[1].grid(True)   
-         
-         axs[2].plot(self.TIME,self.FB,color='tab:green',linewidth=1,label='x')
-         x_ticks = np.linspace(self.TIME[0], self.TIME[-1],5,endpoint=True)
-         y_ticks = np.linspace(np.min(self.FB), np.max(self.FB),5,endpoint=True)
-         axs[2].xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[2].yaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[2].set_xticks(np.round(x_ticks,2))
-         axs[2].set_yticks(np.round(y_ticks,2))
-         axs[2].set_title('ball Force ext [x]'+" vs time" )
-         axs[2].set_ylabel('ball Force ext  [x]',labelpad=1)         
-         axs[2].grid(True)            
-         
-     # axs[1].set_xlim([2.5,10])  
-        
-
-         
-     # axs[2].set_xlim([2.5,10]) 
-         #fig.suptitle('Control forces', fontsize=16)        
-         plt.tight_layout()
-         plt.savefig(direct+"/ball_contact_force.jpg")
-         plt.savefig(direct+"/ball_contact_force.pdf")
-         plt.savefig(direct+"/ball_contact_force.svg")
-         plt.savefig(direct+"/ball_contact_force.eps")
-         plt.close('all')          
-       
-     def plot_epsilon(self):
-         fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(5,3),dpi=300)
-         epsilon=np.asarray(self.EPSILON)
-         axs.plot(self.time,epsilon,color='blue',linewidth=1)
-         x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-         y_ticks = np.linspace(np.min(epsilon), np.max(epsilon),10,endpoint=True)
-         axs.set_xticks(np.round(x_ticks,2))
-         axs.set_yticks(np.round(y_ticks,2))
-         axs.set_title(r'$\epsilon$'+" vs time" )
-         axs.set_ylabel('$\epsilon$',labelpad=1)
-         axs.set_xlabel('time [s]',labelpad=-2)
-         axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs.grid(True)
-         plt.tight_layout()
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon_value.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon_value.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon_value.pdf')         
-       
-     def plot_epsilon2(self): 
-         """ Epsilon regaridng the contact foprces """
-         fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(5,3),dpi=300)
-         epsilon=np.asarray(self.EPSILON2)
-         axs.plot(self.time[0:-2],epsilon,color='blue',linewidth=1)
-         x_ticks = np.linspace(self.time[0], self.time[-2],5,endpoint=True)
-         y_ticks = np.linspace(np.min(epsilon), np.max(epsilon),10,endpoint=True)
-         axs.set_xticks(np.round(x_ticks,2))
-         axs.set_yticks(np.round(y_ticks,2))
-         axs.set_title(r'$\epsilon_{2}$'+" vs time" )
-         axs.set_ylabel('$\epsilon_{2}$',labelpad=1)
-         axs.set_xlabel('time [s]',labelpad=-2)
-         axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs.grid(True)
-         plt.tight_layout()
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon2_value.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon2_value.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon2_value.pdf')        
-        
-        
-     def plot_ball_position(self):
-         ''' plot the control forces'''
-         direct = os.path.join(self.mainDirectory+'/'+self.name+'/'+'_force_analysis')    
-         if not os.path.isdir(direct):
-             os.makedirs(direct)         
-         fig, axs = plt.subplots(nrows=2, ncols=1,figsize=(5,4),dpi=300)
-
-               
-         axs[0].plot(self.time,self.ballx_position,color='tab:red',linewidth=1,label='x')
-         x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-         y_ticks = np.linspace(np.min(self.ballx_position), np.max(self.ballx_position),5,endpoint=True)
-         axs[0].xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[0].yaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[0].set_xticks(np.round(x_ticks,2))
-         axs[0].set_yticks(np.round(y_ticks,2))
-         axs[0].set_title('ball_x_position [x]'+" vs time" )
-         axs[0].set_ylabel('ball_x_position [x]',labelpad=1)         
-         axs[0].grid(True)        
-     # axs[0].set_xlim([2.5,10])  
-        
-         axs[1].plot(self.time,self.ballz_position,color='tab:blue',linewidth=1,label='y')
-         x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-         y_ticks = np.linspace(np.min(self.ballz_position), np.max(self.ballz_position),5,endpoint=True)
-         axs[1].xaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[1].yaxis.set_tick_params(width=.25,length=2,pad=1)
-         axs[1].set_xticks(np.round(x_ticks,2))
-         #axs[1].set_yticks(np.round(y_ticks,2))
-         axs[1].set_title('ball_z_position'+" vs time" )
-         axs[1].set_ylabel('ball_z_position [z]',labelpad=1)
-         axs[1].set_xticks(np.round(x_ticks,2))
-         axs[1].grid(True)   
-     # axs[1].set_xlim([2.5,10])  
-        
-
-         
-     # axs[2].set_xlim([2.5,10]) 
-         #fig.suptitle('Control forces', fontsize=16)        
-         plt.tight_layout()
-         plt.savefig(direct+"/ball_positions.jpg")
-         plt.savefig(direct+"/ball_positions.pdf")
-         plt.savefig(direct+"/ball_positions.svg")
-         plt.savefig(direct+"/ball_positions.eps")
-         plt.close('all')               
-        
- 
-        
-
-     def create_wrenches_slices_frames_video(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_grasping_frames_wrenches_slices/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/wrench_slices_video.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
+         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/'+video+'.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
 
          for i in range(len(img_array)):
             out.write(img_array[i])
          out.release()  
-         
-     def create_video(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_frames/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/video.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release()          
-    
-     def create_video_contact_arrow(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_contact_arrow_frames/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/contact_arrow_video.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release()          
-  
-
-          
-     def create_video_robot_forces(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_forces_frames/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/forces_frames_video.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release()              
-            
-     def create_video_control(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_control_frames/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/control_forces_video.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release()          
-            
-     def create_video_pressure(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_pressure_frames/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/pressure_video.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release()          
-   
-     def create_video_pressure_no_boundary(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_pressure_no_boundary_frames/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/_pressure_no_boundary_video.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release()  
-
-
-         
-     def create_video_grasping_wrench(self):
-         #import pdb    
-         img_array = []
-         for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_grasping_frames_wrench/'+'/*.jpg')):
-             #pdb.set_trace()
-             img = cv2.imread(filename)
-             height, width, layers = img.shape
-             size = (width,height)
-             img_array.append(img)
-         out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/video_wrench.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-         for i in range(len(img_array)):
-            out.write(img_array[i])
-         out.release()   
-         
-         
-       
-     def create_video_grasping(self):
-        #import pdb    
-        img_array = []
-        for index, filename in enumerate(glob.glob(self.mainDirectory+'/'+self.name+'/_grasping_frames/'+'/*.jpg')):
-            #pdb.set_trace()
-            img = cv2.imread(filename)
-            height, width, layers = img.shape
-            size = (width,height)
-            img_array.append(img)
-        out = cv2.VideoWriter(self.mainDirectory+'/'+self.name+'/video_grasping.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, (width,height))    
-
-        for i in range(len(img_array)):
-           out.write(img_array[i])
-        out.release()  
-        
         
         
      def F(self,x,y,x1,x2,y1,y2):
