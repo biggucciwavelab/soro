@@ -17,7 +17,7 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.001 # time step 
-time_end = 6
+time_end = 25
 save_rate = 100 #save every n number of steps
 visual = 'irr'
 
@@ -153,21 +153,17 @@ if control_mode=="shape_morphing":
 #### CONTROL MODE -- GRASPING ####
 if control_mode=="grasping":
 
-      
-    # ball_radius=.81355/2
-    # ball_radius=.69834/2
-    # ball_radius=.58231/2
-    # ball_radius=.46584/2
-    # ball_radius=.34938/2
-    # ball_radius=.23292/2
-    #ball_radius=0.7224813103/2
-    # ball_radius=0.6192696946/2	
-    ball_radius=0.5160580788/2	
-    # ball_radius=0.4128464636/2	
-    # ball_radius=0.3096348469/2	
-    # ball_radius=0.2064232318/2
+    # square  	
+    #ball_radius=0.5160580788/2	
+
+    # circle
+    ball_radius=0.6570655533082147/2
+    
+    # triangle
+    ball_radius=0.6570655533082147/2
+    
     #ball_radius = R*0.3
-    ball_geometry = "square"          
+    ball_geometry = "triangle"          
     ballx = ball_radius+R+.3
     ballz = 0     
     ball_mass = 5
