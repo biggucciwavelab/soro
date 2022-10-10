@@ -1951,16 +1951,22 @@ class controller():
         FZ=[]
         time=np.round(self.my_system.GetChTime(),3)
 
-            
+        
         if time>self.Psi.tcut2:
-            #self.fb=self.fb+.01
+            self.Ball.balls[0].SetBodyFixed(False)             
+          
+        if time>self.Psi.tcut3:
+            self.fb=self.fb+.1
             self.forceb[0].SetMforce(self.fb)
             self.forceb[0].SetDir(chrono.VECT_X)
             self.Ball.balls[0].SetBodyFixed(False)            
             self.Ball.Fb["Fb"].append(self.fb)
             self.Ball.TIME["TIME"].append(time)
             self.Ball.PX["PX"].append(self.Ball.balls[0].GetPos().x)
-            self.Ball.PY["PY"].append(self.Ball.balls[0].GetPos().z)          
+            self.Ball.PY["PY"].append(self.Ball.balls[0].GetPos().z)     
+            
+            
+            
         for i in range(self.nb):
             Fx1=self.Psi.FXGRASP(self.bot_position_x[i],self.bot_position_z[i],time)
             Fz1=self.Psi.FYGRASP(self.bot_position_x[i],self.bot_position_z[i],time)
@@ -3057,6 +3063,7 @@ class R_functions():
             self.yc2 = self.parameters['yc2']    
             self.tcut1 = self.parameters['tcut1'] 
             self.tcut2 = self.parameters['tcut2'] 
+            self.tcut3 = self.parameters['tcut3'] 
 ##############################################################################            
             
 
@@ -6147,6 +6154,32 @@ class import_data:
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon3_value.jpg')
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon3_value.svg')    
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon3_value.pdf')          
+     
+         
+     
+     def plot_contact_number(self):
+         """ contact numbers"""
+         Num_contact1=[]
+         Num_contact2=[]
+         for i in range(len(self.temp_id2)):
+             Num_contact1.append(len(self.temp_id2[i]))
+                      
+         fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(5,3),dpi=300)
+         axs.plot(self.time[0:-2],Num_contact1,color='g',linewidth=1)
+         x_ticks = np.linspace(self.time[0], self.time[-2],5,endpoint=True)
+         y_ticks = np.linspace(0, np.max(Num_contact1),np.max(Num_contact1)+1,endpoint=True)
+         axs.set_xticks(np.round(x_ticks,2))
+         axs.set_yticks(np.round(y_ticks,2))
+         axs.set_title(r'number_contact'+" vs time" )
+         axs.set_ylabel('number of contact',labelpad=1)
+         axs.set_xlabel('time [s]',labelpad=-2)
+         axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
+         axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
+         axs.grid(True)
+         plt.tight_layout()
+         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'number of contact.jpg')
+         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'number of contact.svg')    
+         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'number of contact.pdf')           
          
      def plot_control_forces(self):
          ''' plot the control forces'''

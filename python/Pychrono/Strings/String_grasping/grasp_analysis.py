@@ -38,16 +38,14 @@ name = files[-1]
 #name="01_10_2022_15_21_45"
 
 # square
-#name="28_09_2022_15_55_04"
+name="28_09_2022_15_55_04"
 
 # Circle 
-name="04_10_2022_18_32_38"
+#name="04_10_2022_18_32_38"
 
 
-# triangle 
-name="04_10_2022_18_34_49"
-
-name="05_10_2022_15_18_45"
+## triangle 
+#name="05_10_2022_15_18_45"
 
 
 d=2.5
@@ -92,17 +90,20 @@ sim_data.save_grasp_parameters()
 # print('create_wrenches_slices_frames')
 # sim_data.create_wrenches_slices_frames()
 
-print('plot_epsilon')
-sim_data.plot_epsilon()
+# print('plot_epsilon')
+# sim_data.plot_epsilon()
 
-print('plot_epsilon2')
-sim_data.plot_epsilon2()
+# print('plot_epsilon2')
+# sim_data.plot_epsilon2()
 
-print('plot_epsilon3')
-sim_data.plot_epsilon3()
+# print('plot_epsilon3')
+# sim_data.plot_epsilon3()
 
 # print('plot_control_forces')
 # sim_data.plot_control_forces()
+
+
+sim_data.plot_contact_number()
 
 # print('plot_ball_position')
 # sim_data.plot_ball_position()
