@@ -8,7 +8,7 @@ import pychrono as chrono
 import timeit
 start=timeit.default_timer()
 #import objects_2 as sim_obj
-import objects as sim_obj
+import objects2 as sim_obj
 #from config import *
 import random
 import os
