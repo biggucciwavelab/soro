@@ -6684,7 +6684,7 @@ class import_data:
          """ Epsilon regaridng the contact foprces """
  
          fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(5,3),dpi=300)
-         axs.plot(self.time[0:-2],self.Mag_avg_pressure,color='g',linewidth=1)
+         axs.plot(self.time[0:-1],self.Mag_avg_pressure,color='g',linewidth=1)
          x_ticks = np.linspace(self.time[0], self.time[-2],5,endpoint=True)
          y_ticks = np.linspace(np.min(self.Mag_avg_pressure), np.max(self.Mag_avg_pressure),10,endpoint=True)
          axs.set_xticks(np.round(x_ticks,2))
@@ -6701,7 +6701,7 @@ class import_data:
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'average_pressure.pdf')     
      
          fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(5,3),dpi=300)
-         axs.plot(self.time[0:-2],self.Mag_avg_pressure_no_boundary,color='b',linewidth=1)
+         axs.plot(self.time[0:-1],self.Mag_avg_pressure_no_boundary,color='b',linewidth=1)
          x_ticks = np.linspace(self.time[0], self.time[-2],5,endpoint=True)
          y_ticks = np.linspace(np.min(self.Mag_avg_pressure_no_boundary), np.max(self.Mag_avg_pressure_no_boundary),10,endpoint=True)
          axs.set_xticks(np.round(x_ticks,2))
@@ -8073,22 +8073,21 @@ class import_data:
         plt.rcParams['mathtext.fontset'] = 'dejavuserif'
         plt.rcParams['font.size'] = 8
         plt.rcParams['axes.linewidth'] = .1
+        
         direct = os.path.join(self.mainDirectory+self.name,'_frames_combined')    
         if not os.path.isdir(direct):
             os.makedirs(direct)
         count=0
-
+        Num_contact1=[]
+        Num_contact2=[]
+        for i in range(len(self.temp_id2)):
+            Num_contact1.append(len(self.temp_id2[i]))
+            
         for i in range(len(self.time)-2):    
   
-            fig, axs = plt.subplots(nrows=2, ncols=3,figsize=(12,8),dpi=300)
+            fig, axs = plt.subplots(nrows=3, ncols=3,figsize=(12,12),dpi=300)
             axs[0,0].plot(self.FB[:i],self.PX[:i]-self.PX[54],color='tab:blue',linewidth=1)
             axs[0,0].scatter(self.FB[i-1],self.PX[i-1]-self.PX[54],color='tab:red',s=30)
-            #y_ticks = np.linspace(self.PX[0]-self.PX[0], self.PX[-1]-self.PX[0],5,endpoint=True)
-            #x_ticks = np.linspace(np.min(self.FB), np.max(self.FB),5,endpoint=True)
-            #axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
-            #axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
-            #axs.set_xticks(np.round(x_ticks,2))
-            #axs.set_yticks(np.round(y_ticks,2))
             axs[0,0].set_ylim([0,1])
             axs[0,0].set_title('FB='+str(np.round(self.FB[i-1],2))+" Px= "+str(np.round(self.PX[i-1]-self.PX[54],2))  )
             axs[0,0].set_xlabel('Pull Force [N]',labelpad=1)  
@@ -8127,6 +8126,23 @@ class import_data:
             axs[0,2].yaxis.set_tick_params(width=.25,length=2,pad=1)    
             axs[0,2].grid(True) 
             
+            
+            
+            axs[1,0].plot(self.time[:i],self.Mag_avg_pressure_no_boundary[:i],color='cyan',linewidth=1)
+            axs[1,0].scatter(self.time[i],self.Mag_avg_pressure_no_boundary[i],color='r',s=30)
+            x_ticks = np.linspace(self.time[0], self.time[-2],5,endpoint=True)
+            y_ticks = np.linspace(np.min(self.Mag_avg_pressure_no_boundary), np.max(self.Mag_avg_pressure_no_boundary),10,endpoint=True)
+            axs[1,0].set_xticks(np.round(x_ticks,2))
+            axs[1,0].set_yticks(np.round(y_ticks,2))
+            axs[1,0].set_title('Pressue_no boundary'+" vs time" )
+            axs[1,0].set_ylabel('Pressure (N/m^2)',labelpad=1)
+            axs[1,0].set_xlabel('time [s]',labelpad=-2)
+            axs[1,0].xaxis.set_tick_params(width=.25,length=2,pad=1)
+            axs[1,0].yaxis.set_tick_params(width=.25,length=2,pad=1)
+            axs[1,0].grid(True)
+            
+            
+            
             # epsilon 3
             epsilon=np.asarray(self.EPSILON3)
             axs[1,1].plot(self.time[:i],epsilon[:i],color='m',linewidth=1)
@@ -8160,6 +8176,33 @@ class import_data:
     
     
     
+            axs[2,1].plot(self.time[:i],Num_contact1[:i],color='tab:brown',linewidth=1)
+            axs[2,1].scatter(self.time[i],epsilon[i-1],color='r',s=30)
+            x_ticks = np.linspace(self.time[0], self.time[-2],5,endpoint=True)
+            y_ticks = np.linspace(0, np.max(Num_contact1),np.max(Num_contact1)+1,endpoint=True)
+            axs[2,1].set_xticks(np.round(x_ticks,2))
+            axs[2,1].set_yticks(np.round(y_ticks,2))
+            axs[2,1].set_title(r'number_contact'+" vs time" )
+            axs[2,1].set_ylabel('number of contact',labelpad=1)
+            axs[2,1].set_xlabel('time [s]',labelpad=-2)
+            axs[2,1].xaxis.set_tick_params(width=.25,length=2,pad=1)
+            axs[2,1].yaxis.set_tick_params(width=.25,length=2,pad=1)
+            axs[2,1].grid(True)
+    
+            axs[2,2].plot(self.time[:i],self.ball_velocity_x[:i],color="tab:grey",linewidth=1,label='vx')
+            axs[2,2].scatter(self.time[i],self.ball_velocity_x[i],color='r',s=30)
+            #x_ticks = np.linspace(self.time[0], self.time[-2],5,endpoint=True)
+            #y_ticks = np.linspace(0, np.max(self.ball_velocity_x),np.max(self.ball_velocity_x),endpoint=True)
+            #axs[2,2].set_xticks(np.round(x_ticks,2))
+            #axs[2,2].set_yticks(np.round(y_ticks,2))
+            axs[2,2].set_title(r'ball velocityx'+" vs time" )
+            axs[2,2].set_ylabel('m/s',labelpad=1)
+            axs[2,2].set_xlabel('time [s]',labelpad=-2)
+            axs[2,2].xaxis.set_tick_params(width=.25,length=2,pad=1)
+            axs[2,2].yaxis.set_tick_params(width=.25,length=2,pad=1)
+            axs[2,2].grid(True)
+    
+    
             xcenter=self.ballx_position[i]
             ycenter=self.ballz_position[i]
             
@@ -8171,8 +8214,8 @@ class import_data:
             wymin=y0b-d
             
      
-            axs[1,0].set_xlim([wxmin,wxmax])
-            axs[1,0].set_ylim([wymin,wymax])
+            axs[2,0].set_xlim([wxmin,wxmax])
+            axs[2,0].set_ylim([wymin,wymax])
             if self.geom=="square":
                 const=self.ball_radius*2
                 rx=const
@@ -8210,31 +8253,31 @@ class import_data:
                 if self.geom=="square":
                     if self.PHI(x0,y0,self.segments)<.15:
                         patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
-                        axs[1,0].add_patch(patch)
+                        axs[2,0].add_patch(patch)
                    
                     else:
                         patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
-                        axs[1,0].add_patch(patch) 
+                        axs[2,0].add_patch(patch) 
                         
                 if self.geom=="triangle":
                     if self.PHI(x0-xcenter,y0-ycenter,self.segments)<.1:
                         patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
-                        axs[1,0].add_patch(patch)
+                        axs[2,0].add_patch(patch)
                    
                     else:
                         patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
-                        axs[1,0].add_patch(patch)                         
+                        axs[2,0].add_patch(patch)                         
                         
                 if self.geom=="circle":
                     
                     q=np.sqrt((x0-self.ballx_position[i])**2 + (y0-self.ballz_position[i])**2)
                     if q<=(2 * self.bot_width/2 + self.ball_radius):
                         patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
-                        axs[1,0].add_patch(patch)
+                        axs[2,0].add_patch(patch)
                    
                     else:
                         patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
-                        axs[1,0].add_patch(patch)  
+                        axs[2,0].add_patch(patch)  
                         
                         
                 
@@ -8243,7 +8286,7 @@ class import_data:
                     
                     x0,y0=self.membrane_position_x[j,i],self.membrane_position_z[j,i]  
                     patch = plt.Circle((x0, y0),self.skin_width/2, fc='tab:red')
-                    axs[1,0].add_patch(patch)
+                    axs[2,0].add_patch(patch)
                 
                 
 
@@ -8255,21 +8298,21 @@ class import_data:
                 if self.Rm[j]==self.particle_width*np.sqrt(2)/2:
                     c='tab:green'
                 patch = plt.Circle((x0, y0),self.Rm[j], fc=c)
-                axs[1,0].add_patch(patch)         
+                axs[2,0].add_patch(patch)         
      
             if self.control_mode=="grasping":
                 patch = plt.Circle((self.xc2, self.yc2),self.a2,fc='none',edgecolor='tab:blue',linewidth=1,zorder=2)
-                axs[1,0].add_patch(patch)
+                axs[2,0].add_patch(patch)
                 if self.geom=="circle":
                     x0,y0=self.ballx_position[i],self.ballz_position[i]
                     patch = plt.Circle((x0, y0),self.ball_radius,fc='none',edgecolor='black',linewidth=1)
-                    axs[1,0].add_patch(patch)
+                    axs[2,0].add_patch(patch)
             
                 if self.geom=="square":
                     const_=self.ball_radius*2
                     x0,y0=self.ballx_position[i] - const_/2,self.ballz_position[i] - const_/2
                     patch = matplotlib.patches.Rectangle((x0, y0),const_, const_,fc='tab:grey')     
-                    axs[1,0].add_patch(patch)   
+                    axs[2,0].add_patch(patch)   
                     
                 if self.geom=="triangle":
                     x0,y0=self.ballx_position[i],self.ballz_position[i] 
@@ -8278,13 +8321,25 @@ class import_data:
                     r=const*np.sqrt(3)/3
                     #print(r)
                     patch = matplotlib.patches.RegularPolygon((x0,y0),int(3),r,orientation=-np.pi/2,fc='tab:grey')
-                    axs[1,0].add_patch(patch) 
+                    axs[2,0].add_patch(patch) 
                     xp=np.hstack([self.segments[:,0],self.segments[0,0]])
                     yp=np.hstack([self.segments[:,1],self.segments[0,1]])
-                    axs[1,0].plot(xp+x0,yp+y0,color='tab:red',linestyle='dashed',linewidth=2,zorder=0)
+                    axs[2,0].plot(xp+x0,yp+y0,color='tab:red',linestyle='dashed',linewidth=2,zorder=0)
             
             
-            axs[1,0].set_title('Time= ' + str(np.round(self.time[i],0)),fontsize=12)
+            axs[2,0].set_title('Time= ' + str(np.round(self.time[i],0)),fontsize=12)
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             print(str(i)+ "of"+ str(len(self.time-1)))
             #plt.gca().set_aspect('equal', adjustable='box')

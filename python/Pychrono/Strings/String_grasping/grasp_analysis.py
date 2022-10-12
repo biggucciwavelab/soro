@@ -44,8 +44,7 @@ files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 # square
 #name="06_10_2022_09_38_13"
 #name="10_10_2022_16_06_39"
-
-name="11_10_2022_16_28_04"
+#name="11_10_2022_16_28_04"
 
 name="11_10_2022_17_26_37"
 
@@ -71,7 +70,7 @@ sim_data.save_grasp_parameters()
 
 
 
-# membrane=True
+membrane=True
 # print('create_frames')
 # sim_data.create_frames(membrane)
 
@@ -81,8 +80,8 @@ sim_data.save_grasp_parameters()
 # print('plot_ball_pull_forces')
 # sim_data.plot_ball_pull_forces()
 
-# print('create_frames_pull_epsilon')
-# sim_data.create_frames_pull_epsilon(membrane,1.75)
+print('create_frames_pull_epsilon')
+sim_data.create_frames_pull_epsilon(membrane,1.75)
 
 # print('create_frames_zoomed_in')
 # sim_data.create_frames_zoomed_in(membrane,1)
@@ -108,17 +107,17 @@ sim_data.save_grasp_parameters()
 # print('create_wrenches_slices_frames')
 # sim_data.create_wrenches_slices_frames()
 
-# print('plot_epsilon')
-# sim_data.plot_epsilon()
+print('plot_epsilon')
+sim_data.plot_epsilon()
 
-# print('plot_epsilon2')
-# sim_data.plot_epsilon2()
+print('plot_epsilon2')
+sim_data.plot_epsilon2()
 
-# print('plot_epsilon3')
-# sim_data.plot_epsilon3()
+print('plot_epsilon3')
+sim_data.plot_epsilon3()
 
-# print('plot_epsilon4')
-# sim_data.plot_epsilon4()
+print('plot_epsilon4')
+sim_data.plot_epsilon4()
 
 print('plot_pressure')
 sim_data.plot_pressure()
