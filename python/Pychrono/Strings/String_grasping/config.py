@@ -17,7 +17,7 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.001 # time step 
-time_end = 180
+time_end = 2000
 save_rate = 300 #save every n number of steps
 visual = 'irr'
 
@@ -155,8 +155,9 @@ if control_mode=="shape_morphing":
 if control_mode=="grasping":
     
      
-    ball_geometry = "circle" 
+    ball_geometry = "square" 
     
+    #ball_geometry = "import"
     # circle
     if ball_geometry=="circle":
         ball_radius=0.6570655533082147/2

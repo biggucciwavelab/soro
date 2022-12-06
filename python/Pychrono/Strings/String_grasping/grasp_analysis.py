@@ -25,42 +25,39 @@ os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 
 
-name = files[-1]
+#name = files[-1]
 
-name = "14_11_2022_16_36_03"
+#name = "14_11_2022_16_36_03"
 
 #name = "14_11_2022_16_36_19"
 
 #name = "14_11_2022_16_35_26"
 
 
+#name = "11_10_2022_12_12_55" # TRIANGLE
+
+#name = "11_10_2022_17_26_37" # SQUARE
+
+#name = "11_10_2022_12_12_03" # circle
 
 
-#name = "10_11_2022_16_08_08"
-# circle
-#name="11_10_2022_12_12_03"
-
-# square
-#name="11_10_2022_17_26_37"
-
-# triangle
-#name="11_10_2022_12_12_55"
 
 
-## 9.5 second run ##
-# circle
-#name="12_10_2022_16_40_57"
+name ="29_11_2022_18_36_17" # circle 
 
-# square
-#name="12_10_2022_16_41_19"
+name ="29_11_2022_18_36_48" # triangle
 
-# triangle
-#name="12_10_2022_16_41_37"
+#name ="29_11_2022_18_36_33" # square
 
-#name="18_10_2022_15_40_08"
 
-#name="18_10_2022_15_36_41"
-d=4.5
+
+#name ="30_11_2022_12_51_48"
+#name = "30_11_2022_17_39_10"
+#name = "30_11_2022_17_58_52"
+
+name = "01_12_2022_09_43_46"
+
+d=5.5
 snap_shot=False
 membrane=True
 dxmin=-d
@@ -74,9 +71,41 @@ sim_data=sim_obj.import_data(name,path,dxmin,dxmax,dymin,dymax,Psi)
 
 
 
-membrane=True
-print('create_frames')
-sim_data.create_frames(membrane)
+
+#### this is for pull tests #####
+#sim_data.create_frames_pull_epsilon2(True,1.75)
+
+#######################################
+
+
+# ##### This is for sorting #####
+sim_data.sort_epsilon_and_theta()
+sim_data.plot_epsilon_vs_theta_section()
+
+sim_data.create_frames_pull_epsilon3(True,6)
+print('plot_epsilon_vs_theta')
+sim_data.plot_epsilon_vs_theta()
+
+
+
+
+###### Tjos is for wierd object #####
+# membrane=True
+# print('create_frames')
+# sim_data.create_frames(membrane)
+
+# print('plot_epsilon4')
+# sim_data.plot_epsilon4()
+
+#print('create_frames_contact_forces')
+#sim_data.create_frames_contact_forces(2.5)
+
+#print('Forcechains_arrows')
+#sim_data.Forcechains_arrows(2.5)
+
+#print('plot_epsilon_vs_theta')
+#sim_data.plot_epsilon_vs_theta()
+
 
 # print('plot_ball_pull_forces_trial')
 # sim_data.plot_ball_pull_forces_trial()
@@ -90,8 +119,7 @@ sim_data.create_frames(membrane)
 # print('create_frames_zoomed_in')
 # sim_data.create_frames_zoomed_in(membrane,1)
 
-# print('create_frames_contact_forces')
-# sim_data.create_frames_contact_forces(.4)
+
 
 #print('Forcechains_arrows')
 #sim_data.Forcechains_arrows(1)
@@ -120,8 +148,8 @@ sim_data.create_frames(membrane)
 # print('plot_epsilon3')
 # sim_data.plot_epsilon3()
 
-print('plot_epsilon4')
-sim_data.plot_epsilon4()
+#print('plot_epsilon4')
+#sim_data.plot_epsilon4()
 
 # print('plot_pressure')
 # sim_data.plot_pressure()
