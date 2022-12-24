@@ -17,11 +17,11 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.001 # time step 
-time_end = 2000
-save_rate = 300 #save every n number of steps
+time_end = 5
+save_rate = 100 #save every n number of steps
 visual = 'irr'
 
-xcenter = 2
+xcenter = -4
 zcenter = 0
 
 #### Control Modes ####
@@ -32,7 +32,7 @@ shape morphing linear: linear shape morphing
 shape_morphing: transfinte morphing 
 '''
  
-control_mode = "grasping"
+control_mode = "grasping_explore"
 
 #control_mode = "Verify"
 #### GEOMETRIES ####
@@ -99,8 +99,8 @@ scale_radius = 1
 offset_radius = 0
 
 #### FLOOR PARAMETERS ####
-floor_length=100 # Length of the body floor
-floor_height=particle_height     # height of the body floor
+floor_length=10 # Length of the body floor
+floor_height=1     # height of the body floor
 
 
 #### ENVIROMENT PARAMETERS ####
@@ -150,14 +150,70 @@ if control_mode=="shape_morphing":
     p = 0.5
     alpha = 1.0
     beta = 0
+
+#### CONTROL MODE -- GRASPING EXPLORE ####
+if control_mode=="grasping_explore":
+    #ball_geometry = "square" 
+    
+    ball_geometry = "import"
+    # circle
+    if ball_geometry=="circle":
+        ball_radius=0.6570655533082147/2
+        #ball_radius=.3
+    # square     
+    if ball_geometry=="square":	
+        ball_radius=0.5160580788/2	
+        
+        #ball_radius = .25 
+
+    # triangle
+    if ball_geometry=="triangle":   
+        ball_radius=0.6570655533082147/2
+    
+    if ball_geometry=="import":
+        ball_radius=3
+    #ball_radius = R*0.3
+
+    Rr1=1.0
+    Rr2=4
+    theta=np.pi
+    ballx = 0
+    ballz = 0     
+    ball_mass = 5
+    a1 = .01*ball_radius
+    b1 = 5*ball_radius
+    
+    
+    const=.01
+    a2 = const
+    b2 = const
+    
+    
+    
+    xc1 = ballz
+    yc1 = ballx
+    
+    xc2 = ballx
+    yc2 = ballz
+    
+    tcut1 = 2
+    tcut2 = 60
+    tcut3 = 100
+    alpha1 = 2.5
+    alpha1=2
+    alpha2 = 2
+    beta = 0
+    
+    
+    
     
 #### CONTROL MODE -- GRASPING ####
 if control_mode=="grasping":
     
      
-    ball_geometry = "square" 
+    #ball_geometry = "square" 
     
-    #ball_geometry = "import"
+    ball_geometry = "import"
     # circle
     if ball_geometry=="circle":
         ball_radius=0.6570655533082147/2
@@ -201,6 +257,8 @@ if control_mode=="grasping":
     alpha1 = 2
     alpha2 = 3.5
     beta = 0
+    
+    
 #### SAVE SIMULATION ####
 now = datetime.now()
 dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
@@ -272,6 +330,33 @@ if control_mode=="grasping":
     envParams['ball_geometry'] = ball_geometry
     envParams['ball_radius'] = ball_radius
     envParams['ball_mass'] = ball_mass
+    
+if control_mode=="grasping_explore":
+    envParams['a1'] = a1
+    envParams['b1'] = b1    
+
+    envParams['a2'] = a2
+    envParams['b2'] = b2
+
+    envParams['xc1'] = xc1
+    envParams['yc1'] = yc1
+
+    envParams['xc2'] = xc2
+    envParams['yc2'] = yc2    
+
+    envParams['tcut1'] = tcut1
+    envParams['tcut2'] = tcut2
+    envParams['tcut3'] = tcut3   
+    
+    envParams['ballx'] = ballx
+    envParams['ballz'] = ballz 
+    
+    envParams['ball_geometry'] = ball_geometry
+    envParams['ball_radius'] = ball_radius
+    envParams['ball_mass'] = ball_mass    
+    envParams['Rr1'] = Rr1
+    envParams['Rr2'] = Rr2
+    envParams['theta'] = theta
 # Robot Parameters
 envParams['nb'] = nb 
 envParams['bot_mass'] = bot_mass

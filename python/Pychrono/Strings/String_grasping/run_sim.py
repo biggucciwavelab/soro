@@ -8,7 +8,7 @@ import pychrono as chrono
 import timeit
 start=timeit.default_timer()
 #import objects_2 as sim_obj
-import objects2 as sim_obj
+import objects4 as sim_obj
 #from config import *
 import random
 import os
@@ -22,10 +22,13 @@ data_path="F:/data/"
 chrono.SetChronoDataPath(data_path)
 my_system = chrono.ChSystemNSC() 
 my_system.SetSolverType(chrono.ChSolver.Type_PSSOR)
+#my_system.SetSolverMaxIterations(70)
+
 my_system.Set_G_acc(chrono.ChVectorD(0,-9.81, 0)) 
+#chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.001)
+#chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.001)
 chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.0000001)
 chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.000001)
-
 
 path = os.path.dirname(__file__)
 path=path+"/Experiments/"

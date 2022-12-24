@@ -1200,36 +1200,15 @@ class floor:
         self.material1 = self.Material(.05)
         self.material2 = self.Material(0)
         
-        # self.body_floor = chrono.ChBody()
-        # self.body_floor.SetName('floor')
-        # self.body_floor.SetBodyFixed(True)
-        # self.body_floor.SetPos(chrono.ChVectorD(0, -self.floor_height, 0 ))
-        # self.body_floor.SetMaterialSurface(self.material1)
-        # self.body_floor.GetCollisionModel().ClearModel()
-        # self.body_floor.GetCollisionModel().AddBox(self.floor_length, self.floor_height, self.floor_length) # hemi sizes
-        # self.body_floor.GetCollisionModel().BuildModel()       
-        # self.body_floor.SetCollide(True)
-        # body_floor_shape = chrono.ChBoxShape()
-        # body_floor_shape.GetBoxGeometry().Size = chrono.ChVectorD(self.floor_length, self.floor_height, self.floor_length)
-        # self.body_floor.GetAssets().push_back(body_floor_shape)
-        # col_k = chrono.ChColorAsset()
-        # col_k.SetColor(chrono.ChColor(0, 0, 0))
-        # self.body_floor.AddAsset(col_k)
-        # self.my_system.Add(self.body_floor)
-        
         self.body_floor = chrono.ChBody()
         self.body_floor.SetName('floor')
         self.body_floor.SetBodyFixed(True)
         self.body_floor.SetPos(chrono.ChVectorD(0, -self.floor_height, 0 ))
         self.body_floor.SetMaterialSurface(self.material1)
-
-        # Collision shape
         self.body_floor.GetCollisionModel().ClearModel()
         self.body_floor.GetCollisionModel().AddBox(self.floor_length, self.floor_height, self.floor_length) # hemi sizes
-        self.body_floor.GetCollisionModel().BuildModel()
+        self.body_floor.GetCollisionModel().BuildModel()       
         self.body_floor.SetCollide(True)
-
-        # Visualization shape
         body_floor_shape = chrono.ChBoxShape()
         body_floor_shape.GetBoxGeometry().Size = chrono.ChVectorD(self.floor_length, self.floor_height, self.floor_length)
         self.body_floor.GetAssets().push_back(body_floor_shape)
@@ -1237,6 +1216,9 @@ class floor:
         col_k.SetColor(chrono.ChColor(0, 0, 0))
         self.body_floor.AddAsset(col_k)
         self.my_system.Add(self.body_floor)
+        
+ 
+
         self.body_floor2 = chrono.ChBody()
         self.body_floor2.SetName('floor2')
         self.body_floor2.SetBodyFixed(True)
@@ -1402,13 +1384,7 @@ class Ball:
         z2x.Q_from_AngAxis(chrono.CH_C_PI / 2, chrono.ChVectorD(0, 1, 0))
         z2y = chrono.ChQuaternionD()
         z2y.Q_from_AngAxis(chrono.CH_C_PI / 2, chrono.ChVectorD(0, 0, 1))
-        self.col_y = chrono.ChColorAsset(); self.col_y.SetColor(chrono.ChColor(1, 1, 0))       # Yellow
-        self.col_b = chrono.ChColorAsset(); self.col_b.SetColor(chrono.ChColor(0, 0, 1))       # Blue
-        self.col_g = chrono.ChColorAsset(); self.col_g.SetColor(chrono.ChColor(0, 1, 0))       # Green
-        self.col_p = chrono.ChColorAsset(); self.col_p.SetColor(chrono.ChColor(0.44, .11, 52)) # Purple
-        self.col_w = chrono.ChColorAsset(); self.col_p.SetColor(chrono.ChColor(.8, .8, .8)) # Purple
         
-        #### Circle ####
         if self.geom=='circle':
             #Create ball
             ball = chrono.ChBody() # create ball object
@@ -1422,10 +1398,6 @@ class Ball:
             body_floor_texture = chrono.ChTexture()
             body_floor_texture.SetTextureFilename(chrono.GetChronoDataPath() + 'bluwhite.png')
             ball.GetAssets().push_back(body_floor_texture)
-            ball.SetMaterialSurface(self.material) # apply material
-            self.obj.append(ball)
-            self.balls.append(ball) 
-            self.my_system.Add(ball)    
             #ball.SetMaterialSurface(self.material)
             # pt=chrono.ChLinkMatePlane()
             # pt.Initialize(self.body_floor,ball,False,chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,-1, 0),chrono.ChVectorD(0,1, 0))
@@ -1433,12 +1405,11 @@ class Ball:
             #pt=chrono.ChLinkMatePlane() 
             #pt.Initialize(self.body_floor,ball,False,chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,-1, 0),chrono.ChVectorD(0,1, 0))
             #append the constraint and the ball to array of objects and system
-            #prismatic_ground_ball = chrono.ChLinkLockPrismatic()
-            #prismatic_ground_ball.SetName("prismatic_ground_ball")
-            #prismatic_ground_ball.Initialize(self.body_floor, ball, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_X_TO_Z))
-            #self.my_system.Add(prismatic_ground_ball) 
-        
-        #### square ####
+            prismatic_ground_ball = chrono.ChLinkLockPrismatic()
+            prismatic_ground_ball.SetName("prismatic_ground_ball")
+            prismatic_ground_ball.Initialize(self.body_floor, ball, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_X_TO_Z))
+            self.my_system.Add(prismatic_ground_ball) 
+          
         if self.geom=="square":
             #const=self.radius*2*np.pi/4
             const=self.radius*2
@@ -1456,11 +1427,7 @@ class Ball:
             prismatic_ground_ball.SetName("prismatic_ground_ball")
             prismatic_ground_ball.Initialize(self.body_floor, ball, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_X_TO_Z))
             self.my_system.Add(prismatic_ground_ball) 
-            ball.SetMaterialSurface(self.material) # apply material
-            self.obj.append(ball)
-            self.balls.append(ball) 
-            self.my_system.Add(ball)    
-        #### triangle ####
+            
         if self.geom=="triangle":     
             
             const=self.radius*2*np.pi/3
@@ -1502,140 +1469,84 @@ class Ball:
             ball.GetCollisionModel().ClearModel()
             ball.GetCollisionModel().AddConvexHull(pt_vect)
             ball.GetCollisionModel().BuildModel()            
-            ball.SetMaterialSurface(self.material) # apply material
-            self.obj.append(ball)
-            self.balls.append(ball) 
-            self.my_system.Add(ball)    
-        #### import ####
+            
         if self.geom=="import":          
-            height=self.height
-            R=1.25
-            a=0.504
-            b=0.37
-            w1=1
-            w2=1.26
-            Rr=np.sqrt(R**2 - (w1/2)**2)
-            
-            nsides=50
-            pt_vect = chrono.vector_ChVectorD()
-
-            theta=np.linspace(0 + np.pi/2,2.73 + np.pi/2,100)
-            theta2=np.linspace(3.55 + np.pi/2,np.pi*2 + np.pi/2,100)
-            # creates bottom
-            for i in range(len(theta)):
-                pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta[i]),height/2,R*np.cos(theta[i])))
-                
-            for i in range(len(theta2)):
-                pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta2[i]),height/2,R*np.cos(theta2[i])))    
-            
-                #create top 
-            for i in range(len(theta)):
-                pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta[i]),-height/2,R*np.cos(theta[i])))
-            for i in range(len(theta2)):
-                pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta2[i]),-height/2,R*np.cos(theta2[i])))
-            
-            # # creates bottom
-            # for i in range(nsides):
-            #     pt_vect.push_back(chrono.ChVectorD(R*np.sin(i*2*np.pi/nsides),height/2,R*np.cos(i*2*np.pi/nsides)))
-            #     #create top 
-            # for i in range(nsides):
-            #     pt_vect.push_back(chrono.ChVectorD(R*np.sin(i*2*np.pi/nsides),-height/2,R*np.cos(i*2*np.pi/nsides)))
-            
-            ball=chrono.ChBodyEasyConvexHull(pt_vect,self.rho,True,True)   
-            ball.SetPos(chrono.ChVectorD(0,height/2,0))
-            ball.SetCollide(True) # set the collision mode
-            ball.SetBodyFixed(True) # set if its fixed
-            ball.SetName("ball") # give it a name
-            ball.SetId(10000) 
+  
+            ball = chrono.ChBody()
+            # # Attach a visualization shape .
+            # # First load a .obj from disk into a ChTriangleMeshConnected:
+            path="C:/soro/python/Pychrono/Strings/String_grasping/object_file/"
+            mesh_for_visualization = chrono.ChTriangleMeshConnected()
+            mesh_for_visualization.LoadWavefrontMesh(path+'part3.obj')
+            #mesh_for_visualization.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
+            visualization_shape = chrono.ChTriangleMeshShape()
+            visualization_shape.SetMesh(mesh_for_visualization)
+            ball.AddAsset(visualization_shape)
+            #rotation1 = chrono.ChQuaternionD() # rotate the robots about y axis 
+            #rotation1.Q_from_AngAxis(-np.pi/2, chrono.ChVectorD(0, 1, 0)) 
+            #ball.SetRot(rotation1)
+            mesh_for_collision = chrono.ChTriangleMeshConnected()
+            mesh_for_collision.LoadWavefrontMesh(path+'part3.obj')
+            #Optionally: you can scale/shrink/rotate the mesh using this:
+            #mesh_for_collision.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
             ball.GetCollisionModel().ClearModel()
-            ball.GetCollisionModel().AddConvexHull(pt_vect)
-            ball.GetCollisionModel().BuildModel()
+            ball.GetCollisionModel().AddTriangleMesh(
+                mesh_for_collision, # the mesh 
+                False,  # is it static?
+                False)  # is it convex?
+            ball.GetCollisionModel().BuildModel()        
+            ball.SetPos(chrono.ChVectorD(0,0,0))
+            ball.SetMass(16)
+            ball.SetName("ball") # give it a name
+            ball.SetInertiaXX(chrono.ChVectorD(0.270,0.400,0.427))
+            ball.SetInertiaXY(chrono.ChVectorD(0.057,0.037,-0.062))            
+            ball.SetBodyFixed(True)
+            #rotation1 = chrono.ChQuaternionD() # rotate the robots about y axis 
+           # rotation1.Q_from_AngAxis(-np.pi/2, chrono.ChVectorD(0, 1, 0)) 
+            #ball.SetRot(rotation1)
+            col_y = chrono.ChColorAsset() # apply color
+            col_y.SetColor(chrono.ChColor(1, 1, 0))
+            ball.AddAsset(col_y)
+            ball.SetCollide(True) # set the collision mode
+            self.my_system.Add(ball)      
+
+            # set position
+        # myforcez = chrono.ChForce() # create it 
+        # ball.AddForce(myforcez) # apply it to bot object
+        # myforcez.SetMode(chrono.ChForce.FORCE) # set the mode
+        # myforcez.SetDir(chrono.VECT_Z) # set direction 
+        # myforcez.SetVpoint(chrono.ChVectorD(0,0.05,0))
+        # self.forceb.append(myforcez) # add to force list
+
+        #create constraint to fix it to the floor
+        # pt=chrono.ChLinkMatePlane() 
+        # pt.Initialize(self.body_floor,ball,False,chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,1, 0),chrono.ChVectorD(0,-1, 0))
+        # prismatic_ground_ball = chrono.ChLinkLockPrismatic()
+        # prismatic_ground_ball.SetName("prismatic_ground_ball")
+        # prismatic_ground_ball.Initialize(self.body_floor, ball, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_Z_TO_Y))
+        # self.my_system.AddLink(prismatic_ground_ball)
+        
+        #self.my_system.Add(prismatic_ground_ball) 
+                
+        
+        # material
+        ball.SetMaterialSurface(self.material) # apply material
+        self.obj.append(ball)
+        self.balls.append(ball) 
+        self.my_system.Add(ball)            
+        
             
-            prismatic_ground_ball = chrono.ChLinkLockPrismatic()
-            prismatic_ground_ball.SetName("prismatic_ground_ball")
-            prismatic_ground_ball.Initialize(self.body_floor, ball, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_X_TO_Z))
-            self.my_system.Add(prismatic_ground_ball) 
-            #self.my_system.Add(ball) 
-            ball.SetMaterialSurface(self.material) # apply material
-            self.obj.append(ball)
-            self.balls.append(ball) 
-            self.my_system.Add(ball)    
-            #force = chrono.ChForce()  # create it 
-            #ball.AddForce(force) # apply it to bot object
-            # #force.SetVpoint(chrono.ChVectorD(box1_x,box1_height/2+.1,box1_z))
-            # force.SetMode(chrono.ChForce.FORCE) # set the mode 
-            # force.SetDir(chrono.VECT_X) # set direction 
-            # force.SetMforce(float(-10000))
-            #botforce.SetVpoint(chrono.ChVectorD(0.5,.06,0))
-            
-            
-            
-            
-            box1_width=a
-            box1_length=w1
-            box1_height=height
-            box1_x=-(Rr + a/2)
-            box1_y=height/2
-            box1_z=0
-            
-            
-            box1 = chrono.ChBody() # create ball object
-            box1 = chrono.ChBodyEasyBox(box1_width,box1_height,box1_length,self.rho,True,True) # create object # specify properties and make it a cylinder
-            box1.SetPos(chrono.ChVectorD(box1_x,box1_y,box1_z))
-            box1.SetName("ball") # give it a name
-            box1.SetId(10000) 
-            box1.SetCollide(True) # set the collision mode
-            box1.SetBodyFixed(True) # set if its fixed
-            box1.AddAsset(self.col_y)
-            box1.SetMaterialSurface(self.material) # apply material
-            prismatic_ground_ball = chrono.ChLinkLockPrismatic()
-            prismatic_ground_ball.SetName("prismatic_ground_ball")
-            prismatic_ground_ball.Initialize(self.body_floor, box1, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_X_TO_Z))
-            self.my_system.Add(prismatic_ground_ball) 
-            self.obj.append(box1)
-            self.balls.append(box1) 
-            self.my_system.Add(box1)    
-            glue=chrono.ChLinkMateFix() # cretae fix constraint
-            glue.Initialize(ball,box1) # fix object to bot
-            self.my_system.AddLink(glue) # add to system 
-            
-            
-            
-            box2_width=b
-            box2_length=w2
-            box2_height=height
-            box2_x=-(Rr + a + b/2)
-            box2_y=height/2
-            box2_z=0
-            
-            box2 = chrono.ChBody() # create ball object
-            box2 = chrono.ChBodyEasyBox(box2_width,box2_height,box2_length,self.rho,True,True) # create object # specify properties and make it a cylinder
-            box2.SetPos(chrono.ChVectorD(box2_x,box2_y,box2_z))
-            box2.SetCollide(True) # set the collision mode
-            box2.SetBodyFixed(True) # set if its fixed
-            box2.SetName("ball") # give it a name
-            box2.SetId(10000) 
-            box2.AddAsset(self.col_g)
-            box2.SetMaterialSurface(self.material) # apply material
-            prismatic_ground_ball = chrono.ChLinkLockPrismatic()
-            prismatic_ground_ball.SetName("prismatic_ground_ball")
-            prismatic_ground_ball.Initialize(self.body_floor, box2, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_X_TO_Z))
-            self.my_system.Add(prismatic_ground_ball) 
-            self.obj.append(box2)
-            self.balls.append(box2) 
-            self.my_system.Add(box2)    
-            
-            glue=chrono.ChLinkMateFix() # cretae fix constraint
-            glue.Initialize(box1,box2) # fix object to bot
-            self.my_system.AddLink(glue) # add to system 
-            
+            #col_y = chrono.ChColorAsset() # apply color
+            #col_y.SetColor(chrono.ChColor(1, 1, 0))
+            #ball.AddAsset(col_y)            
+
     def Material(self,lateralFriction):
         ''' Function that creates material object '''
         material = chrono.ChMaterialSurfaceNSC() # create material object
         material.SetFriction(lateralFriction) # set friction properties
-        #material.SetDampingF(self.dampingterm) # set damping properties
-        #material.SetCompliance(self.Compliance) # set compliance property
-        #material.SetComplianceT(self.Compliance_tangent) # set tangential property
+        material.SetDampingF(self.dampingterm) # set damping properties
+        material.SetCompliance(self.Compliance) # set compliance property
+        material.SetComplianceT(self.Compliance_tangent) # set tangential property
         material.SetRollingFriction(self.rollingFriction)
         material.SetSpinningFriction(self.spinningFriction)
         # material.SetComplianceRolling(Cr)
@@ -2214,9 +2125,9 @@ class controller():
         time=np.round(self.my_system.GetChTime(),3)
 
         
-        if time>self.Psi.tcut2:
-            #print("tcut2")
-            self.Ball.balls[0].SetBodyFixed(False)             
+        # if time>self.Psi.tcut2:
+        #     #print("tcut2")
+        #     self.Ball.balls[0].SetBodyFixed(False)             
           
         # if time>self.Psi.tcut3:
         #     #print("tcut3")
@@ -2283,16 +2194,8 @@ class controller():
         # if self.theta__>5*np.pi:
         #     self.Rr1=1.25
         
-        
-        # self.Rr = self.Rr1
-        # self.trig1 = 0
-        # self.alpha_=self.alpha1
-        # self.a=.001
-        # self.b=.001
-        # if self.t>5.0: # check on it every 10 times for efficiency
-        #     self.Ball.balls[0].SetBodyFixed(False) 
-        #     self.Ball.balls[1].SetBodyFixed(False) 
-        #     self.Ball.balls[2].SetBodyFixed(False) 
+
+            
         if self.t<5 and self.trig1!=0: # check on it every 10 times for efficiency
             print("approach")
             self.theta__ = self.theta__
@@ -2304,13 +2207,13 @@ class controller():
             self.b=.001
         
         
-          # back off of object    
+         # back off of object    
         elif self.t>=5 and self.t<=10:
             print("back up")
             self.theta__ = self.theta__
             #self.Rr = 2
             self.Rr = self.Rr2
-            self.alpha_=self.alpha2
+            self.alpha_=self.alpha1
             self.a=1.31
             self.b=1.31
             
@@ -5500,8 +5403,8 @@ class import_data:
                 elif self.geom=="circle":
                     Fx1,Fy1=(self.ballx_position[i]-x0),(self.ballz_position[i]-y0)
                     mag=np.sqrt(Fx1**2 + Fy1**2)
-                    Fx1=-Fx1/mag
-                    Fy1=-Fy1/mag
+                    Fx1=Fx1/mag
+                    Fy1=Fy1/mag
                     F_t=np.array([Fx1,Fy1])
                     X.append(x0-x0b)
                     Y.append(y0-y0b)
@@ -5554,7 +5457,7 @@ class import_data:
                 
                 theta1=np.arctan2(.2,1) #+ frames[j,2]
                 temp=np.round(np.nan_to_num(np.arccos(np.dot(VYpp ,temp_dirr))),2)
-                fx=F_contact_ballx_entry[j]
+                fx=-F_contact_ballx_entry[j]
                 fy=F_contact_ballz_entry[j]
                 
                 mag_=np.sqrt(fx**2 +fy**2)
@@ -7905,7 +7808,6 @@ class import_data:
                     # ax.plot(x6_,y6_,color='k')
                     # ax.plot(x7_,y7_,color='k')
                     # ax.plot(x8_,y8_,color='k')
-                    x0,y0=self.ballx_position[i],self.ballz_position[i] 
                     R=1.25
                     theta1=0.41
                     theta2=2*np.pi-theta1
@@ -7914,8 +7816,8 @@ class import_data:
                     theta3=0.41
                     theta4=2*np.pi-theta1
 
-                    x1_=-R*np.cos(theta)+x0
-                    y1_=R*np.sin(theta)+y0
+                    x1_=-R*np.cos(theta)
+                    y1_=R*np.sin(theta)
 
                     x1a_=R*np.cos(theta3)
                     y1a_=R*np.sin(theta3)
@@ -7930,55 +7832,54 @@ class import_data:
                     w1=.5
                     w2=.63
 
-                    p1=-R*np.cos(theta[0])
-                    p2=-R*np.cos(theta[-1])
-                    x2_=[p1,p1-a]+x0*np.ones(2)
-                    y2_=[w1,w1]+y0*np.ones(2)
 
-                    x3_=[-b,-b]+x0*np.ones(2)
-                    y3_=[w1,w2]+y0*np.ones(2)
+                    x2_=[x1_[0],x1_[0]-a]
+                    y2_=[w1,w1]
 
-                    x4_=[-b,-c]+x0*np.ones(2)
-                    y4_=[w2,w2]+y0*np.ones(2)
+                    x3_=[-b,-b]
+                    y3_=[w1,w2]
 
-                    x5_=[-c,-c]+x0*np.ones(2)
-                    y5_=[w2,-w2]+y0*np.ones(2)
+                    x4_=[-b,-c]
+                    y4_=[w2,w2]
 
-                    x6_=[-c,-b]+x0*np.ones(2)
-                    y6_=[-w2,-w2]+y0*np.ones(2)
+                    x5_=[-c,-c]
+                    y5_=[w2,-w2]
 
-                    x7_=[-b,-b]+x0*np.ones(2)
-                    y7_=[-w1,-w2]+y0*np.ones(2)
+                    x6_=[-c,-b]
+                    y6_=[-w2,-w2]
 
-                    x8_=[-b,p2]+x0*np.ones(2)
-                    y8_=[-w1,-w1]+y0*np.ones(2)
+                    x7_=[-b,-b]
+                    y7_=[-w1,-w2]
 
-                    # x9_=[x1_[-1],x1a_]
-                    # y9_=[w1,w1]
+                    x8_=[-b,x1_[-1]]
+                    y8_=[-w1,-w1]
 
-                    # x10_=[x1a_,x1a_+a]
-                    # y10_=[w1,w1]
+                    x9_=[x1_[-1],x1a_]
+                    y9_=[w1,w1]
 
-                    # x11_=[b,b]
-                    # y11_=[w1,w2]
+                    x10_=[x1a_,x1a_+a]
+                    y10_=[w1,w1]
 
-                    # x12_=[b,c]
-                    # y12_=[w2,w2]
+                    x11_=[b,b]
+                    y11_=[w1,w2]
 
-                    # x13_=[c,c]
-                    # y13_=[w2,-w2]
+                    x12_=[b,c]
+                    y12_=[w2,w2]
 
-                    # x14_=[c,b]
-                    # y14_=[-w2,-w2]
+                    x13_=[c,c]
+                    y13_=[w2,-w2]
 
-                    # x15_=[b,b]
-                    # y15_=[-w1,-w2]
+                    x14_=[c,b]
+                    y14_=[-w2,-w2]
 
-                    # x16_=[b,x1b_]
-                    # y16_=[-w1,-w1]
+                    x15_=[b,b]
+                    y15_=[-w1,-w2]
+
+                    x16_=[b,x1b_]
+                    y16_=[-w1,-w1]
         
-                    # x17_=[x1b_,x1_[-1]]
-                    # y17_=[-w1,-w1]
+                    x17_=[x1b_,x1_[-1]]
+                    y17_=[-w1,-w1]
                     #x_=[x2_[0],x2_[1],x3_[1],x4_[1],x5_[1],x6_[1],x7_[0],x8_[1],x9_[1],x10_[1],x11_[1],x12_[1],x13_[1],x14_[1],x15_[0],x16_[1]]
                     #y_=[y2_[0],y2_[1],y3_[1],y4_[1],y5_[1],y6_[1],y7_[0],y8_[1],y9_[1],y10_[1],y11_[1],y12_[1],y13_[1],y14_[1],y15_[0],y16_[1]]
                     ax.plot(x1_,y1_,color='k')
@@ -7990,15 +7891,15 @@ class import_data:
                     ax.plot(x7_,y7_,color='k')
                     ax.plot(x8_,y8_,color='k')
 
-                    # ax.plot(x9_,y9_,color='k')
-                    # ax.plot(x10_,y10_,color='k')
-                    # ax.plot(x11_,y11_,color='k')
-                    # ax.plot(x12_,y12_,color='k')
-                    # ax.plot(x13_,y13_,color='k')
-                    # ax.plot(x14_,y14_,color='k')
-                    # ax.plot(x15_,y15_,color='k')
-                    # ax.plot(x16_,y16_,color='k')
-                    # ax.plot(x17_,y17_,color='k')
+                    ax.plot(x9_,y9_,color='k')
+                    ax.plot(x10_,y10_,color='k')
+                    ax.plot(x11_,y11_,color='k')
+                    ax.plot(x12_,y12_,color='k')
+                    ax.plot(x13_,y13_,color='k')
+                    ax.plot(x14_,y14_,color='k')
+                    ax.plot(x15_,y15_,color='k')
+                    ax.plot(x16_,y16_,color='k')
+                    ax.plot(x17_,y17_,color='k')
             
             #ax.streamplot(self.X,self.Y,Fx1,Fz1,color='b',density = 2,linewidth=0.1,arrowsize=0.25)
             
@@ -10718,7 +10619,7 @@ class import_data:
         x1b_=R*np.cos(theta4)
         y1b_=R*np.sin(theta4)
 
-        a=.504
+        a=.5
         b=1.65
         c=2.02
 
@@ -10847,7 +10748,7 @@ class import_data:
         x1b_=R*np.cos(theta4)
         y1b_=R*np.sin(theta4)
 
-        a=.504
+        a=.5
         b=1.65
         c=2.02
 
@@ -10975,7 +10876,7 @@ class import_data:
         x1b_=R*np.cos(theta4)
         y1b_=R*np.sin(theta4)
 
-        a=.504
+        a=.5
         b=1.65
         c=2.02
 

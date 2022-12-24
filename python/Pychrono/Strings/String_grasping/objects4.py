@@ -1772,6 +1772,38 @@ class simulate:
         self.dir_zy = []
         self.dir_zz = []   
         
+        self.time_contact_bot = [] # contact time  empty array
+        self.number_contacts_bot = []
+        
+        self.Contact_points_x_bot = []
+        self.Contact_points_y_bot = []
+        self.Contact_points_z_bot = []
+                
+        self.Contact_force_x_bot = []
+        self.Contact_force_y_bot = []
+        self.Contact_force_z_bot = []
+                
+        self.Contact_force_x2_bot = []
+        self.Contact_force_y2_bot = []
+        self.Contact_force_z2_bot = []
+        
+        self.bodiesA_bot = []
+        self.bodiesB_bot = []
+                
+        self.bodiesA_ID_bot = []
+        self.bodiesB_ID_bot = []
+
+        self.dir_xx_bot = []
+        self.dir_xy_bot = []
+        self.dir_xz_bot = []
+                
+        self.dir_yx_bot = []
+        self.dir_yy_bot = []
+        self.dir_yz_bot = []
+                
+        self.dir_zx_bot = []
+        self.dir_zy_bot = []
+        self.dir_zz_bot = []
         
     # simulate the robot
     def simulate(self):
@@ -1884,6 +1916,170 @@ class simulate:
             for key in self.parameters.keys():
                 f.write("%s, %s\n" % (key, self.parameters[key]))
 
+    def find_contact_forces(self):
+        #    '''This function for extacting contact forces without regards for grasping'''
+        tempx = {}
+        tempz = {}
+         
+        tempx2 = {}
+        tempz2 = {} 
+        
+        tempx21 = {}
+        tempz21 = {} 
+                    
+        tempx3 = {}
+        tempz3 = {}
+        
+        
+        tempx4 = {}
+        tempz4 = {}
+        
+        tempx5 = {}
+        tempz5 = {}
+        
+        tempx6 = {}
+        tempz6 = {}
+                    
+        
+        tempxx = {}
+        tempzz = {}
+        
+        tempxxx = {}
+        tempzzz = {}            
+        
+        tempx3["ballx"] = []
+        tempz3["ballz"] = []
+        
+        tempx4["ballx"] = []
+        tempz4["ballz"] = []
+
+        tempx5["ballx"] = []
+        tempz5["ballz"] = []
+        
+        tempx6["ballx"] = []
+        tempz6["ballz"] = []
+        
+        self.number_contacts_bot.append(self.my_system.GetContactContainer().GetNcontacts())
+        self.time_contact_bot.append(self.my_system.GetChTime()) 
+        
+        self.Contact_points_x_bot.append(crt_list[0])
+        self.Contact_points_y_bot.append(crt_list[1])
+        self.Contact_points_z_bot.append(crt_list[2])
+        
+        self.Contact_force_x_bot.append(crt_list[3])
+        self.Contact_force_y_bot.append(crt_list[4])
+        self.Contact_force_z_bot.append(crt_list[5])
+        
+        self.Contact_force_x2_bot.append(crt_list[6])
+        self.Contact_force_y2_bot.append(crt_list[7])
+        self.Contact_force_z2_bot.append(crt_list[8]) 
+        
+        self.bodiesA_bot.append(crt_list[9])
+        self.bodiesB_bot.append(crt_list[10])
+        
+        self.bodiesA_ID_bot.append(crt_list[11])
+        self.bodiesB_ID_bot.append(crt_list[12]) 
+
+        self.dir_xx_bot.append(crt_list[14])
+        self.dir_xy_bot.append(crt_list[15])
+        self.dir_xz_bot.append(crt_list[16])
+        
+        self.dir_yx_bot.append(crt_list[17])
+        self.dir_yy_bot.append(crt_list[18])
+        self.dir_yz_bot.append(crt_list[19]) 
+        
+        self.dir_zx_bot.append(crt_list[20])
+        self.dir_zy_bot.append(crt_list[21])
+        self.dir_zz_bot.append(crt_list[22])                  
+            
+    
+            
+        for j in range(int(self.number_contacts[-1])):
+            temp1=self.bodiesA[j]
+            temp2=self.bodiesB[j]          
+     #        ##### contact forces for ball        
+            if temp1[0:4]=="ball" or temp2[0:4]=="ball" :   
+                if temp1[0:4]=="ball":  
+                tempx3["ballx"].append(self.Contact_force_x2_bot[-1][j])
+                tempz3["ballz"].append(self.Contact_force_z2_bot[-1][j])
+                    
+                tempx4["ballx"].append(self.Contact_points_x_bot[-1][j])
+                tempz4["ballz"].append(self.Contact_points_z_bot[-1][j])  
+                    
+                tempx5["ballx"].append(self.Dirxx_[j,i])
+                tempz5["ballz"].append(self.Dirxz_[j,i]) 
+                    
+                tempx6["ballx"].append(self.Dirzx_[j,i])
+                tempz6["ballz"].append(self.Dirzz_[j,i])
+                    
+                if temp2[0:4]=="ball":
+                tempx3["ballx"].append(self.x_contact_force2[j,i])
+                tempz3["ballz"].append(self.z_contact_force2[j,i])
+                    
+                tempx4["ballx"].append(self.Contact_points_x[j,i])
+                tempz4["ballz"].append(self.Contact_points_z[j,i])
+                    
+                tempx5["ballx"].append(self.Dirxx_[j,i])
+                tempz5["ballz"].append(self.Dirxz_[j,i]) 
+                    
+                tempx6["ballx"].append(self.Dirzx_[j,i])
+                tempz6["ballz"].append(self.Dirzz_[j,i])                        
+                
+                
+                    
+     #        ###### contact forces for ball and boundary robots          
+     #        if (temp1[0:4]=="ball" and temp2[0:3]=="bot") or (temp2[0:4]=="ball" or temp1[0:3]=="bot"):
+     #            if temp1[0:4]=="ball" and temp2[0:3]=="bot" :
+     #                #les=len(temp2)
+     #                num=int(temp2[3:les])
+     #                tempxx["nb"+str(num)].append(self.x_contact_force2[j,i])
+     #                tempzz["nb"+str(num)].append(self.z_contact_force2[j,i])
+
+     #                tempxxx["nb"+str(num)].append(self.Contact_points_x[j,i])
+     #                tempzzz["nb"+str(num)].append(self.Contact_points_z[j,i])
+
+     #            if temp2[0:4]=="ball" and temp1[0:3]=="bot" :
+     #                #les=len(temp2)
+     #                num=int(temp1[3:les])
+     #                tempxx["nb"+str(num)].append(self.x_contact_force2[j,i])
+     #                tempzz["nb"+str(num)].append(self.z_contact_force2[j,i])
+
+     #                tempxxx["nb"+str(num)].append(self.Contact_points_x[j,i])
+     #                tempzzz["nb"+str(num)].append(self.Contact_points_z[j,i])
+
+            
+                    
+     #    self.Forces_x_contact_particles["time_contact"+str(i)].append(tempx) # contact forces for passive particles x
+     #    self.Forces_z_contact_particles["time_contact"+str(i)].append(tempz) # contact forces for passive particles z
+         
+     #    self.Forces_x_ball_bot["time_contact"+str(i)].append(tempxx) # contact forces for ball and boundary robots x
+     #    self.Forces_z_ball_bot["time_contact"+str(i)].append(tempzz) # contact forces for ball and boundary robots  z 
+        
+     #    self.position_x_ball_bot["time_contact"+str(i)].append(tempxxx)  # contact position for ball and boundary robots x
+     #    self.position_z_ball_bot["time_contact"+str(i)].append(tempzzz)  # contact position for ball and boundary robots  z 
+        
+     #    self.Forces_x_contact_bots["time_contact"+str(i)].append(tempx2) # contact forces for boundary bots x
+     #    self.Forces_z_contact_bots["time_contact"+str(i)].append(tempz2) # contact forces for boundary bots z         
+        
+     #    self.position_x_contact_bot["time_contact"+str(i)].append(tempx21) # contact position for boundary bots x
+     #    self.position_z_contact_bot["time_contact"+str(i)].append(tempz21) # contact position for boundary bots z
+    
+     #    self.Force_x_contact_ball["time_contact"+str(i)].append(tempx3) # contact forces for ball x
+     #    self.Force_z_contact_ball["time_contact"+str(i)].append(tempz3) # contact forces for ball z   
+        
+     #    self.position_x_contact_ball["time_contact"+str(i)].append(tempx4) # contact position for ball x
+     #    self.position_z_contact_ball["time_contact"+str(i)].append(tempz4) # contact position for ball z               
+    
+
+     #    self.dir_xx_contact_ball["time_contact"+str(i)].append(tempx5) # contact position for ball x
+     #    self.dir_xz_contact_ball["time_contact"+str(i)].append(tempz5) # contact position for ball x
+    
+     #    self.dir_zx_contact_ball["time_contact"+str(i)].append(tempx6) # contact position for ball x
+     #    self.dir_zz_contact_ball["time_contact"+str(i)].append(tempz6) # contact position for ball x
+                                         
+                    
+             
+
     def save_contacts(self):
         if self.epoch%self.save_rate==0:
             self.my_system.GetContactContainer().ReportAllContacts(self.my_rep)
@@ -1920,8 +2116,41 @@ class simulate:
                 
                 self.dir_zx.append(crt_list[20])
                 self.dir_zy.append(crt_list[21])
-                self.dir_zz.append(crt_list[22])       
-              
+                self.dir_zz.append(crt_list[22])     
+                
+                
+                self.number_contacts_bot.append(self.my_system.GetContactContainer().GetNcontacts())
+                self.time_contact_bot.append(self.my_system.GetChTime()) 
+                
+                self.Contact_points_x_bot.append(crt_list[0])
+                self.Contact_points_y_bot.append(crt_list[1])
+                self.Contact_points_z_bot.append(crt_list[2])
+                
+                self.Contact_force_x_bot.append(crt_list[3])
+                self.Contact_force_y_bot.append(crt_list[4])
+                self.Contact_force_z_bot.append(crt_list[5])
+                
+                self.Contact_force_x2_bot.append(crt_list[6])
+                self.Contact_force_y2_bot.append(crt_list[7])
+                self.Contact_force_z2_bot.append(crt_list[8]) 
+                
+                self.bodiesA_bot.append(crt_list[9])
+                self.bodiesB_bot.append(crt_list[10])
+                
+                self.bodiesA_ID_bot.append(crt_list[11])
+                self.bodiesB_ID_bot.append(crt_list[12]) 
+
+                self.dir_xx_bot.append(crt_list[14])
+                self.dir_xy_bot.append(crt_list[15])
+                self.dir_xz_bot.append(crt_list[16])
+                
+                self.dir_yx_bot.append(crt_list[17])
+                self.dir_yy_bot.append(crt_list[18])
+                self.dir_yz_bot.append(crt_list[19]) 
+                
+                self.dir_zx_bot.append(crt_list[20])
+                self.dir_zy_bot.append(crt_list[21])
+                self.dir_zz_bot.append(crt_list[22])                  
                     
     def save_parameters(self):
         ''' Function that collects data of for the system '''
@@ -8322,8 +8551,8 @@ class import_data:
                 if self.geom=="import":
                     Fx1,Fy1=self.F_random_objdx(x0-x0b,y0-y0b),self.F_random_objdy(x0-x0b,y0-y0b)
                     mag=np.sqrt(Fx1**2 + Fy1**2)
-                    Fx1=-Fx1/mag
-                    Fy1=-Fy1/mag
+                    Fx1=Fx1/mag
+                    Fy1=Fy1/mag
                     F_t=np.array([Fx1,Fy1])
                     X.append(x0-x0b)
                     Y.append(y0-y0b)
@@ -10747,43 +10976,69 @@ class import_data:
         x8_=[-b,x1_[-1]]
         y8_=[-w1,-w1]
 
+        x_=[]
+        y_=[]
+        
+        for i in range(len(x1_)):
+            x_.append(x1_[i])
+            
+        x_.append(x2_[0])
+        x_.append(x2_[1])
+        x_.append(x3_[1])
+        x_.append(x4_[1])
+        x_.append(x5_[1])
+        x_.append(x6_[1])
+        x_.append(x7_[0])
+        x_.append(x8_[1])
+        
+        for i in range(len(y1_)):
+            y_.append(y1_[i])
+            
+        y_.append(y2_[0])
+        y_.append(y2_[1])
+        y_.append(y3_[1])
+        y_.append(y4_[1])
+        y_.append(y5_[1])
+        y_.append(y6_[1])
+        y_.append(y7_[0])
+        y_.append(y8_[1])     
 
-        x9_=[x1_[-1],x1a_]
-        y9_=[w1,w1]
+        # x9_=[x1_[-1],x1a_]
+        # y9_=[w1,w1]
 
-        x10_=[x1a_,x1a_+a]
-        y10_=[w1,w1]
+        # x10_=[x1a_,x1a_+a]
+        # y10_=[w1,w1]
 
-        x11_=[b,b]
-        y11_=[w1,w2]
+        # x11_=[b,b]
+        # y11_=[w1,w2]
 
-        x12_=[b,c]
-        y12_=[w2,w2]
+        # x12_=[b,c]
+        # y12_=[w2,w2]
 
-        x13_=[c,c]
-        y13_=[w2,-w2]
+        # x13_=[c,c]
+        # y13_=[w2,-w2]
 
-        x14_=[c,b]
-        y14_=[-w2,-w2]
+        # x14_=[c,b]
+        # y14_=[-w2,-w2]
 
-        x15_=[b,b]
-        y15_=[-w1,-w2]
+        # x15_=[b,b]
+        # y15_=[-w1,-w2]
 
-        x16_=[b,x1b_]
-        y16_=[-w1,-w1]
+        # x16_=[b,x1b_]
+        # y16_=[-w1,-w1]
 
-        x17_=[x1b_,x1_[-1]]
-        y17_=[-w1,-w1]
+        # x17_=[x1b_,x1_[-1]]
+        # y17_=[-w1,-w1]
 
-        x_=[x2_[0],x2_[1],x3_[1],x4_[1],x5_[1],x6_[1],x7_[0],x8_[1],x9_[1],x10_[1],x11_[1],x12_[1],x13_[1],x14_[1],x15_[0],x16_[1]]
-        y_=[y2_[0],y2_[1],y3_[1],y4_[1],y5_[1],y6_[1],y7_[0],y8_[1],y9_[1],y10_[1],y11_[1],y12_[1],y13_[1],y14_[1],y15_[0],y16_[1]]
+        # x_=[x2_[0],x2_[1],x3_[1],x4_[1],x5_[1],x6_[1],x7_[0],x8_[1],x9_[1],x10_[1],x11_[1],x12_[1],x13_[1],x14_[1],x15_[0],x16_[1]]
+        # y_=[y2_[0],y2_[1],y3_[1],y4_[1],y5_[1],y6_[1],y7_[0],y8_[1],y9_[1],y10_[1],y11_[1],y12_[1],y13_[1],y14_[1],y15_[0],y16_[1]]
         
         (self.segments)=self.create_segment(x_,y_)
-        f1=self.circle(x,y,R,0,0)
-        f1x=self.dphix_circle(x,y,0,0,R)
-        f2 = self.phi_segments(x,y,self.segments)
-        f2x = self.dphix_segments(x,y,self.segments)   
-        Fx = (f1**self.m + f2**self.m)**(-1/self.m)*f1*f2x + (f1**self.m + f2**self.m)**(-1/self.m)*f2*f1x - ((self.m*(f2**self.m)*f2x)/f2 + (self.m*(f1**self.m)*f1x)/f1)*((f1**self.m) +f2**self.m)**(-1/self.m)*f1*f2/(self.m*(f1**self.m + f2**self.m))
+        #f1=self.circle(x,y,R,0,0)
+        #f1x=self.dphix_circle(x,y,0,0,R)
+        #2 = self.phi_segments(x,y,self.segments)
+        Fx = self.dphix_segments(x,y,self.segments)   
+        #Fx = (f1**self.m + f2**self.m)**(-1/self.m)*f1*f2x + (f1**self.m + f2**self.m)**(-1/self.m)*f2*f1x - ((self.m*(f2**self.m)*f2x)/f2 + (self.m*(f1**self.m)*f1x)/f1)*((f1**self.m) +f2**self.m)**(-1/self.m)*f1*f2/(self.m*(f1**self.m + f2**self.m))
             
         return(Fx)
     
@@ -10875,43 +11130,69 @@ class import_data:
 
         x8_=[-b,x1_[-1]]
         y8_=[-w1,-w1]
+        
+        x_=[]
+        y_=[]
+        
+        for i in range(len(x1_)):
+            x_.append(x1_[i])
+            
+        x_.append(x2_[0])
+        x_.append(x2_[1])
+        x_.append(x3_[1])
+        x_.append(x4_[1])
+        x_.append(x5_[1])
+        x_.append(x6_[1])
+        x_.append(x7_[0])
+        x_.append(x8_[1])
+        
+        for i in range(len(y1_)):
+            y_.append(y1_[i])
+            
+        y_.append(y2_[0])
+        y_.append(y2_[1])
+        y_.append(y3_[1])
+        y_.append(y4_[1])
+        y_.append(y5_[1])
+        y_.append(y6_[1])
+        y_.append(y7_[0])
+        y_.append(y8_[1])     
 
+        # x9_=[x1_[-1],x1a_]
+        # y9_=[w1,w1]
 
-        x9_=[x1_[-1],x1a_]
-        y9_=[w1,w1]
+        # x10_=[x1a_,x1a_+a]
+        # y10_=[w1,w1]
 
-        x10_=[x1a_,x1a_+a]
-        y10_=[w1,w1]
+        # x11_=[b,b]
+        # y11_=[w1,w2]
 
-        x11_=[b,b]
-        y11_=[w1,w2]
+        # x12_=[b,c]
+        # y12_=[w2,w2]
 
-        x12_=[b,c]
-        y12_=[w2,w2]
+        # x13_=[c,c]
+        # y13_=[w2,-w2]
 
-        x13_=[c,c]
-        y13_=[w2,-w2]
+        # x14_=[c,b]
+        # y14_=[-w2,-w2]
 
-        x14_=[c,b]
-        y14_=[-w2,-w2]
+        # x15_=[b,b]
+        # y15_=[-w1,-w2]
 
-        x15_=[b,b]
-        y15_=[-w1,-w2]
+        # x16_=[b,x1b_]
+        # y16_=[-w1,-w1]
 
-        x16_=[b,x1b_]
-        y16_=[-w1,-w1]
+        # x17_=[x1b_,x1_[-1]]
+        # y17_=[-w1,-w1]
 
-        x17_=[x1b_,x1_[-1]]
-        y17_=[-w1,-w1]
-
-        x_=[x2_[0],x2_[1],x3_[1],x4_[1],x5_[1],x6_[1],x7_[0],x8_[1],x9_[1],x10_[1],x11_[1],x12_[1],x13_[1],x14_[1],x15_[0],x16_[1]]
-        y_=[y2_[0],y2_[1],y3_[1],y4_[1],y5_[1],y6_[1],y7_[0],y8_[1],y9_[1],y10_[1],y11_[1],y12_[1],y13_[1],y14_[1],y15_[0],y16_[1]]
+        #x_=[x2_[0],x2_[1],x3_[1],x4_[1],x5_[1],x6_[1],x7_[0],x8_[1],x9_[1],x10_[1],x11_[1],x12_[1],x13_[1],x14_[1],x15_[0],x16_[1]]
+        #y_=[y2_[0],y2_[1],y3_[1],y4_[1],y5_[1],y6_[1],y7_[0],y8_[1],y9_[1],y10_[1],y11_[1],y12_[1],y13_[1],y14_[1],y15_[0],y16_[1]]
         (self.segments)=self.create_segment(x_,y_)
-        f1=self.circle(x,y,R,0,0)
-        f1y=self.dphiy_circle(x,y,0,0,R)
-        f2 = self.phi_segments(x,y,self.segments)
-        f2y = self.dphiy_segments(x,y,self.segments)   
-        Fy = (f1**self.m + f2**self.m)**(-1/self.m)*f1*f2y + (f1**self.m + f2**self.m)**(-1/self.m)*f2*f1y - ((self.m*(f2**self.m)*f2y)/f2 + (self.m*(f1**self.m)*f1y)/f1)*((f1**self.m) +f2**self.m)**(-1/self.m)*f1*f2/(self.m*(f1**self.m + f2**self.m))
+        #f1=self.circle(x,y,R,0,0)
+        #f1y=self.dphiy_circle(x,y,0,0,R)
+        #f2 = self.phi_segments(x,y,self.segments)
+        Fy = self.dphiy_segments(x,y,self.segments)   
+        #Fy = (f1**self.m + f2**self.m)**(-1/self.m)*f1*f2y + (f1**self.m + f2**self.m)**(-1/self.m)*f2*f1y - ((self.m*(f2**self.m)*f2y)/f2 + (self.m*(f1**self.m)*f1y)/f1)*((f1**self.m) +f2**self.m)**(-1/self.m)*f1*f2/(self.m*(f1**self.m + f2**self.m))
             
         return(Fy)
     
@@ -11004,45 +11285,70 @@ class import_data:
         x8_=[-b,x1_[-1]]
         y8_=[-w1,-w1]
 
+        x_=[]
+        y_=[]
+        
+        for i in range(len(x1_)):
+            x_.append(x1_[i])
+            
+        x_.append(x2_[0])
+        x_.append(x2_[1])
+        x_.append(x3_[1])
+        x_.append(x4_[1])
+        x_.append(x5_[1])
+        x_.append(x6_[1])
+        x_.append(x7_[0])
+        x_.append(x8_[1])
+        
+        for i in range(len(y1_)):
+            y_.append(y1_[i])
+            
+        y_.append(y2_[0])
+        y_.append(y2_[1])
+        y_.append(y3_[1])
+        y_.append(y4_[1])
+        y_.append(y5_[1])
+        y_.append(y6_[1])
+        y_.append(y7_[0])
+        y_.append(y8_[1])        
+        # x9_=[x1_[-1],x1a_]
+        # y9_=[w1,w1]
 
-        x9_=[x1_[-1],x1a_]
-        y9_=[w1,w1]
+        # x10_=[x1a_,x1a_+a]
+        # y10_=[w1,w1]
 
-        x10_=[x1a_,x1a_+a]
-        y10_=[w1,w1]
+        # x11_=[b,b]
+        # y11_=[w1,w2]
 
-        x11_=[b,b]
-        y11_=[w1,w2]
+        # x12_=[b,c]
+        # y12_=[w2,w2]
 
-        x12_=[b,c]
-        y12_=[w2,w2]
+        # x13_=[c,c]
+        # y13_=[w2,-w2]
 
-        x13_=[c,c]
-        y13_=[w2,-w2]
+        # x14_=[c,b]
+        # y14_=[-w2,-w2]
 
-        x14_=[c,b]
-        y14_=[-w2,-w2]
+        # x15_=[b,b]
+        # y15_=[-w1,-w2]
 
-        x15_=[b,b]
-        y15_=[-w1,-w2]
+        # x16_=[b,x1b_]
+        # y16_=[-w1,-w1]
 
-        x16_=[b,x1b_]
-        y16_=[-w1,-w1]
+        # x17_=[x1b_,x1_[-1]]
+        # y17_=[-w1,-w1]
 
-        x17_=[x1b_,x1_[-1]]
-        y17_=[-w1,-w1]
-
-        x_=[x2_[0],x2_[1],x3_[1],x4_[1],x5_[1],x6_[1],x7_[0],x8_[1],x9_[1],x10_[1],x11_[1],x12_[1],x13_[1],x14_[1],x15_[0],x16_[1]]
-        y_=[y2_[0],y2_[1],y3_[1],y4_[1],y5_[1],y6_[1],y7_[0],y8_[1],y9_[1],y10_[1],y11_[1],y12_[1],y13_[1],y14_[1],y15_[0],y16_[1]]
+        #x_=[x2_[0],x2_[1],x3_[1],x4_[1],x5_[1],x6_[1],x7_[0],x8_[1],x9_[1],x10_[1],x11_[1],x12_[1],x13_[1],x14_[1],x15_[0],x16_[1]]
+        #y_=[y2_[0],y2_[1],y3_[1],y4_[1],y5_[1],y6_[1],y7_[0],y8_[1],y9_[1],y10_[1],y11_[1],y12_[1],y13_[1],y14_[1],y15_[0],y16_[1]]
         (self.segments)=self.create_segment(x_,y_)
 
         phi1_=self.phi_segments(x,y,self.segments)
 
 
-        C=self.circle(x,y,R,0,0)
-        phi2_=C
-        phi3_=self.equivalence(phi1_,phi2_,self.m)
-        return(phi3_)    
+        #C=self.circle(x,y,R,0,0)
+        #phi2_=C
+        #phi3_=self.equivalence(phi1_,phi2_,self.m)
+        return(phi1_)    
     
     
     
