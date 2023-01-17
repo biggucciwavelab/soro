@@ -16,11 +16,12 @@ from shutil import copyfile
 
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
-dt = 0.001 # time step 
-time_end = 5
-save_rate = 200 #save every n number of steps
+dt = 0.002 # time step 
+time_end = 35
+save_rate = 100 #save every n number of steps
 visual = 'irr'
 
+#xcenter = 2.25
 xcenter = 0
 zcenter = 0
 
@@ -32,8 +33,8 @@ shape morphing linear: linear shape morphing
 shape_morphing: transfinte morphing 
 '''
  
+control_mode = "grasping_explore"
 control_mode = "grasping"
-
 #control_mode = "Verify"
 #### GEOMETRIES ####
 """
@@ -63,16 +64,16 @@ bot_width = 0.09525  #  bot width  [m]
 bot_height = 0.09525/2 # bot height    [m]
 membrane_type = 1
 skin_width = 0.03# diameter of membrane particles
-ns =6 # number of skin particles 
+ns = 7# number of skin particles 
 membrane_width = ns*skin_width # cloth width [m]
 spring_stiffness = 100 # spring stiffness
 spring_damping = 0 # spring damping 
 theta = 2*np.pi/nb 
 cord_length = membrane_width + bot_width*np.cos(theta/2) # Cord length between bot centers
 R = np.sqrt((cord_length**2)/(2*(1-np.cos(theta)))) # radius [m]
-membrane_density = 2000
+membrane_density = 2200
 
-ns=6
+ns=7
 
 
 
@@ -88,16 +89,18 @@ ns=6
 
 
 particle_mass = 0.01 # kg 
-#particle_width = 0.0762 # meters
-particle_width = 0.1016  # meters
+particle_width = 0.0762 # meters
 particle_width2 = 0.1016 # meters
+#particle_width = 0.1016*np.sqrt(2) # meters
 particle_height = bot_height # meters
 particle_geom = 'cylinder'
 interior_mode = "bidispersion" # interior particle mode
 #interior_mode = "Verify"
-scale_radius = 1
+scale_radius = 1.02
 offset_radius = 0
 
+
+Rbar = scale_radius*R
 #### FLOOR PARAMETERS ####
 floor_length=10 # Length of the body floor
 floor_height=1     # height of the body floor
@@ -108,10 +111,11 @@ lateralFriction = 0.2
 spinningFriction = 0.1
 rollingFriction = 0.1
 dampingterm = 0.0001
-Ct = 0.0001 # tangent compliane
-C = 0.00001 # compliance
-Cr = 0.00001 # rolling compliance
-Cs = 0.00001 # sliding compliance
+Ct=1e-05
+C=1e-05
+Cr=1e-05
+Cs=1e-05
+
 
 
 #### CONTROL MODE -- SHAPE FORMATION ####
@@ -153,30 +157,33 @@ if control_mode=="shape_morphing":
 
 #### CONTROL MODE -- GRASPING EXPLORE ####
 if control_mode=="grasping_explore":
+    ball_geometry = "circle"
+     
     #ball_geometry = "square" 
     
-    ball_geometry = "import"
+    #ball_geometry = "triangle"
     # circle
+    br=.36
     if ball_geometry=="circle":
-        ball_radius=0.6570655533082147/2
-        #ball_radius=.3
+        ball_radius=br
     # square     
     if ball_geometry=="square":	
-        ball_radius=0.5160580788/2	
         
-        #ball_radius = .25 
-
+        br=(2*br)*np.pi/4
+        ball_radius=br/2	
+        
     # triangle
     if ball_geometry=="triangle":   
-        ball_radius=0.6570655533082147/2
+        br=br
+        ball_radius=br
     
     if ball_geometry=="import":
         ball_radius=3
     #ball_radius = R*0.3
 
-    Rr1=1.0
-    Rr2=4
-    theta=np.pi
+    Rr1=0
+    Rr2=2.25
+    theta=0
     ballx = 0
     ballz = 0     
     ball_mass = 5
@@ -196,12 +203,26 @@ if control_mode=="grasping_explore":
     xc2 = ballx
     yc2 = ballz
     
-    tcut1 = 2
-    tcut2 = 60
-    tcut3 = 100
-    alpha1 = 2.5
-    alpha1=2
-    alpha2 = 2
+    
+    xcenter = (ball_radius+R+.3)
+    zcenter = 0 
+    
+    
+    Rr1=0
+    Rr2=abs(xcenter)
+    #xcenter = 2.25
+    #xcenter = 0
+    #zcenter = 0
+    
+    # tcut1 = 10
+    # tcut2 = 15
+    # tcut3 = 20
+    
+    tcut1 = 5
+    tcut2 = 10
+    tcut3 = 15
+    alpha1 = 2.25
+    alpha2 = 2.25
     beta = 0
     
     
@@ -210,23 +231,25 @@ if control_mode=="grasping_explore":
 #### CONTROL MODE -- GRASPING ####
 if control_mode=="grasping":
     
+    ball_geometry = "circle"
      
     #ball_geometry = "square" 
     
-    ball_geometry = "circle"
+    #ball_geometry = "triangle"
     # circle
+    br=.36
     if ball_geometry=="circle":
-        ball_radius=0.6570655533082147/2
-        #ball_radius=.3
+        ball_radius=br
     # square     
     if ball_geometry=="square":	
-        ball_radius=0.5160580788/2	
         
-        #ball_radius = .25 
-
+        br=(2*br)*np.pi/4
+        ball_radius=br/2	
+        
     # triangle
     if ball_geometry=="triangle":   
-        ball_radius=0.6570655533082147/2
+        br=br
+        ball_radius=br
     
     if ball_geometry=="import":
         ball_radius=3
@@ -238,7 +261,7 @@ if control_mode=="grasping":
     a1 = .01*ball_radius
     b1 = 5*ball_radius
     
-    
+    fb_rate=1*dt
     const=.01
     a2 = const
     b2 = const
@@ -252,11 +275,13 @@ if control_mode=="grasping":
     yc2 = ballz
     
     tcut1 = 2
-    tcut2 = 60
-    tcut3 = 100
-    alpha1 = 1
-    alpha2 = 3.5
+    tcut2 = 6
+    tcut3 = 15
+    alpha1 = 2.25
+    alpha2 = 2.25
     beta = 0
+    
+    
     
     
 #### SAVE SIMULATION ####
@@ -326,7 +351,7 @@ if control_mode=="grasping":
     
     envParams['ballx'] = ballx
     envParams['ballz'] = ballz 
-    
+    envParams['fb_rate'] = fb_rate
     envParams['ball_geometry'] = ball_geometry
     envParams['ball_radius'] = ball_radius
     envParams['ball_mass'] = ball_mass
@@ -384,7 +409,7 @@ envParams['scale_radius'] = scale_radius
 # floor parameters
 envParams['floor_length'] = floor_length
 envParams['floor_height'] = floor_height
-
+envParams['Rbar'] = Rbar
 
 
 # Physical Paramters

@@ -10,6 +10,7 @@ start=timeit.default_timer()
 #import objects_2 as sim_obj
 import objects4 as sim_obj
 #from config import *
+import numpy as np
 import random
 import os
 import csv
@@ -27,8 +28,8 @@ my_system.SetSolverType(chrono.ChSolver.Type_PSSOR)
 my_system.Set_G_acc(chrono.ChVectorD(0,-9.81, 0)) 
 #chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.001)
 #chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.001)
-chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.0000001)
-chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.000001)
+chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.00001)
+chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.00001)
 
 path = os.path.dirname(__file__)
 path=path+"/Experiments/"
@@ -64,7 +65,10 @@ sim = sim_obj.simulate(name,my_system,bots,interior,Ball,controls,my_rep,path)
 
 # Run the simulation 
 sim.simulate()
-
+print("simulation run:",np.round((sim.sim_end-sim.sim_start)/60,2)," minutes")
+print("name=",str(name))
 # export data
 data_export=sim_obj.export_data(my_system,bots,controls,interior,Ball,sim,Psi,my_rep,path,name)
+#%%
 data_export.export_data()
+

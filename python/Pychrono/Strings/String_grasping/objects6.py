@@ -178,9 +178,9 @@ class robots:
         
             # postion 
             theta=i*2*np.pi/self.nb # set angle
-            x = self.Rbar*np.cos(theta)+self.xcenter  # set x positon 
+            x = self.R*np.cos(theta)+self.xcenter  # set x positon 
             y = self.bot_height/2                     # set y position 
-            z = self.Rbar*np.sin(theta)+self.zcenter  # set z position 
+            z = self.R*np.sin(theta)+self.zcenter  # set z position 
             # create body
             #### geometry of the robots to be cylinders
             if self.bot_geom=="cylinder":
@@ -275,9 +275,9 @@ class robots:
                     for j in range(1,self.ns+1,1):
                         # Initial postion of each particle
                         theta=i*b_ang + j*(b_ang - o_ang -  p_ang)/(self.ns) + p_ang 
-                        x=self.Rbar*np.cos(theta)+self.xcenter # x position 
+                        x=self.R*np.cos(theta)+self.xcenter # x position 
                         y=self.bot_height/2              # y position 
-                        z=self.Rbar*np.sin(theta)+self.zcenter # z position  
+                        z=self.R*np.sin(theta)+self.zcenter # z position  
                         
                         # create them and set position
                         #skinm = chrono.ChBodyEasySphere(self.skind/2,self.skinrho,True,True)
@@ -354,9 +354,9 @@ class robots:
                     for j in range(1,self.ns+1,1):
                         # Initial postion of each particle
                         theta=(i+1)*b_ang + j*(b_ang - o_ang - p_ang)/(self.ns) + p_ang
-                        x=self.Rbar*np.cos(theta)+self.xcenter
+                        x=self.R*np.cos(theta)+self.xcenter
                         y=self.bot_height/2
-                        z=self.Rbar*np.sin(theta)+self.zcenter
+                        z=self.R*np.sin(theta)+self.zcenter
                         
                         self.skin_xposition["skin_xposition{0}".format(self.countm)]=[]  #x position
                         self.skin_yposition["skin_yposition{0}".format(self.countm)]=[]  # y position
@@ -669,8 +669,8 @@ class Interiors:
                 self.radius2=self.particle_width/2 - self.offset_radius
                 
                 #R2=self.radius2*self.n[i]/(np.pi) + const   
-                R2=self.Ri[i]+self.diff
-                thetahat=random.uniform(-np.pi/12, np.pi/12)
+                R2=self.Ri[i]#+self.diff
+                #thetahat=random.uniform(-np.pi/12, np.pi/12)
                 for j in range(self.n[i]):
                      
                     self.particle_xposition["particle_xposition{0}".format(count)]=[] # x position  
@@ -690,8 +690,8 @@ class Interiors:
                     y = .5*self.particle_height                         # y position 
                     z = R2*np.sin(j*2*np.pi/self.n[i])+self.zcenter # z position 
                     
-                    xp=np.cos(thetahat)*x - np.sin(thetahat)*z
-                    zp=np.sin(thetahat)*x + np.cos(thetahat)*z
+                    #xp=np.cos(thetahat)*x - np.sin(thetahat)*z
+                    #zp=np.sin(thetahat)*x + np.cos(thetahat)*z
                     # create granular
                     gran = chrono.ChBodyEasyCylinder(self.radius2, self.particle_height,self.particle_density,True,True)
                     gran.SetMaterialSurface(self.particle_material) # add material 
@@ -740,8 +740,8 @@ class Interiors:
                 #R2=self.radius2*self.n[i]/(np.pi) + const
                 
 
-                R2=self.Ri[i]+self.diff
-                thetahat=random.uniform(-np.pi/12, np.pi/12)
+                R2=self.Ri[i]#+self.diff
+                #thetahat=random.uniform(-np.pi/12, np.pi/12)
                 # empty arrays of variables
                 for j in range(self.n[i]):
                     self.particle_xposition["particle_xposition{0}".format(count)]=[] # x position  
@@ -766,26 +766,21 @@ class Interiors:
 
                     #R2=self.radius2*self.n[i]/(np.pi) + const# raidus of ring 
                     # x,y,z positions
-                    x = R2*np.cos(j*2*np.pi/self.n[i])#+self.xcenter
+                    x = R2*np.cos(j*2*np.pi/self.n[i])+self.xcenter
                     y = .5*self.particle_height 
-                    z = R2*np.sin(j*2*np.pi/self.n[i])#+self.zcenter
+                    z = R2*np.sin(j*2*np.pi/self.n[i])+self.zcenter
                     #print("j=",str(j),str(np.round(self.radius2,3)),"x,y",str(np.round(x,2)),str(np.round(z,2)))
                     
-                    xp=np.cos(thetahat)*z - np.sin(thetahat)*x
-                    zp=np.sin(thetahat)*z + np.cos(thetahat)*x
-                    
-                    xp=xp+self.xcenter
-                    zp=zp+self.zcenter
+                    #xp=np.cos(thetahat)*x - np.sin(thetahat)*z
+                    #zp=np.sin(thetahat)*x + np.cos(thetahat)*z
                     
                     self.Rm.append(self.radius2)
                     self.Area = self.Area + (np.pi)*(self.radius2)**2
                     if i%2==0:
                         con = 'b'
-                        const = 0
                         self.N1 = 1+self.N1
                     else: 
                         con = 'a'
-                        const = 0
                         self.N2 = 1+self.N2  
                         
                     # create body
@@ -793,7 +788,7 @@ class Interiors:
                     gran = chrono.ChBodyEasyCylinder(self.radius2 , self.particle_height ,self.particle_density,True,True)
                     
       
-                    gran.SetPos(chrono.ChVectorD(xp,y,zp))
+                    gran.SetPos(chrono.ChVectorD(x,y,z))
                     gran.SetMaterialSurface(self.particle_material)
                     gran.SetName('gran'+str(con)+str(count))
                     gran.SetId(i)
