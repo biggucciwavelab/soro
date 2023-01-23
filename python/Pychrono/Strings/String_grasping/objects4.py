@@ -567,7 +567,7 @@ class Interiors:
         self.Rbar=self.parameters['Rbar']
         self.interior_mode = self.parameters['interior_mode']
         self.offset_radius=self.parameters['offset_radius']
-        
+        self.particle_mix=self.parameters['particle_mix']
         self.lateralFriction = self.parameters['lateralFriction']
         self.spinningFriction = self.parameters['spinningFriction']
         self.rollingFriction = self.parameters['rollingFriction']
@@ -770,12 +770,16 @@ class Interiors:
                     y = .5*self.particle_height 
                     z = R2*np.sin(j*2*np.pi/self.n[i])#+self.zcenter
                     #print("j=",str(j),str(np.round(self.radius2,3)),"x,y",str(np.round(x,2)),str(np.round(z,2)))
+                    if self.particle_mix==True:
+                        
+                        xp=np.cos(thetahat)*z - np.sin(thetahat)*x
+                        zp=np.sin(thetahat)*z + np.cos(thetahat)*x
+                        xp=xp+self.xcenter
+                        zp=zp+self.zcenter
+                    if self.particle_mix==False:
+                        xp=x+self.xcenter
+                        zp=z+self.zcenter
                     
-                    xp=np.cos(thetahat)*z - np.sin(thetahat)*x
-                    zp=np.sin(thetahat)*z + np.cos(thetahat)*x
-                    
-                    xp=xp+self.xcenter
-                    zp=zp+self.zcenter
                     
                     self.Rm.append(self.radius2)
                     self.Area = self.Area + (np.pi)*(self.radius2)**2
@@ -1699,10 +1703,20 @@ class simulate:
         if self.visual=="pov": 
             while (self.my_system.GetChTime() < self.time_end): 
                 self.my_system.DoStepDynamics(self.dt)
-                self.controller.get_position()
                 self.controller.run_controller()
-                self.save_contacts() 
+                self.controller.get_position()
                 self.my_rep.ResetList()
+                self.save_contacts() 
+                #self.my_rep.ResetList()
+                
+                if self.controller.t>=self.tcut3:
+                    print("time change")
+                    self.controller.t=0
+                else:
+                    self.controller.t=self.controller.t+self.dt
+                    #print("not time")
+
+
                 time=np.round(self.my_system.GetChTime(),3)
                 
                 if self.control_mode=="shape_morphing":
@@ -1712,11 +1726,28 @@ class simulate:
                 else:
                     print('time='+str(time))
                 
+                #self.myapplication.EndScene()
                 self.save_parameters()
+                
                 self.epoch = self.epoch + 1
-            self.sim_end=timeit.default_timer()     
+                self.my_rep.ResetList()
+                
+                # aaa=len(self.Bots.bots)
+                # cam_x=0.33*(self.Bots.bots[0].GetPos().x + self.Bots.bots[int(aaa/3)].GetPos().x + self.Bots.bots[int(2*aaa/3)].GetPos().x)
+                # cam_y=0.33*(self.Bots.bots[0].GetPos().y + self.Bots.bots[int(aaa/3)].GetPos().y + self.Bots.bots[int(2*aaa/3)].GetPos().y)
+                # cam_z=0.33*(self.Bots.bots[0].GetPos().z + self.Bots.bots[int(aaa/3)].GetPos().z + self.Bots.bots[int(2*aaa/3)].GetPos().z)
+                # self.myapplication.GetSceneManager().getActiveCamera().setPosition(chronoirr.vector3df(cam_x,cam_y+self.camy_height,cam_z))
+                # self.myapplication.GetSceneManager().getActiveCamera().setTarget(chronoirr.vector3df(cam_x,cam_y,cam_z))
+                # self.myapplication.SetVideoframeSave(self.save_video)
+                # self.myapplication.SetVideoframeSaveInterval(round(1/(self.dt*60)))
+                # Close the simulation if time ends
+                #if self.my_system.GetChTime()> self.time_end :
+                    #self.myapplication.GetDevice().closeDevice()
+                    
+            self.sim_end=timeit.default_timer()
             self.parameters['sime_time']=(self.sim_end-self.sim_start)/60
             self.number_parameters = self.parameters['number_parameters']
+            self.parameters['rho']=self.rho
 
         #print(len(self.parameters),self.number_parameters+4)
         #if len(self.parameters)==self.number_parameters+2:
@@ -3057,7 +3088,7 @@ class controller():
             
             self.xc2 = self.parameters["xc2"]
             self.zc2 = self.parameters["yc2"]    
-            
+            self.increment = self.parameters["increment"]
             self.ball_radius = self.parameters["ball_radius"]
             
             self.fb = 0 
@@ -3388,7 +3419,7 @@ class controller():
         elif self.t>self.tcut2 and self.t<self.tcut3 and self.trig2!=0:
             #print("move")
             self.trig2 = 0
-            self.theta__ = self.theta__ + np.pi/6
+            self.theta__ = self.theta__ + self.increment 
             #self.Rr = 2
             self.Rr = self.Rr2
             self.alpha_=self.alpha2
@@ -10831,7 +10862,7 @@ class import_data:
             for j in range(0,self.nb):
                 x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]
                 if self.geom=="square":
-                    if self.PHI(x0,y0,self.segments)<.15:
+                    if self.PHI(x0-xcenter,y0-ycenter,self.segments)<.1:
                         patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
                         axs[0].add_patch(patch)
                    
@@ -12460,7 +12491,7 @@ class select_import_data:
          self.control_mode=self.parameters['control_mode']
          self.skin_width=self.parameters['skin_width']
          self.height=self.parameters['bot_height']
-         
+         #self.increment= self.parameters['increment']
          
          
          self.path=self.path+self.name+"/results/"
@@ -12483,6 +12514,22 @@ class select_import_data:
          #### THETA
          self.THETA=np.genfromtxt(self.files[self.files.index('THETA.csv') ] ,delimiter=',')
          
+         #if np.sign(self.increment)==-1:
+         # for i in range(len(self.THETA)):
+         #    if self.THETA[i]==0:
+         #        pass
+         #    else:
+         #        temp=abs(2*np.pi-self.THETA[i])
+         #        while temp>2*np.pi:
+         #            #temp=abs(2*np.pi-temp)
+         #            temp=abs(temp-2*np.pi)
+         #        if temp==2*np.pi:
+         #            temp=0
+         #        else:
+         #            temp=temp
+                    
+         #        self.THETA[i]=temp
+
          #### Rr_
          self.Rr_=np.genfromtxt(self.files[self.files.index('Rr_.csv') ] ,delimiter=',')
          
@@ -12501,7 +12548,7 @@ class select_import_data:
          
          
          
-     def sort_epsilon_and_theta(self):
+     def sort_epsilon_and_theta(self,count_range):
         theta=self.THETA#[0:-2] 
         epsilon=self.EPSILON_
         
@@ -12524,6 +12571,7 @@ class select_import_data:
             epsilon2=epsilon[res[0]]
             res2=np.nonzero(epsilon[res[0]])
             res2=res2[0]
+
             self.average_epsilon.append(np.mean(epsilon2[res2]))
             self.max_epsilon.append(max(epsilon[res[0]]))
             self.median_epsilon.append(np.median(epsilon2[res2]))
@@ -12531,7 +12579,7 @@ class select_import_data:
         count=0
         for i in range(len(self.max_epsilon)):
             
-            if count==12:
+            if count==count_range:
                 count=0
             else:
                 count=count

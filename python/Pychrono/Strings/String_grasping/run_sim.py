@@ -66,7 +66,7 @@ sim = sim_obj.simulate(name,my_system,bots,interior,Ball,controls,my_rep,path)
 # Run the simulation 
 sim.simulate()
 print("simulation run:",np.round((sim.sim_end-sim.sim_start)/60,2)," minutes")
-print("name=",str(name))
+print("name =",str(name))
 # export data
 data_export=sim_obj.export_data(my_system,bots,controls,interior,Ball,sim,Psi,my_rep,path,name)
 #%%

@@ -11,7 +11,7 @@ import pychrono.core as chrono
 import timeit
 import numpy as np
 start=timeit.default_timer()
-import objects2 as sim_obj
+import objects5 as sim_obj
 import random
 import os
 import csv
@@ -25,39 +25,42 @@ os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 
 
-#name = files[-1]
+name = files[-1]
 
 #name = "14_11_2022_16_36_03"
-
 #name = "14_11_2022_16_36_19"
-
 #name = "14_11_2022_16_35_26"
-
-
 #name = "11_10_2022_12_12_55" # TRIANGLE
-
 #name = "11_10_2022_17_26_37" # SQUARE
-
 #name = "11_10_2022_12_12_03" # circle
-
-
-
-
-name ="29_11_2022_18_36_17" # circle 
-
-name ="29_11_2022_18_36_48" # triangle
-
+#name ="29_11_2022_18_36_17" # circle 
+#name ="29_11_2022_18_36_48" # triangle
 #name ="29_11_2022_18_36_33" # square
-
-
 
 #name ="30_11_2022_12_51_48"
 #name = "30_11_2022_17_39_10"
 #name = "30_11_2022_17_58_52"
+#name = "01_12_2022_09_43_46"
 
-name = "01_12_2022_09_43_46"
+#name = "06_12_2022_10_40_38" # square
+#name = "06_12_2022_10_35_23" #circle
+#name = "06_12_2022_10_36_05" # triangle
+#name = "08_12_2022_08_33_52"
+#name = "08_12_2022_09_35_31"
 
-d=5.5
+
+name = "09_12_2022_12_10_49" # explore  random object
+name = "12_12_2022_17_09_09"
+#name = "12_12_2022_16_18_10"
+
+name = "13_12_2022_11_23_13"
+name = "13_12_2022_11_24_57"
+
+
+name = "13_12_2022_15_47_16"
+name = "13_12_2022_15_49_40"
+name = "19_12_2022_08_55_00"
+d=4
 snap_shot=False
 membrane=True
 dxmin=-d
@@ -79,23 +82,36 @@ sim_data=sim_obj.import_data(name,path,dxmin,dxmax,dymin,dymax,Psi)
 
 
 # ##### This is for sorting #####
-sim_data.sort_epsilon_and_theta()
-sim_data.plot_epsilon_vs_theta_section()
+# sim_data.sort_epsilon_and_theta()
+# sim_data.plot_epsilon_vs_theta_section()
 
-sim_data.create_frames_pull_epsilon3(True,6)
-print('plot_epsilon_vs_theta')
-sim_data.plot_epsilon_vs_theta()
+# sim_data.create_frames_pull_epsilon3(True,6)
+# print('plot_epsilon_vs_theta')
+# sim_data.plot_epsilon_vs_theta()
 
 
 
 
 ###### Tjos is for wierd object #####
-# membrane=True
-# print('create_frames')
-# sim_data.create_frames(membrane)
+sim_data.plot_ball_position_vs_estimate()
+membrane=True
+print('sort_epsilon_and_theta')
+sim_data.sort_epsilon_and_theta()
 
-# print('plot_epsilon4')
-# sim_data.plot_epsilon4()
+print('plot_epsilon_vs_theta_section')
+sim_data.plot_epsilon_vs_theta_section()
+
+print('create_frames')
+sim_data.create_frames(membrane)
+
+print('create_frames_pull_epsilon3')
+sim_data.create_frames_pull_epsilon3(membrane,4.5)
+
+print('plot_epsilon4')
+sim_data.plot_epsilon4()
+
+print('create_wrenches_slices_frames2')
+sim_data.create_wrenches_slices_frames2()
 
 #print('create_frames_contact_forces')
 #sim_data.create_frames_contact_forces(2.5)

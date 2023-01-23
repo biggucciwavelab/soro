@@ -17,9 +17,10 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-time_end = 35
+#time_end = 180*4
+time_end = 120*5
 save_rate = 100 #save every n number of steps
-visual = 'irr'
+visual = 'pov'
 
 #xcenter = 2.25
 xcenter = 0
@@ -34,7 +35,7 @@ shape_morphing: transfinte morphing
 '''
  
 control_mode = "grasping_explore"
-control_mode = "grasping"
+#control_mode = "grasping"
 #control_mode = "Verify"
 #### GEOMETRIES ####
 """
@@ -159,7 +160,7 @@ if control_mode=="shape_morphing":
 if control_mode=="grasping_explore":
     ball_geometry = "circle"
      
-    #ball_geometry = "square" 
+    ball_geometry = "square" 
     
     #ball_geometry = "triangle"
     # circle
@@ -189,7 +190,7 @@ if control_mode=="grasping_explore":
     ball_mass = 5
     a1 = .01*ball_radius
     b1 = 5*ball_radius
-    
+    increment = np.pi/4
     
     const=.01
     a2 = const
@@ -203,6 +204,7 @@ if control_mode=="grasping_explore":
     xc2 = ballx
     yc2 = ballz
     
+    particle_mix = True
     
     xcenter = (ball_radius+R+.3)
     zcenter = 0 
@@ -221,6 +223,9 @@ if control_mode=="grasping_explore":
     tcut1 = 5
     tcut2 = 10
     tcut3 = 15
+    
+
+    
     alpha1 = 2.25
     alpha2 = 2.25
     beta = 0
@@ -233,7 +238,7 @@ if control_mode=="grasping":
     
     ball_geometry = "circle"
      
-    #ball_geometry = "square" 
+    ball_geometry = "square" 
     
     #ball_geometry = "triangle"
     # circle
@@ -254,7 +259,7 @@ if control_mode=="grasping":
     if ball_geometry=="import":
         ball_radius=3
     #ball_radius = R*0.3
-
+    particle_mix = True
     ballx = ball_radius+R+.3
     ballz = 0 
     ball_mass = 5
@@ -368,7 +373,7 @@ if control_mode=="grasping_explore":
 
     envParams['xc2'] = xc2
     envParams['yc2'] = yc2    
-
+    envParams['increment'] = increment
     envParams['tcut1'] = tcut1
     envParams['tcut2'] = tcut2
     envParams['tcut3'] = tcut3   
@@ -404,6 +409,7 @@ envParams['particle_width'] = particle_width
 envParams['particle_width2'] = particle_width2
 envParams['particle_height'] = particle_height 
 envParams['particle_geom'] = particle_geom
+envParams['particle_mix'] = particle_mix
 envParams['offset_radius'] = offset_radius
 envParams['scale_radius'] = scale_radius
 # floor parameters
