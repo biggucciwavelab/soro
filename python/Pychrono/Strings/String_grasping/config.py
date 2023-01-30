@@ -17,8 +17,9 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-#time_end = 180*4
-time_end = 120*5
+time_end = 120*4
+#time_end = 40
+time_end = 35
 save_rate = 100 #save every n number of steps
 visual = 'pov'
 
@@ -35,7 +36,7 @@ shape_morphing: transfinte morphing
 '''
  
 control_mode = "grasping_explore"
-#control_mode = "grasping"
+control_mode = "grasping"
 #control_mode = "Verify"
 #### GEOMETRIES ####
 """
@@ -190,7 +191,7 @@ if control_mode=="grasping_explore":
     ball_mass = 5
     a1 = .01*ball_radius
     b1 = 5*ball_radius
-    increment = np.pi/4
+    increment = -np.pi/4
     
     const=.01
     a2 = const

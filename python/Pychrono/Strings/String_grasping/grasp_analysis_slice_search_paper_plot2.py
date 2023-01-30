@@ -90,7 +90,7 @@ for i in range(len(epsilon_theta_section_max)):
     x=entry*np.ones(len(y__))
     axs2.scatter(x,y__,linewidths = 0.25,edgecolor ="k", color="w",s=5,zorder=5)
     error=[np.min(y__),np.max(y__)]
-    axs2.plot([x[1],x[1]],error,color="tab:green",linewidth=1,zorder=3)
+    #axs2.plot([x[1],x[1]],error,color="tab:green",linewidth=1,zorder=3)
     axs2.scatter(entry,np.mean(y__),color=c,marker='s',s=3,zorder=3)
     ymean.append(np.mean(y__))
 positions=[0,1,2,3,4,5,6,7,8,9,10,11]
