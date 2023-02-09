@@ -25,7 +25,10 @@ path = os.path.dirname(__file__)
 path=path+"/Experiments/"
 os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['mathtext.fontset'] = 'dejavuserif'
+plt.rcParams['font.size'] = 9
+plt.rcParams['axes.linewidth'] = .1
 path="D:/dmulroy/Experiments/square_search/"
 
 labels=['0',
@@ -79,6 +82,10 @@ name26 = "29_01_2023_22_09_21"
 name27 = "29_01_2023_10_55_00"
 name28 = "29_01_2023_10_54_47"
 name29 = "29_01_2023_10_54_52"
+name30 = "29_01_2023_22_00_41"
+name31 = "30_01_2023_14_31_49"
+
+name32 = "31_01_2023_08_31_14"
 # %%
 
 #Psi=sim_obj.R_functions(name1)  
@@ -576,6 +583,95 @@ max_epsilon29=sim_data29.max_epsilon
 median_epsilon29=sim_data29.median_epsilon
 
 
+#%%
+#Psi=sim_obj.R_functions(name23)  
+sim_data30=sim_obj.select_import_data(name30,path,dxmin,dxmax,dymin,dymax,None)
+sim_data30.sort_epsilon_and_theta(count_range)
+epsilon_section30=sim_data30.epsilon_section
+epsilon_theta_section_max30=sim_data30.epsilon_theta_section_max
+epsilon_theta_section_mean30=sim_data30.epsilon_theta_section_mean
+epsilon_theta_section_median30=sim_data30.epsilon_theta_section_median
+
+average_epsilon30=sim_data30.average_epsilon
+max_epsilon30=sim_data30.max_epsilon
+median_epsilon30=sim_data30.median_epsilon
+
+
+# %%
+#Psi=sim_obj.R_functions(name1)  
+sim_data31=sim_obj.select_import_data(name31,path,dxmin,dxmax,dymin,dymax,None)
+#sim_data.sort_epsilon_and_theta()
+EPSILON_=sim_data31.EPSILON_
+THETA=sim_data31.THETA
+temp=2.1*np.pi
+for i in range(len(THETA)):
+    if THETA[i]==0:
+        pass
+    else:
+        temp=abs(2*np.pi-THETA[i])
+        while temp>2*np.pi:
+            temp=abs(2*np.pi-temp)
+        if temp==2*np.pi:
+            temp=0
+        else:
+            temp=temp
+           
+        THETA[i]=temp
+
+for i in range(len(THETA)):
+    if THETA[i]!=0:
+        THETA[i]=abs(THETA[i]-2*np.pi)
+        
+sim_data31.THETA=THETA        
+sim_data31.sort_epsilon_and_theta(count_range)
+
+epsilon_section31=sim_data31.epsilon_section
+epsilon_theta_section_max31=sim_data31.epsilon_theta_section_max
+epsilon_theta_section_mean31=sim_data31.epsilon_theta_section_mean
+epsilon_theta_section_median31=sim_data31.epsilon_theta_section_median
+
+average_epsilon31=sim_data31.average_epsilon
+max_epsilon31=sim_data31.max_epsilon
+median_epsilon31=sim_data31.median_epsilon
+
+
+# %%
+#Psi=sim_obj.R_functions(name1)  
+sim_data32=sim_obj.select_import_data(name32,path,dxmin,dxmax,dymin,dymax,None)
+#sim_data.sort_epsilon_and_theta()
+EPSILON_=sim_data31.EPSILON_
+THETA=sim_data32.THETA
+temp=2.1*np.pi
+for i in range(len(THETA)):
+    if THETA[i]==0:
+        pass
+    else:
+        temp=abs(2*np.pi-THETA[i])
+        while temp>2*np.pi:
+            temp=abs(2*np.pi-temp)
+        if temp==2*np.pi:
+            temp=0
+        else:
+            temp=temp
+           
+        THETA[i]=temp
+
+for i in range(len(THETA)):
+    if THETA[i]!=0:
+        THETA[i]=abs(THETA[i]-2*np.pi)
+        
+sim_data32.THETA=THETA        
+sim_data32.sort_epsilon_and_theta(count_range)
+
+epsilon_section32=sim_data32.epsilon_section
+epsilon_theta_section_max32=sim_data32.epsilon_theta_section_max
+epsilon_theta_section_mean32=sim_data32.epsilon_theta_section_mean
+epsilon_theta_section_median32=sim_data32.epsilon_theta_section_median
+
+average_epsilon32=sim_data32.average_epsilon
+max_epsilon32=sim_data32.max_epsilon
+median_epsilon32=sim_data32.median_epsilon
+
 # %%
 max_epsilon_={}
 for i in range(count_range):
@@ -609,6 +705,9 @@ for i in range(count_range):
     temp27=np.asarray(epsilon_theta_section_max27[str(i)])
     temp28=np.asarray(epsilon_theta_section_max28[str(i)])
     temp29=np.asarray(epsilon_theta_section_max29[str(i)])    
+    temp30=np.asarray(epsilon_theta_section_max30[str(i)])    
+    temp31=np.asarray(epsilon_theta_section_max31[str(i)])     
+    temp32=np.asarray(epsilon_theta_section_max32[str(i)])     
     #temp3=[temp,temp2]
     temp=np.concatenate((temp1,
                          temp2,
@@ -638,7 +737,10 @@ for i in range(count_range):
                          temp26,
                          temp27,
                          temp28,
-                         temp29))
+                         temp29,
+                         temp30,
+                         temp31,
+                         temp32))
     #temp3=temp3.flatten()
     max_epsilon_[str(i)].append(temp)
     #max_epsilon_[str(i)].append(epsilon_theta_section_max1[str(i)])
@@ -657,8 +759,8 @@ for i in range(len(max_epsilon_)):
     y__=[]
     #print(y_)
     for j in res2:
-        #if y_[j]<5:
-        y__.append(y_[j])
+        if y_[j]<10:
+            y__.append(y_[j])
     y.append(y__)
     x=entry*np.ones(len(y__))
     #axs2.scatter(x,y__,linewidths = 0.25,edgecolor ="k", color="w",s=5,zorder=5)
@@ -710,17 +812,20 @@ print("sigma_faces",np.round(statistics.stdev(yf),2))
 print("mean_edges",np.round(np.mean(ye),2))
 print("sigma_edges",np.round(statistics.stdev(ye),2))
 
+num_bins=25
+
+
+
 name="square_face"
-num_bins=20
 fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
-n, bins, patches = axs.hist(yf,num_bins,density=True,color="tab:purple",zorder=3)
+nf, binsf, patchesf = axs.hist(yf,num_bins,density=True,color="tab:purple",zorder=3)
 x_=np.linspace(0,5,200)  
 mean = statistics.mean(yf)
 sd = statistics.stdev(yf)
 N=norm.pdf(x_, mean, sd)
 axs.plot(x_,N,color='k',zorder=3)
-axs.set_title('(b)',fontsize=9)
-axs.set_xlabel(r'$\epsilon$',fontsize=9)
+axs.set_title('(b)')
+axs.set_xlabel(r'$\epsilon$')
 axs.set_xticks([0,1,2,3,4,5])
 axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
@@ -734,17 +839,16 @@ plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+
 print(len(yf))
 print(len(ye))
 
-num_bins=20
 name="square_corner"
 fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
-n, bins, patches = axs.hist(ye,num_bins,density=True,color="tab:green",zorder=3)
+ne, binse, patchese = axs.hist(ye,num_bins,density=True,color="tab:green",zorder=3)
 x_=np.linspace(0,5,200)  
 mean = statistics.mean(ye)
 sd = statistics.stdev(ye)
 N=norm.pdf(x_, mean, sd)
 axs.plot(x_,N,color='k',zorder=3)
-axs.set_title('(c)',fontsize=9)
-axs.set_xlabel(r'$\epsilon$',fontsize=9)
+axs.set_title('(c)')
+axs.set_xlabel(r'$\epsilon$')
 axs.set_xticks([0,1,2,3,4,5])
 axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.yaxis.set_tick_params(width=.25,length=2,pad=1)

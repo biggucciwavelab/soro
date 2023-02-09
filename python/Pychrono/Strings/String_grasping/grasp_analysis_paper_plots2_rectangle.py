@@ -21,6 +21,11 @@ import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter1d
 import matplotlib.patches as patches
 import statistics
+
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['mathtext.fontset'] = 'dejavuserif'
+plt.rcParams['font.size'] = 9
+plt.rcParams['axes.linewidth'] = .1
 def moving_average(a, n=3) :
     ret = np.cumsum(a, dtype=float)
     ret[n:] = ret[n:] - ret[:-n]
@@ -135,15 +140,16 @@ for i in range(len(time_[0])):
 
 
 # %%
+mu_square=epsilonmu
 name="epsilon_square_sigma_2p25"
 c="tab:blue"
-fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.75),dpi=300)
+fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 #axs.fill_between(time_[0],epsilonsigmap,epsilonsigmam,color=c,alpha=0.5)
 axs.fill_between(time_[0],epsilonsigmap,epsilonsigmammod,color=c,alpha=0.5)
 axs.plot(time_[0],epsilonmu,linewidth=2,color=c,label="$\mu$")
-axs.set_ylabel('$\epsilon$',labelpad=-1,fontsize=9)
-axs.set_xlabel('time (s)',labelpad=-2,fontsize=9)
-axs.set_title('(c)',fontsize=9)
+axs.set_ylabel('$\epsilon$',labelpad=-1)
+axs.set_xlabel('Time (s)',labelpad=-2)
+axs.set_title('(b)')
 axs.set_xticks([0,5,10,15,20,25,30,35])
 axs.set_yticks([0,0.5,1,1.5,2])
 axs.set_ylim([0,2.1])

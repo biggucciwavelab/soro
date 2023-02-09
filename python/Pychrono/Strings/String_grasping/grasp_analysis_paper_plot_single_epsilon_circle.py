@@ -21,7 +21,10 @@ import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter1d
 import matplotlib.patches as patches
 
-
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['mathtext.fontset'] = 'dejavuserif'
+plt.rcParams['font.size'] = 9
+plt.rcParams['axes.linewidth'] = .1
 path = os.path.dirname(__file__)
 path=path+"/Experiments/"
 #os.chdir(path)
@@ -68,7 +71,7 @@ tcut=epsilon1[tzero+1]
 entry=[0,30,75,100,tzero+1]
 # %% In[epsilon_three_shapes_legend]
 name="epsilon_single_shape"
-fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(7.0,1.5),dpi=300)
+fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(7.5,1.5),dpi=300)
 axs.plot(time1,epsilon1,color='tab:red',linewidth=2,alpha=0.5)
 axs.plot(time1[nn-1:],epsilon1_clean,color='tab:red',linewidth=2,label='Circle')
 for i in entry:
@@ -84,9 +87,9 @@ axs.add_patch(p1)
 #yticks=[0,2,4,6,8]
 #axs.set_xticks(np.round(xticks,2))
 #axs.set_yticks(np.round(yticks,2))
-axs.set_title('(a)',fontsize=9)
-axs.set_ylabel('$\epsilon$',labelpad=-1,fontsize=9)
-axs.set_xlabel('time (s)',labelpad=-2,fontsize=9)
+#axs.set_title('(a)')
+axs.set_ylabel('$\epsilon$',labelpad=-1)
+axs.set_xlabel('Time (s)',labelpad=-2)
 axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.grid(True,linewidth=0.1,zorder=-1)

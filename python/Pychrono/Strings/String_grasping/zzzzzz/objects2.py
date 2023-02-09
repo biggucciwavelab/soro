@@ -1518,21 +1518,36 @@ class Ball:
             
             nsides=50
             pt_vect = chrono.vector_ChVectorD()
-
-            theta=np.linspace(0 + np.pi/2,2.73 + np.pi/2,100)
-            theta2=np.linspace(3.55 + np.pi/2,np.pi*2 + np.pi/2,100)
+            theta=np.linspace(3*np.pi/2 + .415,(2*np.pi + 3*np.pi/2) - .415,100,endpoint=True)
+            #Etheta=np.linspace(0 + np.pi/2,2.73 + np.pi/2,100)
+            #theta2=np.linspace(3.55 + np.pi/2,np.pi*2 + np.pi/2,100)
             # creates bottom
+            #for i in range(len(theta)):
+                #pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta[i]),height/2,R*np.cos(theta[i])))
+            
+            x=[]
+            y=[]
             for i in range(len(theta)):
-                pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta[i]),height/2,R*np.cos(theta[i])))
+                x.append(R*np.cos(theta[i]))
+                y.append(R*np.sin(theta[i]))
+            
+            for i in range(len(x)):
+                pt_vect.push_back(chrono.ChVectorD(x[i],-height/2,y[i]))
+            
+            for i in range(len(x)):
+                pt_vect.push_back(chrono.ChVectorD(x[i],height/2,y[i]))
                 
-            for i in range(len(theta2)):
-                pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta2[i]),height/2,R*np.cos(theta2[i])))    
+                
+
+            
+            #for i in range(len(theta2)):
+                #pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta2[i]),height/2,R*np.cos(theta2[i])))    
             
                 #create top 
-            for i in range(len(theta)):
-                pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta[i]),-height/2,R*np.cos(theta[i])))
-            for i in range(len(theta2)):
-                pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta2[i]),-height/2,R*np.cos(theta2[i])))
+            #for i in range(len(theta)):
+                #pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta[i]),-height/2,R*np.cos(theta[i])))
+            #for i in range(len(theta2)):
+                #pt_vect.push_back(chrono.ChVectorD(R*np.sin(theta2[i]),-height/2,R*np.cos(theta2[i])))
             
             # # creates bottom
             # for i in range(nsides):

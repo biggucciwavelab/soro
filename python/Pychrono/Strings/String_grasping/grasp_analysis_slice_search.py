@@ -161,7 +161,62 @@ name = "29_01_2023_10_55_00"
 # name = "29_01_2023_22_09_21"
 
 #name = "29_01_2023_22_00_41"
-d=4.5
+name = "30_01_2023_14_31_49"
+name = "31_01_2023_08_31_14"
+
+name = "01_02_2023_12_41_14"
+
+name = "01_02_2023_14_09_24"
+
+name = "01_02_2023_16_31_25"
+
+name = "01_02_2023_17_09_25"
+name = "01_02_2023_19_41_50"
+
+name = "02_02_2023_07_51_09"
+
+
+name = "04_02_2023_14_17_44"
+name = "05_02_2023_10_45_19"
+name = "05_02_2023_13_58_28"
+name = "05_02_2023_14_12_10"
+name = "05_02_2023_14_38_38"
+name = "05_02_2023_14_48_48"
+#name = "05_02_2023_14_49_27"
+name = "05_02_2023_15_07_28"
+name = "05_02_2023_15_09_48"
+name = "05_02_2023_15_16_44"
+name = "05_02_2023_15_18_48"
+name = "05_02_2023_15_29_53"
+name = "05_02_2023_15_29_53"
+name = "05_02_2023_17_34_30"
+name = "05_02_2023_17_45_17"
+name = "05_02_2023_17_50_23"
+name = "06_02_2023_08_46_25"
+name = "06_02_2023_15_59_12"
+name = "07_02_2023_08_51_59"
+name = "07_02_2023_14_03_02"
+name = "07_02_2023_13_49_19"
+name = "07_02_2023_16_26_01"
+name = "07_02_2023_16_26_17"
+name = "07_02_2023_20_45_00"
+name = "07_02_2023_20_45_40"
+name = "08_02_2023_11_22_07"
+name = "08_02_2023_11_33_51"
+name = "08_02_2023_11_43_57"
+name = "08_02_2023_11_57_45"
+name = "08_02_2023_12_09_45"
+
+# circle
+#name = 08_02_2023_08_15_08
+#name = 08_02_2023_08_15_21
+#name = 08_02_2023_08_20_22
+
+
+name = "08_02_2023_21_43_51"
+name = "08_02_2023_21_44_54"
+name = "09_02_2023_08_12_41"
+d=5.5
 snap_shot=False
 membrane=True
 dxmin=-d
@@ -179,8 +234,8 @@ sim_data.sort_epsilon_and_theta()
 print('plot_epsilon_vs_theta_section')
 sim_data.plot_epsilon_vs_theta_section()
 
-#print('plot_epsilon4')
-#sim_data.plot_epsilon4()
+print('plot_epsilon4')
+sim_data.plot_epsilon4()
 
 #print('plot_Qcm')
 #sim_data.plot_Qcm()
@@ -191,6 +246,16 @@ sim_data.plot_epsilon_vs_theta_section()
 # sim_data.create_frames(membrane)
 
 print('create_frames_pull_epsilon3')
-sim_data.create_frames_pull_epsilon3(membrane,4.5)
+# wxmin=-2.5
+# wxmax=2
+# wymin=-2.25
+# wymax=2.25
+
+wxmin=-d
+wxmax=d
+wymin=-d
+wymax=d
+
+sim_data.create_frames_pull_epsilon3(membrane,wxmin,wxmax,wymin,wymax)
 
 

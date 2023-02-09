@@ -30,7 +30,10 @@ path = os.path.dirname(__file__)
 path=path+"/Experiments/"
 os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['mathtext.fontset'] = 'dejavuserif'
+plt.rcParams['font.size'] = 9
+plt.rcParams['axes.linewidth'] = .1
 path="D:/dmulroy/Experiments/square_pull_rotate/"
 d=2
 
@@ -135,9 +138,9 @@ fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,2),dpi=300)
 #axs.fill_between(time_[0],epsilonsigmap,epsilonsigmam,color=c,alpha=0.5)
 axs.fill_between(time_[0],epsilonsigmap,epsilonsigmammod,color=c,alpha=0.5)
 axs.plot(time_[0],epsilonmu,linewidth=2,color=c,label="$\mu$")
-axs.set_ylabel('$\epsilon$',labelpad=-1,fontsize=9)
-axs.set_xlabel('time (s)',labelpad=-2,fontsize=9)
-axs.set_title(r'$(c)$',fontsize=9)
+axs.set_ylabel('$\epsilon$',labelpad=-1)
+axs.set_xlabel('time (s)',labelpad=-2)
+axs.set_title(r'$(b)$')
 #axs.set_xticks([0,5,10,15,20,25,30,35,40])
 #axs.set_yticks([0,0.5,1,1.5,2])
 #axs.set_ylim([0,2.1])

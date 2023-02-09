@@ -23,7 +23,11 @@ from scipy.stats import norm
 import statistics
 from matplotlib.ticker import PercentFormatter
 
-
+#fm._rebuild()
+plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['mathtext.fontset'] = 'dejavuserif'
+plt.rcParams['font.size'] = 9
+plt.rcParams['axes.linewidth'] = .1
 path = os.path.dirname(__file__)
 path=path+"/Experiments/"
 os.chdir(path)
@@ -425,10 +429,12 @@ for i in range(12):
     #max_epsilon_[str(i)].append(epsilon_theta_section_max1[str(i)])
 
 
-c="tab:red"
-name="searching_circle_guassian"
+
 y=[]
 ymean=[]
+c="tab:red"
+name="searching_square_bar_plot_max"
+fig1, axs2 = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 for i in range(len(max_epsilon_)):
     entry=int(str(i))
     y_=max_epsilon_[str(i)][0]
@@ -441,8 +447,37 @@ for i in range(len(max_epsilon_)):
         #y__.append(y_[j])
     for j in range(len(y__)):
         y.append(y__[j])
+    x=entry*np.ones(len(y__))     
+    mean = np.mean(y__)
+    sd = statistics.stdev(y_)
+    error=[mean-sd,mean+sd]
+    axs2.plot([x[1],x[1]],error,color="k",linewidth=1,zorder=3)
+    #axs2.scatter(entry,np.mean(y__),color=c,marker='s',s=3,zorder=3)
+    ymean.append(mean)        
+positions=[0,1,2,3,4,5,6,7,8,9,10,11]
+#positions=[0,1,2,3,4,5,6,7]
+axs2.set_xticks(positions)
+axs2.set_yticks([0,1,2,3,4,5])
+axs2.set_xticklabels(labels,color='k',fontsize=8)
+axs2.bar(labels,ymean,color="tab:blue",zorder=3)
+print(np.max(ymean)-np.min(ymean))
+axs2.set_ylabel('$\epsilon$',labelpad=-1,fontsize=9)
+axs2.set_xlabel('angle (rad)',labelpad=-2,fontsize=9)
+axs2.set_title(r'$(a)$',fontsize=9)
+axs2.xaxis.set_tick_params(width=.25,length=2,pad=1)
+axs2.yaxis.set_tick_params(width=.25,length=2,pad=1)
+axs2.yaxis.grid(True,linewidth=0.1,zorder=3)
+# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
+# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
+# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
+# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")        
         
-num_bins=20
+# %%
+
+c="tab:red"
+name="searching_circle_guassian"
+
+num_bins=25
 x_=np.linspace(0,5,200)  
 fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 mean = statistics.mean(y)
@@ -450,12 +485,13 @@ sd = statistics.stdev(y)
 print(mean)
 print(sd)
 N=norm.pdf(x_, mean, sd)
+print(len(y))
 n, bins, patches = axs.hist(y,num_bins,density=True,color="tab:red",zorder=3)
 axs.plot(x_,N,color='k',zorder=3)
 axs.set_xticks([0,1,2,3,4,5])
 #axs.yaxis.set_major_formatter(PercentFormatter(xmax=1))
-axs.set_title('(a)',fontsize=9)
-axs.set_xlabel(r'$\epsilon$',fontsize=9)
+axs.set_title('(a)')
+axs.set_xlabel(r'$\epsilon$')
 axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.grid(True,linewidth=0.1,zorder=3)
