@@ -168,8 +168,8 @@ for i in range(count_range):
 
 
 c="tab:red"
-name="searching_circle_bar_plot_max"
-fig1, axs2 = plt.subplots(nrows=1, ncols=1,figsize=(3.25,2),dpi=300)
+name="searching_circle_bar_plot_max2"
+fig1, axs2 = plt.subplots(nrows=1, ncols=1,figsize=(2.25,2),dpi=300)
 y=[]
 ymean=[]
 for i in range(len(max_epsilon_)):

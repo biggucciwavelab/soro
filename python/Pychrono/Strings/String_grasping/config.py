@@ -17,12 +17,12 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-time_end = 252*3
-time_end = 15
+time_end = 10
+#time_end = 25
 #time_end = 40
 #time_end = 35
 save_rate = 100 #save every n number of steps
-visual = 'pov'
+visual = 'irr'
 
 #xcenter = 2.25
 xcenter = 0
@@ -38,6 +38,7 @@ shape_morphing: transfinte morphing
  
 control_mode = "grasping_explore"
 control_mode = "grasping"
+control_mode = "grasping_u"
 #control_mode = "Verify"
 #### GEOMETRIES ####
 """
@@ -100,7 +101,7 @@ particle_geom = 'cylinder'
 interior_mode = "bidispersion" # interior particle mode
 #interior_mode = "Verify"
 scale_radius = 1.02
-offset_radius = .8
+offset_radius = .9
 
 
 Rbar = scale_radius*R
@@ -110,14 +111,21 @@ floor_height=1     # height of the body floor
 
 
 #### ENVIROMENT PARAMETERS ####
-lateralFriction = 0.2
+lateralFriction = 0.1
 spinningFriction = 0.1
 rollingFriction = 0.1
 dampingterm = 0.0001
+dampingterm = 0
 Ct=1e-05
 C=1e-05
 Cr=1e-05
 Cs=1e-05
+
+
+Ct=0
+C=0
+Cr=0
+Cs=0
 
 
 
@@ -196,10 +204,9 @@ if control_mode=="grasping_explore":
     increment = np.pi/6
     
     const=.01
+    
     a2 = const
     b2 = const
-    
-    
     
     xc1 = ballz
     yc1 = ballx
@@ -238,7 +245,40 @@ if control_mode=="grasping_explore":
     alpha2 = 1.75
     beta = 0
     
+#### CONTROL MODE -- GRASPING_U #### 
+if control_mode=="grasping_u":
     
+    ball_geometry = "circle"
+    br=0.36
+    if ball_geometry=="circle":
+        ball_radius=br
+    
+    
+    p=2
+    width_grasp = 2
+    length_grasp = 3
+    xcenter_grasp = 0
+    ycenter_grasp = 0
+    
+    particle_mix = True
+    ballx = 0
+    ballz = 0 
+    ball_mass = 1
+    fb_rate=1*dt
+
+
+    xcenter = -(ball_radius+R+.1)
+    zcenter = 0 
+    
+    xcenter_grasp = xcenter
+    ycenter_grasp = zcenter
+    
+    tcut1 = 20
+    tcut2 = 50
+    tcut3 = 150
+    alpha1 = 1.5
+    alpha2 = 2.0
+    beta = 0
     
     
 #### CONTROL MODE -- GRASPING ####
@@ -251,8 +291,11 @@ if control_mode=="grasping":
     #ball_geometry = "triangle"
     
     ball_geometry = "c_shape"
+    ball_geometry = "import"
+    #ball_geometry = "circle"
     # circle
     br=.5
+    br=0.36
     if ball_geometry=="circle":
         ball_radius=br
     # square     
@@ -267,7 +310,7 @@ if control_mode=="grasping":
         ball_radius=br
     
     if ball_geometry=="import":
-        ball_radius=3
+        ball_radius=2.25
         
         
         # square     
@@ -276,36 +319,43 @@ if control_mode=="grasping":
         br=(2*br)*np.pi/4
         ball_radius=br/2
         w=2*ball_radius
-        l=5.5*ball_radius
+        l=3*ball_radius
         t=.2
         
     #ball_radius = R*0.3
     particle_mix = True
     ballx = 0
     ballz = 0 
-    ball_mass = 5
+    ball_mass = 1
     a1 = .01*ball_radius
-    #b1 = 5*ball_radius
-    b1 = 5*l
+    b1 = -5*ball_radius
+    #b1 = 5*l
     fb_rate=1*dt
     const=.01
     a2 = const
     b2 = const
     
-    xcenter = (ball_radius+R+.1)
+    xcenter = -(ball_radius+R+.1)
     zcenter = 0 
     
+    #xc1 = (ballx)
+    #yc1 = ballz
+
     xc1 = (ballx-1)
     yc1 = ballz
     
-    xc2 = ballx #- (w/2)-(t/2)
-    xc2=(-w/2)+(t/2)
+    #xc2=ballx+1.1*ball_radius
+    #yc2=ballz
+    
+    #xc2 = ballx #- (w/2)-(t/2)
+    xc2 = -1.39
+    #xc2=(-w/2)+(t/2)
     yc2 = ballz
     
-    tcut1 = 3
-    tcut2 = 8
+    tcut1 = 2
+    tcut2 = 5
     tcut3 = 150
-    alpha1 = 2
+    alpha1 = 1.5
     alpha2 = 2.0
     beta = 0
     
@@ -388,6 +438,27 @@ if control_mode=="grasping":
         envParams['w']=w
         envParams['l']=l
         envParams['t']=t
+        
+        
+        
+if control_mode=="grasping_u":   
+        
+    envParams['width_grasp'] = width_grasp
+    envParams['length_grasp'] = length_grasp
+    envParams['xcenter_grasp'] = xcenter_grasp
+    envParams['ycenter_grasp'] = ycenter_grasp
+    envParams['p'] = p
+    envParams['tcut1'] = tcut1
+    envParams['tcut2'] = tcut2
+    envParams['tcut3'] = tcut3   
+    
+    envParams['ballx'] = ballx
+    envParams['ballz'] = ballz 
+    
+    envParams['ball_geometry'] = ball_geometry
+    envParams['ball_radius'] = ball_radius
+    envParams['ball_mass'] = ball_mass   
+ 
         
 if control_mode=="grasping_explore":
     envParams['a1'] = a1

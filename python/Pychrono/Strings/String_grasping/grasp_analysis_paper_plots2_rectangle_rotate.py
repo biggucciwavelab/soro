@@ -64,10 +64,10 @@ name = ["27_01_2023_09_24_23",
         "27_01_2023_15_45_29",
         "27_01_2023_15_45_40",
         "27_01_2023_15_45_48",
-        "27_01_2023_16_43_16",
+        #"27_01_2023_16_43_16",
         "27_01_2023_16_43_22",
         "27_01_2023_16_43_27",
-        "27_01_2023_16_43_31",
+        #"27_01_2023_16_43_31",
         "27_01_2023_16_43_39"]
 # %%
 snap_shot=False
@@ -188,4 +188,6 @@ params["mean"]=np.round(mean,2)
 params["sigma"]=np.round(sd,2)
 params["meanf"]=np.round(meanf,2)
 params["sigmaf"]=np.round(sdf,2)
+params['fcut']=fcut
+params['tcut']=tcut
 np.save('C:/soro/python/Pychrono/Strings/String_grasping/square_corner.npy',params)

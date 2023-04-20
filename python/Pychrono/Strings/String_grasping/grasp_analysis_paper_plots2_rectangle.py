@@ -72,7 +72,7 @@ name= ["18_01_2023_09_21_26",
        "25_01_2023_09_50_19",
        "25_01_2023_09_50_25",
        "25_01_2023_09_50_30",
-       "30_01_2023_11_38_45",
+       #"30_01_2023_11_38_45",
        "30_01_2023_11_39_12"]
 
  
@@ -197,6 +197,7 @@ params["mean"]=np.round(mean,2)
 params["sigma"]=np.round(sd,2)
 params["meanf"]=np.round(meanf,2)
 params["sigmaf"]=np.round(sdf,2)
-
+params['fcut']=fcut
+params['tcut']=tcut
 
 np.save('C:/soro/python/Pychrono/Strings/String_grasping/square_surface.npy',params)

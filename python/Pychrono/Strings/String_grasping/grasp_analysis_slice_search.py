@@ -216,7 +216,50 @@ name = "08_02_2023_12_09_45"
 name = "08_02_2023_21_43_51"
 name = "08_02_2023_21_44_54"
 name = "09_02_2023_08_12_41"
-d=5.5
+
+
+# strange object
+name = "09_02_2023_11_30_34"
+name = "09_02_2023_21_34_40"
+name = "10_02_2023_18_53_40"
+name = "10_02_2023_19_26_36"
+name = "11_02_2023_13_15_36"#
+name = "11_02_2023_13_15_43"#
+name = "12_02_2023_11_25_50"#
+name = "12_02_2023_12_45_48"#
+name = "13_02_2023_10_10_12"#
+name = "13_02_2023_10_10_21"#
+name = "13_02_2023_10_10_04"#
+name = "14_02_2023_18_32_26"
+name = "14_02_2023_18_32_33"
+name = "14_02_2023_18_32_41"
+
+
+
+
+name = "14_02_2023_18_32_26"
+name = "14_02_2023_18_32_33"
+name = "14_02_2023_18_32_41"
+name = "15_02_2023_09_31_03"
+name = "15_02_2023_09_31_09"
+name = "15_02_2023_09_31_14"
+name = "15_02_2023_17_20_28"
+name = "15_02_2023_17_20_35"
+name = "15_02_2023_17_20_42"
+name = "15_02_2023_17_20_50"
+
+
+name = "27_02_2023_15_05_17"
+name = "27_02_2023_15_52_43"
+name = "27_02_2023_16_15_53"
+name = "27_02_2023_16_30_26"
+name = "27_02_2023_17_02_51"
+name = "27_02_2023_17_28_15"
+
+name = "29_01_2023_10_54_52"
+name = "14_01_2023_15_35_36"
+name = "09_02_2023_11_30_34"
+d=4.5
 snap_shot=False
 membrane=True
 dxmin=-d
@@ -242,8 +285,8 @@ sim_data.plot_epsilon4()
 
 
 
-# print('create_frames')
-# sim_data.create_frames(membrane)
+#print('create_frames')
+#sim_data.create_frames(membrane)
 
 print('create_frames_pull_epsilon3')
 # wxmin=-2.5
@@ -256,6 +299,6 @@ wxmax=d
 wymin=-d
 wymax=d
 
-sim_data.create_frames_pull_epsilon3(membrane,wxmin,wxmax,wymin,wymax)
+#sim_data.create_frames_pull_epsilon3(membrane,wxmin,wxmax,wymin,wymax)
 
-
+sim_data.create_frames_pull_epsilon6(membrane,wxmin,wxmax,wymin,wymax)

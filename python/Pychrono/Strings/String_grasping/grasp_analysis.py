@@ -94,6 +94,32 @@ name = "09_02_2023_11_22_09"
 name = "09_02_2023_11_34_47"
 name = "09_02_2023_11_54_35"
 name = "09_02_2023_12_12_41"
+name = "09_02_2023_12_29_15"
+name = "09_02_2023_13_58_57"
+name = "09_02_2023_15_35_57"
+name = "09_02_2023_16_00_09"
+name = "09_02_2023_16_15_18"
+name = "09_02_2023_16_28_07"
+name = "09_02_2023_16_41_03"
+name = "09_02_2023_16_53_40"
+name = "09_02_2023_17_37_26"
+name = "09_02_2023_18_05_37"
+name = "09_02_2023_18_30_50"
+name = "09_02_2023_20_03_36"
+name = "09_02_2023_20_31_52"
+name = "09_02_2023_21_12_42"
+name = "10_02_2023_18_53_40"
+name = "10_02_2023_19_26_36"
+
+name = "27_03_2023_16_15_32"
+name = "27_03_2023_16_30_45"
+name = "27_03_2023_16_58_54"
+name = "27_03_2023_17_20_17"
+name = "28_03_2023_08_51_22"
+
+name = "17_01_2023_19_29_37"
+name = "17_01_2023_18_49_15"
+name = "04_04_2023_08_52_48"
 d=4
 snap_shot=False
 membrane=True
@@ -102,10 +128,16 @@ dxmax=d
 dymin=-d
 dymax=d
 
-wxmin=-2
-wxmax=2
-wymin=-2
-wymax=2
+#wxmin=-2
+#wxmax=3
+#wymin=-2.5
+#wymax=2.5
+
+
+wxmin=dxmin
+wxmax=dxmax
+wymin=dymin
+wymax=dymax
 Psi=sim_obj.R_functions(name)  
 sim_data=sim_obj.import_data(name,path,dxmin,dxmax,dymin,dymax,Psi)
 #sim_data.save_grasp_parameters()
@@ -142,7 +174,7 @@ sim_data=sim_obj.import_data(name,path,dxmin,dxmax,dymin,dymax,Psi)
 # print('create_frames')
 # sim_data.create_frames(membrane)
 
-print('create_frames_pull_epsilon3')
+print('create_frames_pull_epsilon0')
 sim_data.create_frames_pull_epsilon3(membrane,wxmin,wxmax,wymin,wymax)
 
 print('plot_epsilon4')

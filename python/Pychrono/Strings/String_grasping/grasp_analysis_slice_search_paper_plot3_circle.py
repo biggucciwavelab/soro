@@ -33,6 +33,7 @@ path=path+"/Experiments/"
 os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 count_range=12
+plt.close('all')
 path="D:/dmulroy/Experiments/circle_search/"
 labels=['0',
         r'$\frac{\pi}{6}$',
@@ -475,28 +476,65 @@ axs2.yaxis.grid(True,linewidth=0.1,zorder=3)
 # %%
 
 c="tab:red"
-name="searching_circle_guassian"
-
+name="searching_circle_guassian2"
 num_bins=25
 x_=np.linspace(0,5,200)  
-fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
-mean = statistics.mean(y)
-sd = statistics.stdev(y)
-print(mean)
-print(sd)
-N=norm.pdf(x_, mean, sd)
-print(len(y))
-n, bins, patches = axs.hist(y,num_bins,density=True,color="tab:red",zorder=3)
-axs.plot(x_,N,color='k',zorder=3)
-axs.set_xticks([0,1,2,3,4,5])
-#axs.yaxis.set_major_formatter(PercentFormatter(xmax=1))
-axs.set_title('(a)')
-axs.set_xlabel(r'$\epsilon$')
+fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(2.,1.5),dpi=300)
+#heights, bins = np.histogram(data, bins = len(list(set(data))))
+axs.hist(y,num_bins, weights=np.ones(len(y)) / len(y),color="tab:red",zorder=3)
+#plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
 axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
-axs.grid(True,linewidth=0.1,zorder=3)
+axs.set_title('(a)')
+axs.set_xlabel(r'$\epsilon$')
+axs.set_yticks([0,0.05,0.1,0.15,0.2])
+axs.set_xticks([0,1,2,3,4,5])
+axs.grid(True,linewidth=0.1,zorder=-3)
+x_=np.linspace(0,2,200)  
+mean = statistics.mean(y)
+sd = statistics.stdev(y)
+N=norm.pdf(x_, mean, sd)
+textstr = '\n'.join((
+    r'$\mu=%.2f$' % (mean, ),
+    r'$\sigma=%.2f$' % (sd, )))
+props = dict(boxstyle='round', facecolor='white', alpha=0.5)
+axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
+        verticalalignment='top', bbox=props)
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
-#plt.close('all')
+
+#num_bins=25
+#x_=np.linspace(0,5,200)  
+
+# fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
+# mean = statistics.mean(y)
+# sd = statistics.stdev(y)
+# print(mean)
+# print(sd)
+# N=norm.pdf(x_, mean, sd)
+# print(len(y))
+# n, bins, patches = axs.hist(y,num_bins,density=True,color="tab:red",zorder=3)
+# axs.plot(x_,N,color='k',zorder=3)
+# #axs.axvline(x=mean,linewidth=0.5,color='k',zorder=4)
+# #axs.axvline(x=mean-sd,linewidth=0.5,color='k',zorder=4)
+# #axs.axvline(x=mean+sd,linewidth=0.5,color='k',zorder=4)
+# textstr = '\n'.join((
+#     r'$\mu=%.2f$' % (mean, ),
+#     r'$\sigma=%.2f$' % (sd, )))
+# props = dict(boxstyle='round', facecolor='white', alpha=0.5)
+# axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
+#         verticalalignment='top', bbox=props)
+# axs.set_xticks([0,1,2,3,4,5])
+# #axs.yaxis.set_major_formatter(PercentFormatter(xmax=1))
+# axs.set_title('(a)')
+# axs.set_xlabel(r'$\epsilon$')
+# axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
+# axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
+# axs.grid(True,linewidth=0.1,zorder=3)
+# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
+# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
+# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
+# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
+# #plt.close('all')

@@ -185,6 +185,8 @@ params["mean"]=np.round(mean,2)
 params["sigma"]=np.round(sd,2)
 params["meanf"]=np.round(meanf,2)
 params["sigmaf"]=np.round(sdf,2)
+params['fcut']=fcut
+params['tcut']=tcut
 np.save('C:/soro/python/Pychrono/Strings/String_grasping/circle.npy',params)
 
    
