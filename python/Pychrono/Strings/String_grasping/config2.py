@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 21 14:14:49 2021
-
-@author: dmulr
-"""
-
 import os
 import pathlib
 from shutil import copyfile
@@ -17,7 +10,7 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-time_end = 35
+time_end = 120
 #time_end = 25
 #time_end = 40
 #time_end = 100
@@ -37,8 +30,8 @@ shape_morphing: transfinte morphing
 '''
  
 control_mode = "grasping_explore"
-control_mode = "grasping"
-control_mode = "grasping_u"
+#control_mode = "grasping"
+#control_mode = "grasping_u"
 #control_mode = "Verify"
 #### GEOMETRIES ####
 """
@@ -61,7 +54,7 @@ convert_mass = 1 # if its grams or kg
 
 
 #### ROBOT VARIABLES #####
-nb = 40 # number of bots
+nb = 30 # number of bots
 bot_mass = .200  # mass of bot kg 
 bot_geom = 'cylinder'
 bot_width = 0.09525  #  bot width  [m]
@@ -102,7 +95,7 @@ particle_geom = 'cylinder'
 interior_mode = "bidispersion" # interior particle mode
 #interior_mode = "Verify"
 scale_radius = 1.02
-offset_radius = .75
+offset_radius = 1
 
 
 Rbar = scale_radius*R
@@ -171,8 +164,8 @@ if control_mode=="shape_morphing":
 if control_mode=="grasping_explore":
     ball_geometry = "circle"
      
-    # ball_geometry = "square" 
-    ball_geometry = "import"
+    ball_geometry = "square" 
+    #ball_geometry = "import"
     
     #ball_geometry = "triangle"
     # circle
@@ -202,7 +195,7 @@ if control_mode=="grasping_explore":
     ball_mass = 5
     a1 = .01*ball_radius
     b1 = 5*ball_radius
-    increment = np.pi/6
+    increment = np.pi/4
     
     const=.01
     
@@ -217,7 +210,7 @@ if control_mode=="grasping_explore":
     
     particle_mix = True
     
-    xcenter = -(ball_radius+R+.2)
+    xcenter = -(ball_radius+R+.3)
     zcenter = 0 
     
     
@@ -236,14 +229,14 @@ if control_mode=="grasping_explore":
     # tcut3 = 15
     
     tcut1 = 5
-    tcut2 = 13
-    tcut3 = 21
+    tcut2 = 10
+    tcut3 = 15
     
 
     # alpha1 = 2.25
     # alpha2 = 2.25 
-    alpha1 = 1.75
-    alpha2 = 1.75
+    alpha1 = 2.5
+    alpha2 = 2.5
     beta = 0
     
 #### CONTROL MODE -- GRASPING_U #### 

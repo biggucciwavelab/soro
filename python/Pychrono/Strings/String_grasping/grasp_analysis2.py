@@ -196,18 +196,20 @@ Psi=sim_obj.R_functions(name)
 sim_data=sim_obj.import_data(name,path,dxmin,dxmax,dymin,dymax,Psi)
 #sim_data.save_grasp_parameters()
 
+print('create_frames_pull_epsilon3')
+sim_data.create_frames_pull_epsilon3(True,3)
 
-print('create_frames_u')
-sim_data.create_frames_u(membrane,wxmin,wxmax,wymin,wymax)
+#print('create_frames_u')
+#sim_data.create_frames_u(membrane,wxmin,wxmax,wymin,wymax)
 
 print('plot_epsilon4')
 sim_data.plot_epsilon4()
 
-print('plot_potential_Field_value_sum')
-sim_data.plot_potential_Field_value()
+# print('plot_potential_Field_value_sum')
+# sim_data.plot_potential_Field_value()
 
-print('plot_potential_Field_value')
-sim_data.plot_potential_Field_value_individual()
+# print('plot_potential_Field_value')
+# sim_data.plot_potential_Field_value_individual()
 
 #### this is for pull tests #####
 #sim_data.create_frames_pull_epsilon2(True,1.75)
