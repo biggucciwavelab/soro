@@ -189,14 +189,13 @@ name2=[]
 for i in entry:
      name2.append(name[i])
      
-     
-# entry2=[ 0,  2,  4,  5,  6,  8, 10, 11, 12, 14, 15, 16, 17, 18, 20, 21, 23,
-#         24, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]     
+ 
+entry2=[ 0,  2,  4,  5,  6,  8, 10, 11, 12, 14, 15, 16, 17, 18, 20, 21, 23,24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]   
+  
 
-# name3=[]
-# for i in entry2:
-#      print(i)
-#      name3.append(name2[i]) 
+name3=[]
+for i in entry2:
+    name3.append(name2[i]) 
 # %%
 snap_shot=False
 membrane=True
@@ -210,11 +209,11 @@ Psi=[]
 epsilon_=[]
 epsilon_clean=[]
 time_=[]
-for i in range(len(name2)):
-    print("set: "+str(i+1)+" of "+str(len(name2)))
+for i in range(len(name3)):
+    print("set: "+str(i+1)+" of "+str(len(name3)))
     #Psi.append(sim_obj.R_functions(name[i]))
     Psi.append(None)
-    temp=sim_obj.import_data(name2[i],path,dxmin,dxmax,dymin,dymax,Psi[i])
+    temp=sim_obj.import_data(name3[i],path,dxmin,dxmax,dymin,dymax,Psi[i])
     sim_data.append(temp)
     epsilon_.append(temp.EPSILON_)
     time_.append(temp.time)
@@ -284,6 +283,7 @@ print("sigma=",np.round(sd,2))
 print("muf=",np.round(meanf,2))
 print("sigmaf=",np.round(sdf,2))  
 # %%
+plt.close('all')
 mu_square=epsilonmu
 name="epsilon_square_sigma_2p25"
 c="tab:blue"

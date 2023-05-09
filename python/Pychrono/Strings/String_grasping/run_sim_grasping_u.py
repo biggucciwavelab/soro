@@ -8,7 +8,7 @@ import pychrono as chrono
 import timeit
 start=timeit.default_timer()
 #import objects_2 as sim_obj
-import objects9 as sim_obj
+import objects4 as sim_obj
 #from config import *
 import numpy as np
 import random
@@ -32,7 +32,7 @@ chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.00001)
 chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.00001)
 
 path = os.path.dirname(__file__)
-path=path+"/Experiments/"
+path=path+"/Experiments/grasping_u/"
 os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 name = files[-1]
@@ -56,12 +56,12 @@ Ball=sim_obj.Ball(name,my_system,body_floor,path)
 my_rep = sim_obj.MyReportContactCallback()
 
 # Potential Fields
-Psi=sim_obj.R_functions(name)
+Psi=sim_obj.R_functions(name,path)
 
 controls=sim_obj.controller(name,my_system,bots,Psi,Ball,path)
 
 # Create simulation
-sim = sim_obj.simulate(name,my_system,bots,interior,Ball,controls,my_rep,path)
+sim = sim_obj.simulate(name,my_system,bots,interior,Ball,controls,my_rep,path,Psi)
 
 # Run the simulation 
 sim.simulate()

@@ -17,8 +17,11 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-#time_end = 180*4
-time_end = 160*4
+time_end = 252/6
+time_end = 300*4
+#time_end = 10
+#time_end = 40
+#time_end = 35
 save_rate = 100 #save every n number of steps
 visual = 'pov'
 
@@ -98,7 +101,7 @@ particle_geom = 'cylinder'
 interior_mode = "bidispersion" # interior particle mode
 #interior_mode = "Verify"
 scale_radius = 1.02
-offset_radius = 0
+offset_radius = 1
 
 
 Rbar = scale_radius*R
@@ -160,7 +163,8 @@ if control_mode=="shape_morphing":
 if control_mode=="grasping_explore":
     ball_geometry = "circle"
      
-    #ball_geometry = "square" 
+    # ball_geometry = "square" 
+    ball_geometry = "import"
     
     #ball_geometry = "triangle"
     # circle
@@ -179,18 +183,18 @@ if control_mode=="grasping_explore":
         ball_radius=br
     
     if ball_geometry=="import":
-        ball_radius=3
+        ball_radius=2
     #ball_radius = R*0.3
 
-    Rr1=0
-    Rr2=2.25
-    theta=0
-    ballx = 0
+    #Rr1=1.25
+    #Rr2=ball_radius
+    theta=np.pi
+    ballx = 0.0
     ballz = 0     
     ball_mass = 5
     a1 = .01*ball_radius
     b1 = 5*ball_radius
-    increment = -np.pi/4
+    increment = np.pi/6
     
     const=.01
     a2 = const
@@ -206,28 +210,35 @@ if control_mode=="grasping_explore":
     
     particle_mix = True
     
-    xcenter = (ball_radius+R+.3)
+    xcenter = -(ball_radius+R+.3)
     zcenter = 0 
     
     
     Rr1=0
     Rr2=abs(xcenter)
+    
+    
+    #Rr1=0
+    #Rr2=2.25
     #xcenter = 2.25
     #xcenter = 0
     #zcenter = 0
     
-    # tcut1 = 10
-    # tcut2 = 15
-    # tcut3 = 20
-    
-    tcut1 = 10
+    # tcut1 = 5
+    # tcut2 = 10
+    # tcut3 = 15
+    tcut1 = 5
     tcut2 = 15
-    tcut3 = 20
+    tcut3 = 25
+    #tcut1 = 10
+    #tcut2 = 20
+    #tcut3 = 25
     
 
-    
     alpha1 = 2.5
     alpha2 = 2.5
+    #alpha1 = 1.75
+    #alpha2 = 1.75
     beta = 0
     
     
@@ -241,8 +252,10 @@ if control_mode=="grasping":
     ball_geometry = "square" 
     
     #ball_geometry = "triangle"
+    
+    ball_geometry = "c_shape"
     # circle
-    br=.36
+    br=.5
     if ball_geometry=="circle":
         ball_radius=br
     # square     
@@ -258,32 +271,45 @@ if control_mode=="grasping":
     
     if ball_geometry=="import":
         ball_radius=3
+        
+        
+        # square     
+    if ball_geometry=="c_shape":	
+        
+        br=(2*br)*np.pi/4
+        ball_radius=br/2
+        w=2*ball_radius
+        l=3*ball_radius
+        t=.2
+        
     #ball_radius = R*0.3
     particle_mix = True
-    ballx = ball_radius+R+.3
+    ballx = 0
     ballz = 0 
     ball_mass = 5
     a1 = .01*ball_radius
-    b1 = 5*ball_radius
-    
+    #b1 = 5*ball_radius
+    b1 = 5*l
     fb_rate=1*dt
     const=.01
     a2 = const
     b2 = const
     
+    xcenter = (ball_radius+R+.1)
+    zcenter = 0 
     
-    
-    xc1 = ballx+1
+    xc1 = (ballx-1)
     yc1 = ballz
     
-    xc2 = ballx
+    xc2 = ballx #- (w/2)-(t/2)
+    xc2=(-w/2)+(t/2)
     yc2 = ballz
     
-    tcut1 = 2
-    tcut2 = 6
-    tcut3 = 15
-    alpha1 = 2.25
-    alpha2 = 2.25
+    tcut1 = 3
+    tcut2 = 12
+    tcut3 = 150
+    alpha1 = 1.5
+    alpha2 = 2.0
     beta = 0
     
     
@@ -361,6 +387,11 @@ if control_mode=="grasping":
     envParams['ball_radius'] = ball_radius
     envParams['ball_mass'] = ball_mass
     
+    if ball_geometry=="c_shape":
+        envParams['w']=w
+        envParams['l']=l
+        envParams['t']=t
+        
 if control_mode=="grasping_explore":
     envParams['a1'] = a1
     envParams['b1'] = b1    
@@ -387,6 +418,10 @@ if control_mode=="grasping_explore":
     envParams['Rr1'] = Rr1
     envParams['Rr2'] = Rr2
     envParams['theta'] = theta
+    if ball_geometry=="c_shape":
+        envParams['w']=w
+        envParams['l']=l
+        envParams['t']=t
 # Robot Parameters
 envParams['nb'] = nb 
 envParams['bot_mass'] = bot_mass

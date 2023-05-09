@@ -37,7 +37,7 @@ path = os.path.dirname(__file__)
 path=path+"/Experiments/"
 os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-#path="D:/dmulroy/Experiments/circle_pull/"
+path="D:/dmulroy/Experiments/circle_pull2/"
 
 name= ["17_01_2023_15_42_45",
        "17_01_2023_15_42_53",
