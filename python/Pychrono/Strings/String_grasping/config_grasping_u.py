@@ -21,7 +21,7 @@ time_end = 90
 #time_end = 25
 #time_end = 40
 #time_end = 100
-save_rate = 100 #save every n number of steps
+save_rate = 50 #save every n number of steps
 visual = 'pov'
 
 #xcenter = 2.25
@@ -261,10 +261,10 @@ if control_mode=="grasping_u":
     
     p=0.07
     width_grasp = 0.75
-    lengtho_grasp = 0.5
+    lengtho_grasp = .36*2
     #atilda=np.round(np.pi * ((cord_length * nb / np.pi) / 2)**2,2)
     #print("atilda=",atilda)
-    atilda=4.2/.78
+    atilda=4.2/.84
     print("atilda=",atilda)
     length_grasp = atilda/(2*width_grasp) - lengtho_grasp/2
     print("length_grasp=",length_grasp)
@@ -281,7 +281,7 @@ if control_mode=="grasping_u":
     ballz = 0 
     ball_mass = 5
     fb_rate=1*dt
-
+    update_rate = 20
 
     xcenter = -(ball_radius+R+.1)
     zcenter = 0 
@@ -299,11 +299,11 @@ if control_mode=="grasping_u":
     xc2 = ballx+2
     yc2 = ballz
     
-    tcut1 = 200
-    tcut2 = 300
+    tcut1 = 45
+    tcut2 = 60
     tcut3 = 150
-    alpha1 = 2.5
-    alpha2 = 2.5
+    alpha1 = 2.0
+    alpha2 = 2.0
     beta = 0
     
     
@@ -449,7 +449,7 @@ now = datetime.now()
 dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
 #mainDirectory = "F:/Soro_chrono/python/Pychrono/Strings/String_grasping/"
 mainDirectory =os.path.abspath(os.getcwd())
-savefile = mainDirectory +'/Experiments/'+ dt_string
+savefile = mainDirectory +'/Experiments/'+'grasping_u/'+ dt_string
 os.makedirs(savefile, exist_ok=True)
 txtFile = savefile+'/Parameters.csv'
     
@@ -538,7 +538,7 @@ if control_mode=="grasping_u":
     envParams['tcut1'] = tcut1
     envParams['tcut2'] = tcut2
     envParams['tcut3'] = tcut3   
-    
+    envParams['update_rate'] = update_rate
     envParams['ballx'] = ballx
     envParams['ballz'] = ballz 
     
