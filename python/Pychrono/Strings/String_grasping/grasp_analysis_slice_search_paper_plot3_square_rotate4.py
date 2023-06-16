@@ -29,7 +29,7 @@ plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'dejavuserif'
 plt.rcParams['font.size'] = 9
 plt.rcParams['axes.linewidth'] = .1
-#path="D:/dmulroy/Experiments/square_search/"
+path="D:/dmulroy/Experiments/square_search2/"
 plt.close('all')
 labels=['0',
         r'$\frac{\pi}{4}$',
@@ -603,6 +603,135 @@ max_epsilon25=sim_data25.max_epsilon
 median_epsilon25=sim_data25.median_epsilon
 
 
+# # %%26
+# name26 = "09_05_2023_14_56_21"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data26=sim_obj.select_import_data(name26,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data26.sort_epsilon_and_theta(count_range)
+# epsilon_section26=sim_data26.epsilon_section
+# epsilon_theta_section_max26=sim_data26.epsilon_theta_section_max
+# epsilon_theta_section_mean26=sim_data26.epsilon_theta_section_mean
+# epsilon_theta_section_median26=sim_data26.epsilon_theta_section_median
+
+# average_epsilon26=sim_data26.average_epsilon
+# max_epsilon26=sim_data26.max_epsilon
+# median_epsilon26=sim_data26.median_epsilon
+
+
+# # %%27
+# name27 = "09_05_2023_14_57_54"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data27=sim_obj.select_import_data(name27,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data27.sort_epsilon_and_theta(count_range)
+# epsilon_section27=sim_data27.epsilon_section
+# epsilon_theta_section_max27=sim_data27.epsilon_theta_section_max
+# epsilon_theta_section_mean27=sim_data27.epsilon_theta_section_mean
+# epsilon_theta_section_median27=sim_data27.epsilon_theta_section_median
+
+# average_epsilon27=sim_data27.average_epsilon
+# max_epsilon27=sim_data27.max_epsilon
+# median_epsilon27=sim_data27.median_epsilon
+
+# # %%28
+# name28 = "09_05_2023_14_58_02"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data28=sim_obj.select_import_data(name28,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data28.sort_epsilon_and_theta(count_range)
+# epsilon_section28=sim_data28.epsilon_section
+# epsilon_theta_section_max28=sim_data28.epsilon_theta_section_max
+# epsilon_theta_section_mean28=sim_data28.epsilon_theta_section_mean
+# epsilon_theta_section_median28=sim_data28.epsilon_theta_section_median
+
+# average_epsilon28=sim_data28.average_epsilon
+# max_epsilon28=sim_data28.max_epsilon
+# median_epsilon28=sim_data28.median_epsilon
+
+# # %%29
+# name29 = "09_05_2023_14_58_08"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data29=sim_obj.select_import_data(name29,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data29.sort_epsilon_and_theta(count_range)
+# epsilon_section29=sim_data29.epsilon_section
+# epsilon_theta_section_max29=sim_data29.epsilon_theta_section_max
+# epsilon_theta_section_mean29=sim_data29.epsilon_theta_section_mean
+# epsilon_theta_section_median29=sim_data29.epsilon_theta_section_median
+
+# average_epsilon29=sim_data29.average_epsilon
+# max_epsilon29=sim_data29.max_epsilon
+# median_epsilon29=sim_data29.median_epsilon
+
+
+
+# # %%30
+# name30 = "09_05_2023_20_40_11"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data30=sim_obj.select_import_data(name30,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data30.sort_epsilon_and_theta(count_range)
+# epsilon_section30=sim_data30.epsilon_section
+# epsilon_theta_section_max30=sim_data30.epsilon_theta_section_max
+# epsilon_theta_section_mean30=sim_data30.epsilon_theta_section_mean
+# epsilon_theta_section_median30=sim_data30.epsilon_theta_section_median
+
+# average_epsilon30=sim_data30.average_epsilon
+# max_epsilon30=sim_data30.max_epsilon
+# median_epsilon30=sim_data30.median_epsilon
+
+# # %%31
+# name31 = "09_05_2023_20_40_22"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data31=sim_obj.select_import_data(name31,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data31.sort_epsilon_and_theta(count_range)
+# epsilon_section31=sim_data31.epsilon_section
+# epsilon_theta_section_max31=sim_data31.epsilon_theta_section_max
+# epsilon_theta_section_mean31=sim_data31.epsilon_theta_section_mean
+# epsilon_theta_section_median31=sim_data31.epsilon_theta_section_median
+
+# average_epsilon31=sim_data31.average_epsilon
+# max_epsilon31=sim_data31.max_epsilon
+# median_epsilon31=sim_data31.median_epsilon
+
+# # %%32
+# name32 = "09_05_2023_20_40_45"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data32=sim_obj.select_import_data(name32,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data32.sort_epsilon_and_theta(count_range)
+# epsilon_section32=sim_data32.epsilon_section
+# epsilon_theta_section_max32=sim_data32.epsilon_theta_section_max
+# epsilon_theta_section_mean32=sim_data32.epsilon_theta_section_mean
+# epsilon_theta_section_median32=sim_data32.epsilon_theta_section_median
+
+# average_epsilon32=sim_data32.average_epsilon
+# max_epsilon32=sim_data32.max_epsilon
+# median_epsilon32=sim_data32.median_epsilon
+
+
+# # %%33
+# name33= "09_05_2023_20_40_56"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data33=sim_obj.select_import_data(name33,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data33.sort_epsilon_and_theta(count_range)
+# epsilon_section33=sim_data33.epsilon_section
+# epsilon_theta_section_max33=sim_data33.epsilon_theta_section_max
+# epsilon_theta_section_mean33=sim_data33.epsilon_theta_section_mean
+# epsilon_theta_section_median33=sim_data33.epsilon_theta_section_median
+
+# average_epsilon33=sim_data33.average_epsilon
+# max_epsilon33=sim_data33.max_epsilon
+# median_epsilon33=sim_data33.median_epsilon
+
+# # %%34
+# name34 = "09_05_2023_20_41_20"
+# #Psi=sim_obj.R_functions(name2)  
+# sim_data34=sim_obj.select_import_data(name34,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data34.sort_epsilon_and_theta(count_range)
+# epsilon_section34=sim_data34.epsilon_section
+# epsilon_theta_section_max34=sim_data34.epsilon_theta_section_max
+# epsilon_theta_section_mean34=sim_data34.epsilon_theta_section_mean
+# epsilon_theta_section_median34=sim_data34.epsilon_theta_section_median
+
+# average_epsilon34=sim_data34.average_epsilon
+# max_epsilon34=sim_data34.max_epsilon
+# median_epsilon34=sim_data34.median_epsilon
 
 # %% 
 max_epsilon_={}
@@ -633,7 +762,17 @@ for i in range(count_range):
     temp23=np.asarray(epsilon_theta_section_max23[str(i)])
     temp24=np.asarray(epsilon_theta_section_max24[str(i)])
     temp25=np.asarray(epsilon_theta_section_max25[str(i)])
+    # temp26=np.asarray(epsilon_theta_section_max26[str(i)])
+    # temp27=np.asarray(epsilon_theta_section_max27[str(i)])
+    # temp28=np.asarray(epsilon_theta_section_max28[str(i)])
+    # temp29=np.asarray(epsilon_theta_section_max29[str(i)])
+    # temp30=np.asarray(epsilon_theta_section_max30[str(i)])
+    # temp31=np.asarray(epsilon_theta_section_max31[str(i)])
+    # temp32=np.asarray(epsilon_theta_section_max32[str(i)])
+    # temp33=np.asarray(epsilon_theta_section_max33[str(i)])
+    # temp34=np.asarray(epsilon_theta_section_max34[str(i)])
     #temp3=[temp,temp2]
+    
     temp=np.concatenate((temp1,
                          temp2,
                          temp3,
@@ -659,6 +798,15 @@ for i in range(count_range):
                          temp23,
                          temp24,
                          temp25))
+                         # temp26,
+                         # temp27,
+                         # temp28,
+                         # temp29,
+                         # temp30,
+                         # temp31,
+                         # temp32,
+                         # temp33,
+                         # temp34))
     #temp3=temp3.flatten()
     max_epsilon_[str(i)].append(temp)
     #max_epsilon_[str(i)].append(epsilon_theta_section_max1[str(i)])
@@ -731,11 +879,11 @@ print("sigma_faces",np.round(statistics.stdev(yf),2))
 print("mean_edges",np.round(np.mean(ye),2))
 print("sigma_edges",np.round(statistics.stdev(ye),2))
 
-num_bins=25
+num_bins=20
 
 
 
-name="square_face2"
+name="square_face3"
 fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 #heights, bins = np.histogram(data, bins = len(list(set(data))))
 axs.hist(yf,num_bins, weights=np.ones(len(yf)) / len(yf),color="tab:purple",zorder=3)
@@ -746,7 +894,7 @@ axs.set_title('(b)')
 axs.set_xlabel(r'$\epsilon$')
 #axs.set_ylim([0,5])
 axs.set_yticks([0,0.05,0.1,0.15,0.2])
-axs.set_xticks([0,1,2,3,4,5])
+axs.set_xticks([0,1,2,3,4,5,6])
 axs.grid(True,linewidth=0.1,zorder=-3)
 x_=np.linspace(0,2,200)  
 mean = statistics.mean(yf)
@@ -758,15 +906,15 @@ textstr = '\n'.join((
 props = dict(boxstyle='round', facecolor='white', alpha=0.5)
 axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
         verticalalignment='top', bbox=props)
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 
 
 
 
-name="square_corner2"
+name="square_corner3"
 fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 #heights, bins = np.histogram(data, bins = len(list(set(data))))
 axs.hist(ye,num_bins, weights=np.ones(len(ye)) / len(ye),color="tab:green",zorder=3)
@@ -776,7 +924,7 @@ axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.set_title('(c)')
 axs.set_xlabel(r'$\epsilon$')
-axs.set_xticks([0,1,2,3,4,5])
+axs.set_xticks([0,1,2,3,4,5,6])
 axs.grid(True,linewidth=0.1,zorder=-3)
 x_=np.linspace(0,2,200)  
 mean = statistics.mean(ye)
@@ -788,10 +936,10 @@ textstr = '\n'.join((
 props = dict(boxstyle='round', facecolor='white', alpha=0.5)
 axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
         verticalalignment='top', bbox=props)
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 
 
 
@@ -821,7 +969,7 @@ axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 #plt.close('all')
-
+print("number of times encirlcing=",len(ytemp2))
 print(len(yf))
 print(len(ye))
 

@@ -435,7 +435,7 @@ y=[]
 ymean=[]
 c="tab:red"
 name="searching_square_bar_plot_max"
-fig1, axs2 = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
+#fig1, axs2 = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 for i in range(len(max_epsilon_)):
     entry=int(str(i))
     y_=max_epsilon_[str(i)][0]
@@ -452,34 +452,35 @@ for i in range(len(max_epsilon_)):
     mean = np.mean(y__)
     sd = statistics.stdev(y_)
     error=[mean-sd,mean+sd]
-    axs2.plot([x[1],x[1]],error,color="k",linewidth=1,zorder=3)
+    #axs2.plot([x[1],x[1]],error,color="k",linewidth=1,zorder=3)
     #axs2.scatter(entry,np.mean(y__),color=c,marker='s',s=3,zorder=3)
     ymean.append(mean)        
-positions=[0,1,2,3,4,5,6,7,8,9,10,11]
-#positions=[0,1,2,3,4,5,6,7]
-axs2.set_xticks(positions)
-axs2.set_yticks([0,1,2,3,4,5])
-axs2.set_xticklabels(labels,color='k',fontsize=8)
-axs2.bar(labels,ymean,color="tab:blue",zorder=3)
-print(np.max(ymean)-np.min(ymean))
-axs2.set_ylabel('$\epsilon$',labelpad=-1,fontsize=9)
-axs2.set_xlabel('angle (rad)',labelpad=-2,fontsize=9)
-axs2.set_title(r'$(a)$',fontsize=9)
-axs2.xaxis.set_tick_params(width=.25,length=2,pad=1)
-axs2.yaxis.set_tick_params(width=.25,length=2,pad=1)
-axs2.yaxis.grid(True,linewidth=0.1,zorder=3)
+# positions=[0,1,2,3,4,5,6,7,8,9,10,11]
+# #positions=[0,1,2,3,4,5,6,7]
+# axs2.set_xticks(positions)
+# axs2.set_yticks([0,1,2,3,4,5])
+# axs2.set_xticklabels(labels,color='k',fontsize=8)
+# axs2.bar(labels,ymean,color="tab:blue",zorder=3)
+# print(np.max(ymean)-np.min(ymean))
+# axs2.set_ylabel('$\epsilon$',labelpad=-1,fontsize=9)
+# axs2.set_xlabel('angle (rad)',labelpad=-2,fontsize=9)
+# axs2.set_title(r'$(a)$',fontsize=9)
+# axs2.xaxis.set_tick_params(width=.25,length=2,pad=1)
+# axs2.yaxis.set_tick_params(width=.25,length=2,pad=1)
+# axs2.yaxis.grid(True,linewidth=0.1,zorder=3)
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")        
-        
-# %%
 
+print("number of times encirlcing=",len(y_))   
+# %%
+ytemp1=y[0] 
 c="tab:red"
 name="searching_circle_guassian2"
 num_bins=25
 x_=np.linspace(0,5,200)  
-fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(2.,1.5),dpi=300)
+fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 #heights, bins = np.histogram(data, bins = len(list(set(data))))
 axs.hist(y,num_bins, weights=np.ones(len(y)) / len(y),color="tab:red",zorder=3)
 #plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
@@ -501,8 +502,8 @@ props = dict(boxstyle='round', facecolor='white', alpha=0.5)
 axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
         verticalalignment='top', bbox=props)
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
-plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
-plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
+#plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
+#plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 
 #num_bins=25

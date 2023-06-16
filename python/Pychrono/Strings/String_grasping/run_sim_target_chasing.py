@@ -32,7 +32,7 @@ chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.00001)
 chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.00001)
 
 path = os.path.dirname(__file__)
-path=path+"/Experiments/grasping_u/"
+path=path+"/Experiments/target_chasing/"
 os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 name = files[-1]
@@ -50,8 +50,8 @@ bots = sim_obj.robots(name,my_system,body_floor,path)
 interior = sim_obj.Interiors(name,my_system,body_floor,path)
 
 # Create object to be chases
-Ball=sim_obj.Ball(name,my_system,body_floor,path)
-
+#Ball=sim_obj.Ball(name,my_system,body_floor,path)
+Ball = None
 # Report contact class
 my_rep = sim_obj.MyReportContactCallback()
 
@@ -62,16 +62,14 @@ controls=sim_obj.controller(name,my_system,bots,Psi,Ball,path)
 
 # Create simulation
 sim = sim_obj.simulate(name,my_system,bots,interior,Ball,controls,my_rep,path,Psi)
-
 # Run the simulation 
 sim.simulate()
 print("simulation run:",np.round((sim.sim_end-sim.sim_start)/60,2)," minutes")
-# export data
-data_export=sim_obj.export_data(my_system,bots,controls,interior,Ball,sim,Psi,my_rep,path,name)
-#%%  
-sim_export_start=timeit.default_timer()  
-data_export.export_data()
 
+#%%  export data
+data_export=sim_obj.export_data(my_system,bots,controls,interior,Ball,sim,Psi,my_rep,path,name) 
+sim_export_start=timeit.default_timer()   
+data_export.export_data()
 sim_export_end=timeit.default_timer()
 print("export_time:",np.round((sim_export_end-sim_export_start)/60,2)," minutes")
 print("name =",str(name))

@@ -17,11 +17,11 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-time_end = 90
+time_end = 30
 #time_end = 25
 #time_end = 40
 #time_end = 100
-save_rate = 50 #save every n number of steps
+save_rate = 100 #save every n number of steps
 visual = 'pov'
 
 #xcenter = 2.25
@@ -62,25 +62,25 @@ convert_mass = 1 # if its grams or kg
 
 
 #### ROBOT VARIABLES #####
-nb = 40 # number of bots
+nb = 30 # number of bots
 bot_mass = .200  # mass of bot kg 
 bot_geom = 'cylinder'
 bot_width = 0.09525  #  bot width  [m]
 bot_height = 0.09525/2 # bot height    [m]
 membrane_type = 1
-skin_width = 0.03# diameter of membrane particles
+skin_width = 0.035# diameter of membrane particles
 ns = 7# number of skin particles 
 membrane_width = ns*skin_width # cloth width [m]
-spring_stiffness = 100 # spring stiffness
+spring_stiffness = 50 # spring stiffness
 spring_damping = 0 # spring damping 
 theta = 2*np.pi/nb 
 cord_length = membrane_width + bot_width*np.cos(theta/2) # Cord length between bot centers
 print(np.pi*((nb*cord_length/np.pi)/2)**2)
 R = np.sqrt((cord_length**2)/(2*(1-np.cos(theta)))) # radius [m]
 print(np.pi*(R)**2)
-membrane_density = 2200
+membrane_density = 2000
 
-ns=7
+ns=8
 
 
 
@@ -104,7 +104,7 @@ particle_geom = 'cylinder'
 interior_mode = "bidispersion" # interior particle mode
 #interior_mode = "Verify"
 scale_radius = 1.01
-offset_radius = .7
+offset_radius = .78
 
 Rbar = scale_radius*R
 #### FLOOR PARAMETERS ####
@@ -118,11 +118,11 @@ spinningFriction = 0.1
 rollingFriction = 0.1
 dampingterm = 0.00001
 #dampingterm = 0
-Ct=1e-08
-C=1e-08
-Cr=1e-08
-Cs=1e-08
-
+Ct=0
+C=0
+Cr=0
+Cs=0
+restituition=0.05
 # Ct=0
 # C=0
 # Cr=0
@@ -254,39 +254,59 @@ if control_mode=="grasping_explore":
 if control_mode=="grasping_u":
     
     ball_geometry = "circle"
-    br=0.36
+    #ball_geometry = "square"
+    #ball_geometry = "c_shape"
+    br=0.5
+    br2=br
     if ball_geometry=="circle":
         ball_radius=br
-    
+        print("perimeter object=",str(2*br*np.pi))
+    # square     
+    if ball_geometry=="square":	
+        
+        br=(2*br)*np.pi/4
+        ball_radius=br/2	  
+        #print("perimeter object=",str(2*br*np.pi))
+    if ball_geometry=="c_shape":	
+        
+        br=(2*br)*np.pi/4
+        
+        ball_radius=br/2
+        w=2*ball_radius
+        l=6*ball_radius
+        t=.2
     
     p=0.07
-    width_grasp = 0.75
-    lengtho_grasp = .36*2
+    width_grasp = 0.9
+    lengtho_grasp = 2*br
     #atilda=np.round(np.pi * ((cord_length * nb / np.pi) / 2)**2,2)
     #print("atilda=",atilda)
-    atilda=4.2/.84
+    pack=1
+    a=4.5
+    atilda=a/pack
     print("atilda=",atilda)
     length_grasp = atilda/(2*width_grasp) - lengtho_grasp/2
     print("length_grasp=",length_grasp)
-    
+    print("perimeter grasp=",str(length_grasp+lengtho_grasp))
     #print("Area_act=",np.round(np.pi*R**2,2))
     
     #print("Asquare=",np.round(width_grasp*(2*length_grasp+lengtho_grasp),2))
     #length_grasp = 3.25
     #lengtho_grasp = 0.5
-    floor_friction = .01
-    particle_mix = True
+    floor_friction = .03
+    particle_mix = False
     ball_fixed=False
     ballx = 0
     ballz = 0 
-    ball_mass = 5
+    ball_mass = 20
     fb_rate=1*dt
-    update_rate = 20
-
-    xcenter = -(ball_radius+R+.1)
+    update_rate = 1
+    rho_ = 10
+    rtilda = br*1.5
+    xcenter = -(ball_radius+R+.3)
     zcenter = 0 
     
-    xcenter_grasp = -3*br
+    xcenter_grasp = -2*br2
     ycenter_grasp = zcenter
     
     xcenter_grasp2 = ballx
@@ -296,16 +316,16 @@ if control_mode=="grasping_u":
     xc1 = ballx
     yc1 = ballz
     
-    xc2 = ballx+2
+    xc2 = ballx+rtilda
     yc2 = ballz
     
     tcut1 = 45
-    tcut2 = 60
+    tcut2 = 30
     tcut3 = 150
     alpha1 = 2.0
-    alpha2 = 2.0
+    alpha2 = 1
     beta = 0
-    
+    error = .01
     
 #### CONTROL MODE -- GRASPING ####
 if control_mode=="grasping":
@@ -320,7 +340,7 @@ if control_mode=="grasping":
     #ball_geometry = "import"
     #ball_geometry = "circle"
     # circle
-    br=.5
+    br=.36
     br=0.36
     if ball_geometry=="circle":
         ball_radius=br
@@ -468,7 +488,7 @@ envParams['convert_mass'] = convert_mass
 envParams['visual'] = visual
 envParams['xcenter'] = xcenter
 envParams['zcenter'] = zcenter
-
+envParams['restituition'] = restituition
 # control mode
 envParams['control_mode'] = control_mode
 envParams['alpha1'] = alpha1
@@ -552,7 +572,13 @@ if control_mode=="grasping_u":
 
     envParams['xc2'] = xc2
     envParams['yc2'] = yc2 
-        
+    envParams['rho_'] = rho_
+    envParams['error'] = error
+    envParams['rtilda'] = rtilda
+    if ball_geometry=="c_shape":
+        envParams['w']=w
+        envParams['l']=l
+        envParams['t']=t
 if control_mode=="grasping_explore":
     envParams['a1'] = a1
     envParams['b1'] = b1    

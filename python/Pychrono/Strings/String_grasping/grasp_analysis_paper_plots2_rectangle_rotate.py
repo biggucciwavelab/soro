@@ -34,53 +34,8 @@ plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'dejavuserif'
 plt.rcParams['font.size'] = 9
 plt.rcParams['axes.linewidth'] = .1
-#path="D:/dmulroy/Experiments/square_pull_rotate/"
+path="D:/dmulroy/Experiments/square_pull_rotate2/"
 d=2
-
-name = ["27_01_2023_09_24_23",
-        "27_01_2023_09_50_14",
-        "27_01_2023_09_50_20",
-        "27_01_2023_09_50_25",
-        "27_01_2023_09_50_32",
-        "27_01_2023_09_50_40",
-        "27_01_2023_09_50_54",
-        "27_01_2023_13_36_56",
-        "27_01_2023_13_37_02",
-        "27_01_2023_13_37_09",
-        "27_01_2023_13_37_15",
-        "27_01_2023_13_37_23",
-        "27_01_2023_14_48_20",
-        "27_01_2023_14_48_25",
-        "27_01_2023_14_48_29",
-        "27_01_2023_14_48_36",
-        "27_01_2023_14_48_44",
-        "27_01_2023_15_15_22",
-        "27_01_2023_15_15_28",
-        "27_01_2023_15_15_36",
-        "27_01_2023_15_15_55",
-        "27_01_2023_15_16_07",
-        "27_01_2023_15_45_18",
-        "27_01_2023_15_45_24",
-        "27_01_2023_15_45_29",
-        "27_01_2023_15_45_40",
-        "27_01_2023_15_45_48",
-        #"27_01_2023_16_43_16",
-        "27_01_2023_16_43_22",
-        "27_01_2023_16_43_27",
-        #"27_01_2023_16_43_31",
-        "27_01_2023_16_43_39"]
-
-
-name = ["25_04_2023_18_45_25",
-        "25_04_2023_18_52_51",
-        "25_04_2023_18_52_58",
-        "25_04_2023_18_52_58",
-        "25_04_2023_18_52_58",
-        "25_04_2023_18_53_24",
-        "25_04_2023_18_53_34",
-        "25_04_2023_18_53_42",
-        "25_04_2023_18_53_51",
-        "25_04_2023_18_53_59"]
 
 
 name = ["25_04_2023_23_42_52",
@@ -108,7 +63,7 @@ name = ["25_04_2023_23_42_52",
         "26_04_2023_01_36_40",
         "26_04_2023_01_36_48",
         "26_04_2023_01_36_58",
-        "26_04_2023_02_04_59",
+        #"26_04_2023_02_04_59",
         "26_04_2023_02_04_12",
         "26_04_2023_02_04_18",
         "26_04_2023_02_04_24",
@@ -206,7 +161,7 @@ print("muf=",np.round(meanf,2))
 print("sigmaf=",np.round(sdf,2))    
 
 # %%
-name="epsilon_square_sigma_2p25"
+name="epsilon_square_sigma_25"
 c="tab:green"
 fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,2),dpi=300)
 #axs.fill_between(time_[0],epsilonsigmap,epsilonsigmam,color=c,alpha=0.5)
@@ -222,10 +177,10 @@ axs.set_title(r'$(b)$')
 axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.grid(True,linewidth=0.1,zorder=-1)
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 
 
 

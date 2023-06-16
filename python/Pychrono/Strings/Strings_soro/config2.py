@@ -33,7 +33,7 @@ target_chasing
 "grasping"
 '''
  
-control_mode = "grasping"
+control_mode = "target_chasing"
 #### GEOMETRIES ####
 """
 circle:
@@ -240,13 +240,12 @@ if control_mode=="target_chasing":
 #### SAVE SIMULATION ####
 now = datetime.now()
 dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
-mainDirectory = "F:/Soro_chrono/python/Pychrono/Strings/Strings_soro/"
-savefile = mainDirectory +'Experiments/'+ dt_string
+#mainDirectory = "F:/Soro_chrono/python/Pychrono/Strings/Strings_soro/"
+mainDirectory =os.path.abspath(os.getcwd())
+savefile = mainDirectory +'/Experiments/'+ dt_string
 os.makedirs(savefile, exist_ok=True)
 txtFile = savefile+'/Parameters.csv'
     
-
-
 
 
 ##### export as npy file

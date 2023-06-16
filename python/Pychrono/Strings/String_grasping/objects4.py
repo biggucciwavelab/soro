@@ -92,7 +92,7 @@ class robots:
         self.Compliance_tangent = self.parameters['Ct'] 
         self.Compliance = self.parameters['C'] 
         self.membrane_density = self.parameters['membrane_density']
-        
+        self.restituition = self.parameters['restituition']
         ####### Calculated variables ######
         self.bot_density=self.bot_mass/self.bot_volume # calculate density of robot 
         self.bot_material = self.Material(self.lateralFriction)
@@ -229,14 +229,23 @@ class robots:
             
                 # make the color blue 
                 bot.AddAsset(self.col_b)
-                
-                # zeroth robot so we know which is which in the videos
-                if i==0:   
-                    bot.AddAsset(self.col_p)   
-                if i>=20 and i<=25:
-                    bot.AddAsset(self.col_w)
-                if i==22:   
-                    bot.AddAsset(self.col_y)  
+                entry=[25,24,25,26,27,28,29,0,1,2,3,4,5,6,7]
+                entry=[0,2,5,8,11,14,17,20,23,26]
+                if i in entry:
+                    bot.AddAsset(self.col_p)
+                # # zeroth robot so we know which is which in the videos
+                # if i==0:   
+                #     entry=[25,24,25,26,27,28,29,0,1,2,3,4,5,6,7]
+                # if i==10:
+                #     bot.AddAsset(self.col_p)
+                # if i==20:
+                #     bot.AddAsset(self.col_p)    
+                # if i==30:
+                #     bot.AddAsset(self.col_p)                  
+                #if i>=20 and i<=25:
+                    #bot.AddAsset(self.col_w)
+                #if i==22:   
+                    #bot.AddAsset(self.col_y)  
                 
                 # set collision
                 bot.SetCollide(True)
@@ -437,11 +446,11 @@ class robots:
         material = chrono.ChMaterialSurfaceNSC() # create material object
         material.SetFriction(lateralFriction) # set friction properties
         material.SetDampingF(self.dampingterm) # set damping properties
-        #material.SetCompliance(self.Compliance) # set compliance property
-        #material.SetComplianceT(self.Compliance_tangent) # set tangential property
+        material.SetCompliance(self.Compliance) # set compliance property
+        material.SetComplianceT(self.Compliance_tangent) # set tangential property
         material.SetRollingFriction(self.rollingFriction)
         material.SetSpinningFriction(self.spinningFriction)
-        material.SetRestitution(.2)
+        material.SetRestitution(self.restituition)
         # material.SetComplianceRolling(Cr)
         # material.SetComplianceSpinning(Cs)
         return (material)
@@ -576,14 +585,18 @@ class Interiors:
         self.dampingterm = self.parameters['dampingterm']
         self.Compliance_tangent = self.parameters['Ct'] 
         self.Compliance = self.parameters['C'] 
-        
+        self.restituition = self.parameters['restituition']
         self.particle_volume=np.pi*self.particle_height*(self.particle_width/2)**2   # calculate volume
         self.particle_density=self.particle_mass/self.particle_volume # calculate density of robot 
         #self.particle_material = self.Material()
-        
+        self.control_mode = self.parameters['control_mode']
         self.fixed = False
         #(self.n,self.Ri) = self.MaxValues()
         (self.n,self.Ri) = self.MaxValues2()
+        #if self.control_mode=="grasping_u":
+         #   self.Ri = [1.03708564, 0.94818564, 0.85928564, 0.77038564, 0.68148564, 0.59258564, 0.50368564, 0.41478564, 0.32588564, 0.23698564, 0.14808564, 0.05918564]						
+        #    self.n = [64,78,53,63,42,48,31,34,20,19,9,4]
+#
         self.total_particles = np.sum(self.n)
         self.particle_material = self.Material(self.lateralFriction)
         
@@ -851,11 +864,11 @@ class Interiors:
         material = chrono.ChMaterialSurfaceNSC() # create material object
         material.SetFriction(lateralFriction) # set friction properties
         material.SetDampingF(self.dampingterm) # set damping properties
-        #material.SetCompliance(self.Compliance) # set compliance property
-        #material.SetComplianceT(self.Compliance_tangent) # set tangential property
+        material.SetCompliance(self.Compliance) # set compliance property
+        material.SetComplianceT(self.Compliance_tangent) # set tangential property
         #material.SetCompliance(0) # set compliance property
         #material.SetComplianceT(0) # set tangential property
-        material.SetRestitution(.2)
+        material.SetRestitution(self.restituition)
         material.SetRollingFriction(self.rollingFriction)
         material.SetSpinningFriction(self.spinningFriction)
         # material.SetComplianceRolling(Cr)
@@ -1043,9 +1056,12 @@ class floor:
         self.Compliance_tangent = self.parameters['Ct'] 
         self.Compliance = self.parameters['C'] 
         self.floor_friction = self.parameters['floor_friction']
+        self.restituition = self.parameters['restituition']
+        self.control_mode = self.parameters['control_mode']
+        if self.control_mode=="target_chasing":
+            self.tunnel_geom = self.parameters['tunnel_geom']
         self.material1 = self.Material(self.floor_friction)
         self.material2 = self.Material(0)
-        
         # self.body_floor = chrono.ChBody()
         # self.body_floor.SetName('floor')
         # self.body_floor.SetBodyFixed(True)
@@ -1097,62 +1113,82 @@ class floor:
         self.body_floor2.SetCollide(True)
         self.my_system.Add(self.body_floor2)
         
-        
-        
-        
-        
-        
-        
-        
-        # body_floor_shape2 = chrono.ChBoxShape()
-        # body_floor_shape2.GetBoxGeometry().Size = chrono.ChVectorD(self.floor_length, self.floor_height, self.floor_length)
-        # self.body_floor2.GetAssets().push_back(body_floor_shape2)
-        # col_k = chrono.ChColorAsset()
-        # col_k.SetColor(chrono.ChColor(0, 0, 0))
-        # self.body_floor2.AddAsset(col_k)
-        # self.my_system.Add(self.body_floor2)        
-        # self.body_floor = chrono.ChBody()
-        #self.body_floor.SetName('floor2')
-        # self.body_floor.SetBodyFixed(True)
-        # self.body_floor.SetPos(chrono.ChVectorD(0, self.tall+self.height2, 0 ))
-        # self.body_floor.SetMaterialSurface(self.material2)
-        # self.body_floor.GetCollisionModel().ClearModel()
-        # self.body_floor.GetCollisionModel().AddBox(self.length, self.tall, self.length) # hemi sizes
-        # self.body_floor_shape = chrono.ChBoxShape()
-        
-        
-        # self.body_floor2 = chrono.ChBody()
-        # self.body_floor2.SetName('floor2')
-        # self.body_floor2.SetBodyFixed(True)
-        # self.body_floor2.SetPos(chrono.ChVectorD(0, self.floor_height+self.bot_height, 0 ))
-        # self.body_floor2.SetMaterialSurface(self.material2)
-        # self.body_floor2.GetCollisionModel().ClearModel()
-        # self.body_floor2.GetCollisionModel().AddBox(self.floor_length, self.floor_height+self.bot_height, self.floor_length) # hemi sizes
-        # self.body_floor2.SetCollide(True)
-        # self.my_system.Add(self.body_floor2) 
-        
-        #self.body_floor2_shape = chrono.ChBoxShape()
-        # self.body_floor_shape2.GetBoxGeometry().Size = chrono.ChVectorD((self.floor_length, self.floor_tall, self.floor_length))
-        # self.body_floor2.GetAssets().push_back(self.body_floor_shape2)
-  
-        # body_floor_shape.GetBoxGeometry().Size = chrono.ChVectorD(self.length, self.tall, self.length)
-        # self.body_floor.GetAssets().push_back(body_floor_shape)
-        # col_g = chrono.ChColorAsset()
-        # col_g.SetColor(chrono.ChColor(0, 0, 0))
-        # self.body_floor.AddAsset(col_g)body_floor.GetCollisionModel().BuildModel()       
-  
+        if self.control_mode=="target_chasing":
+            
+            if self.tunnel_geom=='tanh':
+                wall = chrono.ChBody()
+                path="C:/soro/python/Pychrono/Strings/String_grasping/object_file/"
+                mesh_for_visualization = chrono.ChTriangleMeshConnected()
+                mesh_for_visualization.LoadWavefrontMesh(path+'wall_3.obj')
+                mesh_for_visualization.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
+                visualization_shape = chrono.ChTriangleMeshShape()
+                visualization_shape.SetMesh(mesh_for_visualization)
+                wall.AddAsset(visualization_shape)
+                mesh_for_collision = chrono.ChTriangleMeshConnected()
+                mesh_for_collision.LoadWavefrontMesh(path+'wall_3.obj')
+                # Optionally: you can scale/shrink/rotate the mesh using this:
+                mesh_for_collision.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
+                wall.GetCollisionModel().ClearModel()
+                wall.GetCollisionModel().AddTriangleMesh(
+                mesh_for_collision, # the mesh 
+                False,  # is it static?
+                False)  # is it convex?
+                wall.SetMaterialSurface(self.material1)
+                wall.GetCollisionModel().BuildModel()        
+                wall.SetPos(chrono.ChVectorD(0,-3.2,0))
+                wall.SetMass(16)
+                wall.SetInertiaXX(chrono.ChVectorD(0.270,0.400,0.427))
+                wall.SetInertiaXY(chrono.ChVectorD(0.057,0.037,-0.062))            
+                wall.SetBodyFixed(True)
+                col_y = chrono.ChColorAsset() # apply color
+                col_y.SetColor(chrono.ChColor(1, 1, 0))
+                wall.AddAsset(col_y)
+                wall.SetCollide(True) # set the collision mode
+                self.my_system.Add(wall)         
     
+            elif self.tunnel_geom=='sin':
+                wall = chrono.ChBody()
+                # Attach a visualization shape .
+                path="C:/soro/python/Pychrono/Strings/String_grasping/object_file/"
+                mesh_for_visualization = chrono.ChTriangleMeshConnected()
+                mesh_for_visualization.LoadWavefrontMesh(path+'wall_7.obj')
+                mesh_for_visualization.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
+                visualization_shape = chrono.ChTriangleMeshShape()
+                visualization_shape.SetMesh(mesh_for_visualization)
+                wall.AddAsset(visualization_shape)
+        
+                mesh_for_collision = chrono.ChTriangleMeshConnected()
+                mesh_for_collision.LoadWavefrontMesh(path+'wall_7.obj')
+                # Optionally: you can scale/shrink/rotate the mesh using this:
+                mesh_for_collision.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
+                wall.GetCollisionModel().ClearModel()
+                wall.GetCollisionModel().AddTriangleMesh(
+                mesh_for_collision, # the mesh 
+                False,  # is it static?
+                False)  # is it convex?
+                wall.GetCollisionModel().BuildModel()        
+                wall.SetPos(chrono.ChVectorD(0,-3.2,0))
+                wall.SetMass(16)
+                wall.SetInertiaXX(chrono.ChVectorD(0.270,0.400,0.427))
+                wall.SetInertiaXY(chrono.ChVectorD(0.057,0.037,-0.062))            
+                wall.SetBodyFixed(True)
+                col_y = chrono.ChColorAsset() # apply color
+                col_y.SetColor(chrono.ChColor(1, 1, 0))
+                wall.AddAsset(col_y)
+                wall.SetCollide(True) # set the collision mode
+                self.my_system.Add(wall)    
+                
     
     def Material(self,lateralFriction):
         ''' Function that creates material object '''
         material = chrono.ChMaterialSurfaceNSC() # create material object
         material.SetFriction(lateralFriction) # set friction properties
         material.SetDampingF(self.dampingterm) # set damping properties
-        #material.SetCompliance(self.Compliance) # set compliance property
-        #material.SetComplianceT(self.Compliance_tangent) # set tangential property
+        material.SetCompliance(self.Compliance) # set compliance property
+        material.SetComplianceT(self.Compliance_tangent) # set tangential property
         #material.SetCompliance(0) # set compliance property
         #material.SetComplianceT(0) # set tangential property
-        material.SetRestitution(.2)
+        material.SetRestitution(self.restituition)
         material.SetRollingFriction(self.rollingFriction)
         material.SetSpinningFriction(self.spinningFriction)
         # material.SetComplianceRolling(Cr)
@@ -1188,6 +1224,7 @@ class Ball:
         self.dampingterm = self.parameters['dampingterm']
         self.Compliance_tangent = self.parameters['Ct'] 
         self.Compliance = self.parameters['Cr'] 
+        self.restituition = self.parameters['restituition']
         self.material=self.Material(self.lateralFriction)
         self.geom = self.parameters['ball_geometry']
         self.fixed=self.parameters['ball_fixed']
@@ -1195,7 +1232,8 @@ class Ball:
             self.w=self.parameters['w']
             self.l=self.parameters['l']
             self.t=self.parameters['t']
-            
+        if self.geom =="rectangle":
+            self.ball_length = self.parameters['ball_length']  
         self.radius = self.parameters['ball_radius']
         self.mb= self.parameters['ball_mass']
         volume3=np.pi*self.height*(self.radius)**2   # calculate volume
@@ -1298,7 +1336,7 @@ class Ball:
             myforcez.SetVpoint(chrono.ChVectorD(0,0.05,0))
             self.forceb.append(myforcez) # add to force list
         #### square  
-        if self.geom=="square":
+        elif self.geom=="square":
             #const=self.radius*2*np.pi/4
             const=self.radius*2
             ball = chrono.ChBody() # create ball object
@@ -1311,14 +1349,52 @@ class Ball:
             ball.SetName("ball") # give it a name
             ball.SetId(10000) 
             ball.SetCollide(True) # set the collision mode
-            ball.SetBodyFixed(True) # set if its fixed
+            ball.SetBodyFixed(self.fixed) # set if its fixed
             body_floor_texture = chrono.ChTexture()
-            body_floor_texture.SetTextureFilename(chrono.GetChronoDataPath() + 'bluwhite.png')
-            ball.GetAssets().push_back(body_floor_texture)
             prismatic_ground_ball = chrono.ChLinkLockPrismatic()
             prismatic_ground_ball.SetName("prismatic_ground_ball")
             prismatic_ground_ball.Initialize(self.body_floor, ball, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_X_TO_Z))
             self.my_system.Add(prismatic_ground_ball) 
+            self.obj.append(ball)
+            self.balls.append(ball) 
+            self.my_system.Add(ball) 
+            # set position
+            myforcez = chrono.ChForce() # create it 
+            ball.AddForce(myforcez) # apply it to bot object
+            myforcez.SetMode(chrono.ChForce.FORCE) # set the mode
+            myforcez.SetDir(chrono.VECT_Z) # set direction 
+            myforcez.SetVpoint(chrono.ChVectorD(0,0.05,0))
+            self.forceb.append(myforcez) # add to force list
+        elif self.geom=="rectangle":
+            #const=self.radius*2*np.pi/4
+            const=self.radius*2
+            length=self.ball_length
+            ball = chrono.ChBody() # create ball object
+            ball = chrono.ChBodyEasyBox(length,self.height,const,self.rho,True,True) # create object # specify properties and make it a cylinder
+            ball.SetPos(chrono.ChVectorD(self.x,self.y,self.z))
+            #rotation1 = chrono.ChQuaternionD() # rotate the robots about y axis 
+            #rotation1.Q_from_AngAxis(-np.pi/4, chrono.ChVectorD(0, 1, 0)) 
+            #ball.SetRot(rotation1)
+                
+            ball.SetName("ball") # give it a name
+            ball.SetId(10000) 
+            ball.SetCollide(True) # set the collision mode
+            ball.SetBodyFixed(self.fixed) # set if its fixed
+            body_floor_texture = chrono.ChTexture()
+            prismatic_ground_ball = chrono.ChLinkLockPrismatic()
+            prismatic_ground_ball.SetName("prismatic_ground_ball")
+            prismatic_ground_ball.Initialize(self.body_floor, ball, chrono.ChCoordsysD(chrono.ChVectorD(self.x, self.y, self.z), chrono.Q_ROTATE_X_TO_Z))
+            self.my_system.Add(prismatic_ground_ball) 
+            self.obj.append(ball)
+            self.balls.append(ball) 
+            self.my_system.Add(ball) 
+            # set position
+            myforcez = chrono.ChForce() # create it 
+            ball.AddForce(myforcez) # apply it to bot object
+            myforcez.SetMode(chrono.ChForce.FORCE) # set the mode
+            myforcez.SetDir(chrono.VECT_Z) # set direction 
+            myforcez.SetVpoint(chrono.ChVectorD(0,0.05,0))
+            self.forceb.append(myforcez) # add to force list
         #### triangle    
         if self.geom=="triangle":     
             
@@ -1372,14 +1448,15 @@ class Ball:
             box1_x=(-self.w/2)+(self.t/2)+self.z
             box1_y=self.y
             box1_z=self.x
-            
+            volume=(self.l - 2*self.t)*self.t*height
+            rho=(self.mb/3)/volume
             box1 = chrono.ChBody() # create ball object
-            box1 = chrono.ChBodyEasyBox(self.t,height,self.l - 2*self.t,self.rho,True,True) # create object # specify properties and make it a cylinder
+            box1 = chrono.ChBodyEasyBox(self.t,height,self.l - 2*self.t,rho,True,True) # create object # specify properties and make it a cylinder
             box1.SetPos(chrono.ChVectorD(box1_x,box1_y,box1_z))
             box1.SetName("ball") # give it a name
             box1.SetId(10000) 
             box1.SetCollide(True) # set the collision mode
-            box1.SetBodyFixed(True) # set if its fixed
+            box1.SetBodyFixed(self.fixed) # set if its fixed
             box1.AddAsset(self.col_y)
             box1.SetMaterialSurface(self.material) # apply material
             prismatic_ground_ball = chrono.ChLinkLockPrismatic()
@@ -1397,12 +1474,14 @@ class Ball:
             box2_y=self.y
             box2_z = (self.l-self.t)/2 + self.z
             box2 = chrono.ChBody() # create ball object
-            box2 = chrono.ChBodyEasyBox(self.w,height,self.t,self.rho,True,True) # create object # specify properties and make it a cylinder
+            volume=self.w*self.t*height
+            rho=(self.mb/3)/volume
+            box2 = chrono.ChBodyEasyBox(self.w,height,self.t,rho,True,True) # create object # specify properties and make it a cylinder
             box2.SetPos(chrono.ChVectorD(box2_x,box2_y,box2_z))
             box2.SetName("ball") # give it a name
             box2.SetId(10000) 
             box2.SetCollide(True) # set the collision mode
-            box2.SetBodyFixed(True) # set if its fixed
+            box2.SetBodyFixed(self.fixed) # set if its fixed
             box2.AddAsset(self.col_g)
             box2.SetMaterialSurface(self.material) # apply material
             prismatic_ground_ball = chrono.ChLinkLockPrismatic()
@@ -1421,12 +1500,14 @@ class Ball:
             box3_y=self.y
             box3_z = -(self.l-self.t)/2 + self.z
             box3 = chrono.ChBody() # create ball object
-            box3 = chrono.ChBodyEasyBox(self.w,height,self.t,self.rho,True,True) # create object # specify properties and make it a cylinder
+            volume=self.w*self.t*height
+            rho=(self.mb/3)/volume
+            box3 = chrono.ChBodyEasyBox(self.w,height,self.t,rho,True,True) # create object # specify properties and make it a cylinder
             box3.SetPos(chrono.ChVectorD(box3_x,box3_y,box3_z))
             box3.SetName("ball") # give it a name
             box3.SetId(10000) 
             box3.SetCollide(True) # set the collision mode
-            box3.SetBodyFixed(True) # set if its fixed
+            box3.SetBodyFixed(self.fixed) # set if its fixed
             box3.AddAsset(self.col_g)
             box3.SetMaterialSurface(self.material) # apply material
             prismatic_ground_ball = chrono.ChLinkLockPrismatic()
@@ -1589,10 +1670,11 @@ class Ball:
         material = chrono.ChMaterialSurfaceNSC() # create material object
         material.SetFriction(lateralFriction) # set friction properties
         #material.SetDampingF(self.dampingterm) # set damping properties
-        #material.SetCompliance(self.Compliance) # set compliance property
-        #material.SetComplianceT(self.Compliance_tangent) # set tangential property
+        material.SetCompliance(self.Compliance) # set compliance property
+        material.SetComplianceT(self.Compliance_tangent) # set tangential property
         material.SetRollingFriction(self.rollingFriction)
         material.SetSpinningFriction(self.spinningFriction)
+        material.SetRestitution(self.restituition)
         # material.SetComplianceRolling(Cr)
         # material.SetComplianceSpinning(Cs)
         return (material)            
@@ -1687,18 +1769,21 @@ class simulate:
         self.zcenter = self.parameters['zcenter']
         self.visual = self.parameters['visual']
         self.dt = self.parameters['dt']
-        self.tcut3 = self.parameters['tcut3']
+        if self.control_mode!='target_chasing':
+           self.tcut3 = self.parameters['tcut3']
+           
         self.time_end = self.parameters['time_end']
         self.save_rate = self.parameters['save_rate']
-        self.geom=self.parameters['ball_geometry']
-        if self.geom=="c_shape":
-            self.w=self.parameters['w']
-            self.l=self.parameters['l']
-            self.t=self.parameters['t']
-            
-        self.ball_radius = self.parameters['ball_radius']
-        self.ballx_ = self.parameters['ballx']
-        self.ballz_ = self.parameters['ballz']
+        if self.control_mode!='target_chasing':
+            self.geom=self.parameters['ball_geometry']
+            if self.geom=="c_shape":
+                self.w=self.parameters['w']
+                self.l=self.parameters['l']
+                self.t=self.parameters['t']
+                
+            self.ball_radius = self.parameters['ball_radius']
+            self.ballx_ = self.parameters['ballx']
+            self.ballz_ = self.parameters['ballz']
         ###### Predefined variables ######
         self.myapplication=[]
         self.epoch = 0
@@ -1825,10 +1910,10 @@ class simulate:
             
         self.x0b_=0
         self.y0b_=0
-        
-        self.tcut1 = self.parameters['tcut1']
-        self.tcut2 = self.parameters['tcut2']
-        self.tcut3 = self.parameters['tcut3']
+        if self.control_mode!='target_chasing':
+            self.tcut1 = self.parameters['tcut1']
+            self.tcut2 = self.parameters['tcut2']
+            self.tcut3 = self.parameters['tcut3']
         
         #self.p = self.parameters['p']
         
@@ -1870,12 +1955,12 @@ class simulate:
                 self.save_contacts() 
                 #self.my_rep.ResetList()
                 
-                if self.controller.t>=self.tcut3:
-                    print("time change")
-                    self.controller.t=0
-                else:
-                    self.controller.t=self.controller.t+self.dt
-                    #print("not time")
+                # if self.controller.t>=self.tcut3:
+                #     print("time change")
+                #     self.controller.t=0
+                # else:
+                #     self.controller.t=self.controller.t+self.dt
+                #     #print("not time")
 
 
                 time=np.round(self.my_system.GetChTime(),3)
@@ -1926,11 +2011,11 @@ class simulate:
                 #    self.controller.smooth_epsilon(self.EPSILON4,np.round(self.my_system.GetChTime(),3))
                 #self.my_rep.ResetList()
                 
-                if self.controller.t>=self.tcut3:
-                    print("time change")
-                    self.controller.t=0
-                else:
-                    self.controller.t=self.controller.t+self.dt
+               # if self.controller.t>=self.tcut3:
+                #    print("time change")
+                #    self.controller.t=0
+                #else:
+                #    self.controller.t=self.controller.t+self.dt
                     #print("not time")
 
     
@@ -1945,48 +2030,24 @@ class simulate:
                     #if time<=self.tcut1:
                     if self.controller.trig1_==0:
                           print('time='+str(time), 'phase = '+str(self.controller.trig1_+1),end='\n')  
-                        #ft2_=np.round(self.Psi.ft2(time,0,self.p),3)
-                        #print('time='+str(time), 'f(t)='+str(ft2_),end='\n')
-                        
                     elif self.controller.trig1_!=0:
                         print('time='+str(time), 'phase = '+str(self.controller.trig1_+1),end='\n')
-                        #print('time='+str(time), 'f(t)='+str(ft2_),end='\n')
                     else:
                         print('time='+str(time))
                 else:
                     print('time='+str(time))
-                #self.myapplication.EndScene()
                 self.save_parameters()
                 
                 self.epoch = self.epoch + 1
                 self.my_rep.ResetList()
                 
-                # aaa=len(self.Bots.bots)
-                # cam_x=0.33*(self.Bots.bots[0].GetPos().x + self.Bots.bots[int(aaa/3)].GetPos().x + self.Bots.bots[int(2*aaa/3)].GetPos().x)
-                # cam_y=0.33*(self.Bots.bots[0].GetPos().y + self.Bots.bots[int(aaa/3)].GetPos().y + self.Bots.bots[int(2*aaa/3)].GetPos().y)
-                # cam_z=0.33*(self.Bots.bots[0].GetPos().z + self.Bots.bots[int(aaa/3)].GetPos().z + self.Bots.bots[int(2*aaa/3)].GetPos().z)
-                # self.myapplication.GetSceneManager().getActiveCamera().setPosition(chronoirr.vector3df(cam_x,cam_y+self.camy_height,cam_z))
-                # self.myapplication.GetSceneManager().getActiveCamera().setTarget(chronoirr.vector3df(cam_x,cam_y,cam_z))
-                # self.myapplication.SetVideoframeSave(self.save_video)
-                # self.myapplication.SetVideoframeSaveInterval(round(1/(self.dt*60)))
-                # Close the simulation if time ends
-                #if self.my_system.GetChTime()> self.time_end :
-                    #self.myapplication.GetDevice().closeDevice()
-                    
             self.sim_end=timeit.default_timer()
             self.parameters['sime_time']=(self.sim_end-self.sim_start)/60
             self.number_parameters = self.parameters['number_parameters']
             self.parameters['rho']=self.rho
 
-        #print(len(self.parameters),self.number_parameters+4)
-        #if len(self.parameters)==self.number_parameters+2:
-        #print('save')
         np.save(self.mainDirectory+self.name+'/Parameters.npy',self.parameters)
-        
-        #else:
-            #print('not save')
-        
-        
+
         with open(self.mainDirectory+self.name+"/Parameters.csv", 'w') as f:
             for key in self.parameters.keys():
                 f.write("%s, %s\n" % (key, self.parameters[key]))
@@ -3384,7 +3445,8 @@ class controller():
         self.robots = bots # robot objets
         self.Psi=Psi # potential fields 
         self.Ball=Ball
-        self.forceb=self.Ball.forceb
+        if self.Ball == None:
+            self.forceb=None
         ##### Extract variables from other imported objects #####
         self.forces=self.robots.force
         self.nb=self.robots.nb 
@@ -3401,6 +3463,7 @@ class controller():
         self.b=0.0001
         self.epsilon_tilda=[]
         self.time_tilda=[]
+        self.check_field=0
         ###### Imported Variables #########
         self.mainDirectory = path   # main directory 
         parameters=np.load(self.mainDirectory+self.name+'/Parameters.npy',allow_pickle=True)
@@ -3411,6 +3474,20 @@ class controller():
         self.FX=np.zeros(self.nb)
         self.FZ=np.zeros(self.nb)
         self.save_rate=self.parameters['save_rate']
+        
+        self.T = 0
+        self.tn = 0
+        self.w = 5       
+        #self.pwm = self.parameters["pwm"]
+        if self.control_mode=="target_chasing":
+            self.xc = self.parameters["xc"]
+            self.zc = self.parameters["yc"]
+            self.alpha = self.parameters['alpha1']
+            self.beta = self.parameters['beta']
+            self.T = 0
+            self.tn = 0
+            self.w = 5       
+            self.pwm = self.parameters["pwm"]
         if self.control_mode=="grasping" or self.control_mode=="grasping_epsilon":
             self.alpha1 = self.parameters['alpha1']
             self.alpha2 = self.parameters['alpha2']
@@ -3431,6 +3508,8 @@ class controller():
             self.ball_radius = self.parameters["ball_radius"]
             self.fb = 0
             self.ball_geometry=self.parameters['ball_geometry']
+            if self.control_mode=="grasping_epsilon":
+                self.nojam = self.parameters['nojam']
             
             if self.ball_geometry=="c_shape":
                 self.w=self.parameters['w']
@@ -3469,6 +3548,7 @@ class controller():
             
         elif self.control_mode=="grasping_u":  
             self.trig1_=0
+            self.check1=0
             self.TRIG1_=[]
             self.alpha1 = self.parameters['alpha1']
             self.alpha2 = self.parameters['alpha2']
@@ -3490,6 +3570,7 @@ class controller():
             self.fb = 0
             self.ball_radius = self.parameters['ball_radius']
             self.update_rate = self.parameters['update_rate']
+            self.error = self.parameters['error']
         else:    
             self.alpha1 = self.parameters['alpha1']
             self.alpha2 = self.parameters['alpha2']
@@ -3539,6 +3620,13 @@ class controller():
                 (self.FX,self.FZ) = self.morph_controller() # run shape controller
                 self.apply_force(self.FX,self.FZ)         # apply force            
    
+        if self.control_mode =="target_chasing":
+                (self.bot_position_x,self.bot_position_z) = self.get_position()     # get position of bots
+                (self.bot_velocitiy_x,self.bot_velocitiy_z) = self.get_velocity()   # get velocity of bots
+                (self.FX,self.FZ) = self.target_controller() # run shape controller
+                self.apply_force3(self.FX,self.FZ)         # apply force 
+   
+    
         if self.control_mode =="grasping":
                 (self.bot_position_x,self.bot_position_z) = self.get_position()     # get position of bots
                 (self.bot_velocitiy_x,self.bot_velocitiy_z) = self.get_velocity()   # get velocity of bots
@@ -3559,7 +3647,7 @@ class controller():
                 (self.bot_position_x,self.bot_position_z) = self.get_position()     # get position of bots
                 (self.bot_velocitiy_x,self.bot_velocitiy_z) = self.get_velocity()   # get velocity of bots
                 if self.epoch%int(self.update_rate)==0:
-                    print("update")
+                    #print("update")
                     (self.FX,self.FZ) = self.grasping_controller_u3()
                     self.apply_force(self.FX,self.FZ)  
                 else:
@@ -3572,14 +3660,14 @@ class controller():
                 (self.bot_position_x,self.bot_position_z) = self.get_position()     # get position of bots
                 (self.bot_velocitiy_x,self.bot_velocitiy_z) = self.get_velocity()   # get velocity of bots
             #self.smooth_epsilon(self,epsilon)
-                if self.epoch%100==0:
-                    print("update")
-                    (self.FX,self.FZ) = self.grasping_controller_epsilon()
-                    self.apply_force(self.FX,self.FZ)  
-                else:
-                    self.FX=self.FX
-                    self.FZ=self.FZ
-                    self.apply_force(self.FX,self.FZ)         # apply force           
+                #if self.epoch%100==0:
+                    #print("update")
+                (self.FX,self.FZ) = self.grasping_controller_epsilon()
+                self.apply_force(self.FX,self.FZ)  
+                #else:
+                    # self.FX=self.FX
+                    # self.FZ=self.FZ
+                    # self.apply_force(self.FX,self.FZ)         # apply force           
                 
     def save_field_value(self):
         
@@ -3590,7 +3678,7 @@ class controller():
             t=np.round(self.my_system.GetChTime(),3)
             for i in range(self.nb):
                 self.Field_value["bot"+str(i)].append(self.Psi.F_morph(self.bot_position_x[i],self.bot_position_z[i],self.Psi.tanh(t)))    
-    
+            
         if self.control_mode=="grasping":
             t=np.round(self.my_system.GetChTime(),3)
             for i in range(self.nb):
@@ -3599,11 +3687,11 @@ class controller():
             t=np.round(self.my_system.GetChTime(),3)
             for i in range(self.nb):
                 self.Field_value["bot"+str(i)].append(self.Psi.FGraspU(self.bot_position_x[i],self.bot_position_z[i],t,self.trig1_))    
-        #if self.control_mode=="grasping_explore":
-            #t=np.round(self.my_system.GetChTime(),3)
-            #for i in range(self.nb):
-                #self.Field_value["bot"+str(i)].append(self.Psi.FGRASP(self.bot_position_x[i],self.bot_position_z[i],t))    
-                
+        if self.control_mode=="target_chasing":
+            t=np.round(self.my_system.GetChTime(),3)
+            for i in range(self.nb):
+                self.Field_value["bot"+str(i)].append(self.Psi.dpoint_(self.bot_position_x[i],self.bot_position_z[i],self.xc,self.zc))
+
     def save_controller_forces(self):
         for i in range(self.nb):
             self.F_controller_x["bot"+str(i)+"_control_force_x"].append(self.FX[i])
@@ -3762,6 +3850,36 @@ class controller():
         zeta2=temp[1]
         return(zeta1,zeta2)    
 
+    def target_controller(self):
+        """ target Controller """
+        FX=[]
+        FZ=[]
+        for i in range(self.nb):
+            Fx=self.Psi.dxpoint_(self.bot_position_x[i],self.bot_position_z[i],self.xc,self.zc)
+            Fz=self.Psi.dypoint_(self.bot_position_x[i],self.bot_position_z[i],self.xc,self.zc)
+            mag=np.sqrt(Fx**2 + Fz**2)
+            if mag==0:
+                FXX=0
+                FZZ=0
+            else:
+                FXX=Fx/mag
+                FZZ=Fz/mag
+            fx=-self.alpha*FXX-self.beta*self.bot_velocitiy_x[i]
+            fz=-self.alpha*FZZ-self.beta*self.bot_velocitiy_z[i]
+            
+            #ang2 = 20*np.sin(2*np.pi*np.round(self.my_system.GetChTime(),3))
+            #theta = np.nan_to_num(np.arctan2(FXX, FZZ)) % 2*np.pi
+            #theta=theta+ang2
+            
+            
+            
+            #fz=-self.alpha*np.sin(theta)
+            #fx=-self.alpha*np.cos(theta)            
+            FX.append(fx)
+            FZ.append(fz)
+        return(np.asarray(FX),np.asarray(FZ)) 
+
+
     def grasping_controller_DS(self):
         FX=[]
         FZ=[]
@@ -3890,34 +4008,52 @@ class controller():
         FX=[]
         FZ=[]
         time=np.round(self.my_system.GetChTime(),3)
-
-        
-        
+        #print("check_field=",self.check_field)
+        if time>=self.Psi.tcut2-.2 and self.check_field==0:
+            #print("initiated")
+            self.check_field=1
+            for ii in range(self.nb):
+                self.Psi.xjam.append(self.bot_position_x[ii])
+                self.Psi.yjam.append(self.bot_position_z[ii])    
+            ii=0
+            self.Psi.xjam.append(self.bot_position_x[ii])
+            self.Psi.yjam.append(self.bot_position_z[ii])  
+            (self.Psi.segments_jam)=self.Psi.create_segment(self.Psi.xjam,self.Psi.yjam)
+            #print("completed")    
+        # c=0
+        # for i in range(self.nb):
+        #     temp = np.sqrt((self.bot_position_x[i]-self.xc2)**2 + (self.bot_position_z[i]-self.zc2)**2)
+        #     if temp<2.25:
+        #         print(i)
+        #         c=c+1
+        # print("c=",str(c))
+            #print(np.round(,2))
         if time>self.Psi.tcut2:
             #print("tcut2")
             self.Ball.balls[0].SetBodyFixed(False)             
             #self.Ball.balls[1].SetBodyFixed(False)             
             #self.Ball.balls[2].SetBodyFixed(False)             
-            
-        if time>self.Psi.tcut3:
-            #print("tcut3")
-            self.fb=5*(signal.square(2 * np.pi * 0.1 * time) + 1)
-            print(self.fb)
-            #self.fb=self.fb+self.dt
-            self.forceb[0].SetMforce(self.fb)
-            self.forceb[0].SetDir(chrono.VECT_X)
-            self.Ball.balls[0].SetBodyFixed(False)   
-            
-            # self.Ball.Fb["Fb"].append(self.fb)
-            # self.Ball.TIME["TIME"].append(time)
-            # self.Ball.PX["PX"].append(self.Ball.balls[0].GetPos().x)
-            # self.Ball.PY["PY"].append(self.Ball.balls[0].GetPos().z)     
+        if self.tcut1>time:
+            alpha_=self.alpha1
+            #alpha_=self.alpha1-random.uniform(0, 0.05)
+            #print("alpha:",alpha_)
+        else:
+            alpha_=self.alpha2    
+        
+        # if time>self.Psi.tcut3:
+        #     #self.fb=self.fb+self.dt
+        #     #self.fb=2*(signal.square(2 * np.pi * 0.1 * time) + 1)
+        #     self.forceb[0].SetMforce(self.fb)
+        #     self.forceb[0].SetDir(chrono.VECT_X)
   
         #if 5<time:
             #print("spring_change")
             #self.change_springk(100)
-            
         for i in range(self.nb):
+        #for i in entry:
+            
+            #Fx1 =  self.Psi.FxGraspEpsilon(self.bot_position_x[i],self.bot_position_z[i],time,self.nojam)
+            #Fz1 =  self.Psi.FyGraspEpsilon(self.bot_position_x[i],self.bot_position_z[i],time,self.nojam)
             Fx1 = self.Psi.Fx_point(self.bot_position_x[i],self.bot_position_z[i],self.xc2,self.zc2)
             Fz1 = self.Psi.Fy_point(self.bot_position_x[i],self.bot_position_z[i],self.xc2,self.zc2)
             
@@ -3925,8 +4061,9 @@ class controller():
             Fx1=Fx1/mag1
             Fz1=Fz1/mag1
 
+            
             #moving_average(self,a, n=3)
-            if mag1==0 or i%2==0:
+            if mag1==0:
                 FXX=0
                 FZZ=0
             else:
@@ -3934,19 +4071,13 @@ class controller():
                 FZZ=Fz1
  
             
-            if self.tcut1>time:
-                alpha_=self.alpha1
-                #alpha_=self.alpha1-random.uniform(0, 0.05)
-                #print("alpha:",alpha_)
-            else:
-                alpha_=self.alpha2
-                #alpha_=self.alpha2-random.uniform(0, 0.05)
-                #print("alpha:",alpha_)
             fx=-(alpha_)*FXX#-self.beta*self.bot_velocitiy_x[i]
             fz=-(alpha_)*FZZ#-self.beta*self.bot_velocitiy_z[i]
 
             FX.append(fx)
             FZ.append(fz)
+
+                
         return(np.asarray(FX),np.asarray(FZ)) 
 
     def grasping_controller_u(self):
@@ -4149,126 +4280,46 @@ class controller():
         time=np.round(self.my_system.GetChTime(),3)
         
             
-        if self.tcut1>time:
+        if self.trig1_==0:
             alpha_=self.alpha1
-        else:
+        if self.trig1_!=0:
             alpha_=self.alpha2
         phi=0  
-        if self.trig1_==0:
+        #if self.trig1_==0:
             #print("phase1")
-            for i in range(self.nb):
-                Fx1=self.Psi.FxGraspU(self.bot_position_x[i],self.bot_position_z[i],time,self.trig1_)
-                Fz1=self.Psi.FyGraspU(self.bot_position_x[i],self.bot_position_z[i],time,self.trig1_)    
-                mag1=np.sqrt(Fx1**2 + Fz1**2)
-                Fx1=Fx1/mag1
-                Fz1=Fz1/mag1
-                phi=self.Psi.FGraspU(self.bot_position_x[i],self.bot_position_z[i],time,self.trig1_)+phi
+        for i in range(self.nb):
+            Fx1=self.Psi.FxGraspU(self.bot_position_x[i],self.bot_position_z[i],time,self.trig1_)
+            Fz1=self.Psi.FyGraspU(self.bot_position_x[i],self.bot_position_z[i],time,self.trig1_)    
+            mag1=np.sqrt(Fx1**2 + Fz1**2)
+            Fx1=Fx1/mag1
+            Fz1=Fz1/mag1
+            phi=self.Psi.FGraspU(self.bot_position_x[i],self.bot_position_z[i],time,self.trig1_)+phi
+            
                 
-                    
-                if mag1==0:
-                    FXX=0
-                    FZZ=0
-                else:
-                    FXX=Fx1
-                    FZZ=Fz1
+            if mag1==0:
+                FXX=0
+                FZZ=0
+            else:
+                FXX=Fx1
+                FZZ=Fz1
 
-    
-                fx=-(alpha_)*FXX#-self.beta*self.bot_velocitiy_x[i]
-                fz=-(alpha_)*FZZ#-self.beta*self.bot_velocitiy_z[i]
-                FX.append(fx)
-                FZ.append(fz)
-        if phi<2.1:
+
+            fx=-(alpha_)*FXX#-self.beta*self.bot_velocitiy_x[i]
+            fz=-(alpha_)*FZZ#-self.beta*self.bot_velocitiy_z[i]
+            FX.append(fx)
+            FZ.append(fz)
+        phibar=np.round(phi/self.nb,3)
+        #print('alpha_= '+str(alpha_))
+        print('update:  '+'  phi= '+str(np.round(phi,2))+'  '+'phibar= '+str(phibar)+'  '+'alpha_= '+str(alpha_))
+        #print('phibar= '+str(np.round(phibar,3)))
+        if phibar<=self.error and self.check1==0:
             self.trig1_=1
-        
-        #if self.tcut1<=time and self.tcut2>=time: 
-        if self.trig1_!=0:     
-            #print("phase2")
-            for i in range(self.nb):
-                a=2*self.ball_radius
-                b=2*self.ball_radius
-                #Fx1=self.Uxy(self.bot_position_x[i]-self.xc1,self.bot_position_z[i]-self.yc1,a)
-                #Fz1=self.Vxy(self.bot_position_x[i]-self.xc1,self.bot_position_z[i]-self.yc1,a)
-                Fx1,Fz1=self.field3(self.bot_position_x[i],self.bot_position_z[i],self.xc1,self.yc1,a,b,self.xc2,self.yc2)
-                mag1=np.sqrt(Fx1**2 + Fz1**2)
-                Fx1=Fx1/mag1
-                Fz1=Fz1/mag1
-    
-                if mag1==0:
-                    FXX=0
-                    FZZ=0
-                else:
-                    FXX=Fx1
-                    FZZ=Fz1
-     
-                
-
-    
-    
-                fx=(alpha_)*FXX#-self.beta*self.bot_velocitiy_x[i]
-                fz=(alpha_)*FZZ#-self.beta*self.bot_velocitiy_z[i]
-    
-    
-                FX.append(fx)
-                FZ.append(fz)
-                
-                
-        # if self.tcut2<=time: 
-        #     print("phase3")
-        #     for i in range(self.nb):
-        #         Fx1=self.Psi.FxGraspU(self.bot_position_x[i],self.bot_position_z[i],time)
-        #         Fz1=self.Psi.FyGraspU(self.bot_position_x[i],self.bot_position_z[i],time) 
-        #         mag1=np.sqrt(Fx1**2 + Fz1**2)
-        #         Fx1=Fx1/mag1
-        #         Fz1=Fz1/mag1
-    
-        #         if mag1==0:
-        #             FXX=0
-        #             FZZ=0
-        #         else:
-        #             FXX=Fx1
-        #             FZZ=Fz1
-     
-                
-
-    
-    
-        #         fx=-(alpha_)*FXX#-self.beta*self.bot_velocitiy_x[i]
-        #         fz=-(alpha_)*FZZ#-self.beta*self.bot_velocitiy_z[i]
-    
-    
-        #         FX.append(fx)
-        #         FZ.append(fz)
+            self.check1=1
+        #if self.check1==1:
+            #print("rho="+str(self.Psi.rho_))
         return(np.asarray(FX),np.asarray(FZ)) 
     
-    def grasping_controller_u_value(self):
-        """ Grasping Controller_u """
-        #FX=[]
-        #FZ=[]
-        F=[]
-        time=np.round(self.my_system.GetChTime(),3)
-
-        
-        if time>self.tcut2:
-            #print("tcut2")
-            self.Ball.balls[0].SetBodyFixed(False)             
-            #self.Ball.balls[1].SetBodyFixed(False)             
-            #self.Ball.balls[2].SetBodyFixed(False)             
-            
-        if time>self.tcut3:
-            #print("tcut3")
-            #self.fb=self.fb+self.dt
-            self.forceb[0].SetMforce(self.fb)
-            self.forceb[0].SetDir(chrono.VECT_X)
-            self.Ball.balls[0].SetBodyFixed(False)   
-            
-            
-        for i in range(self.nb):
-            F.append(self.Psi.FGraspU(self.bot_position_x[i],self.bot_position_z[i],time))
-
-        return(np.asarray(F)) 
-
-
-
+   
     def grasping_controller_morph(self):
         """ Grasping Controller """
         FX=[]
@@ -4297,8 +4348,9 @@ class controller():
             #self.Ball.balls[1].SetBodyFixed(False) 
             #self.Ball.balls[2].SetBodyFixed(False) 
         
-        
-        for i in range(self.nb):
+        entry=[31,32,33,34,35,36,37,38,39,0,1,2,3,4,5,6,7,8,9,10]
+        #for i in range(self.nb):
+        for i in entry:
             if time<self.tcut1: 
                 fxb = self.Psi.dphix_oval(self.bot_position_x[i],self.bot_position_z[i],self.px,self.pz,self.a,self.b)
                 fyb = self.Psi.dphiy_oval(self.bot_position_x[i],self.bot_position_z[i],self.px,self.pz,self.a,self.b)
@@ -4567,10 +4619,34 @@ class controller():
         ret[n:] = ret[n:] - ret[:-n]
         return ret[n - 1:] / n
 
-
     def apply_force(self,FX,FZ):  
         """ Appy forces to robots """
-        
+        entry=[0,2,5,8,11,14,17,20,23,26]
+        #for i in range(self.nb):
+        for i in entry:
+            self.fxt.append(FX[i])
+            self.fyt.append(0)
+            self.fzt.append(self.FZ[i])
+            self.forces[3*i].SetMforce(float(FX[i]))
+            self.forces[3*i].SetDir(chrono.VECT_X)
+            self.forces[3*i+2].SetMforce(float(FZ[i]))
+            self.forces[3*i+2].SetDir(chrono.VECT_Z)
+            
+            
+    def apply_force3(self,FX,FZ):  
+        """ Appy forces to robots """
+        self.tn=(self.pwm/255)/self.w 
+        self.T=self.dt+self.T
+        if self.T>0 and self.T<=self.tn:
+            self.FX=FX
+            self.FZ=FZ
+        else:
+            self.FX=np.zeros(len(FX))
+            self.FZ=np.zeros(len(FX))
+            
+        if self.T>(1/self.w):
+            self.T=0
+            print('reset',np.round(self.my_system.GetChTime(),2))
         for i in range(self.nb):
             self.fxt.append(FX[i])
             self.fyt.append(0)
@@ -4651,6 +4727,7 @@ class export_data():
         self.interior = interior
         self.simulation = simulation
         self.ball = ball
+        self.Psi=Psi
         self.results_dir=self.mainDirectory+self.name+'/results'
         self.control_mode=self.parameters['control_mode']
         if not os.path.exists(self.results_dir):
@@ -4691,6 +4768,11 @@ class export_data():
             self.time_tilda=self.controls.time_tilda
             if self.control_mode=="grasping_u":
                 self.TRIG1_=self.controls.TRIG1_
+                
+            if self.control_mode=="grasping_epsilon":
+                self.xjam=self.Psi.xjam
+                self.yjam=self.Psi.yjam
+                
         self.Field_value=self.controls.Field_value
         
         self.F_controller_x=self.controls.F_controller_x
@@ -5405,6 +5487,14 @@ class export_data():
             if self.control_mode=="grasping_u":
                 file_name=self.results_dir+'/TRIG1_.csv' 
                 savetxt(file_name,self.TRIG1_, delimiter=',')
+                
+            if self.control_mode=="grasping_epsilon":
+                file_name=self.results_dir+'/xjam.csv' 
+                savetxt(file_name,self.xjam, delimiter=',')   
+ 
+                file_name=self.results_dir+'/yjam.csv' 
+                savetxt(file_name,self.yjam, delimiter=',')   
+                
 class MyReportContactCallback(chrono.ReportContactCallback):
     """ Class for reporting and storing the the contact forces and postions  """
     def __init__(self):
@@ -5684,8 +5774,13 @@ class R_functions():
             self.tcut3=self.parameters['tcut3']
             self.lengtho2_grasp = 0
             self.length2_grasp = 0
-
-            
+            self.xc1 = self.parameters['xc1']     
+            self.yc1 = self.parameters['yc1']
+            self.xc2 = self.parameters['xc2']     
+            self.yc2 = self.parameters['yc2']   
+            self.ball_radius = self.parameters["ball_radius"]
+            self.rho_ = self.parameters['rho_']
+            self.rtilda = self.parameters['rtilda']
         ######### GRASPING & GRASPING_EXPLORE #########    
         if self.control_mode=="grasping" or self.control_mode=="grasping_explore" or self.control_mode=="grasping_epsilon":
 
@@ -5706,6 +5801,9 @@ class R_functions():
             self.tcut1 = self.parameters['tcut1'] 
             self.tcut2 = self.parameters['tcut2'] 
             self.tcut3 = self.parameters['tcut3'] 
+            self.segments_jam=0
+            self.xjam=[]
+            self.yjam=[]
 ##############################################################################            
             
 
@@ -5931,54 +6029,123 @@ class R_functions():
         R=(-term1*term2/term3)
         return(R)
     
-    def E_(self,x,xo,y,yo,a,b):
+    def E_(self,x,xo,y,yo,r):
         xbar=x-xo
         ybar=y-yo
-        E=np.array([[2*xbar/(a**2),-2*ybar/(b**2)],
-                   [2*ybar/(b**2),2*xbar/(a**2)]])
+        E=np.array([[2*xbar/(r**2),-2*ybar/(r**2)],
+                   [2*ybar/(r**2),2*xbar/(r**2)]])
         return(E)
     
     
-    def Gamma(self,x,y,xo,yo,a,b):
+    def Gamma(self,x,y,xo,yo,r):
         xbar=x-xo
         ybar=y-yo
-        return((xbar/a)**2 + (ybar/b)**2)
-        
-    def D_(self,G):
-        rho=10
-        l1 = 1 - (1/abs(G)**(1/rho))
-        l2 = 1 + (1/abs(G)**(1/rho))
-        D=np.diag([l1,l2])
+        return((xbar/r)**2 + (ybar/r)**2)
+    
+    
+    def D_(self,G,rho):
+        lambda1 = 1 - (1/(abs(G)))**(1/rho)
+        lambda2 = 1 + (1/(abs(G)))**(1/rho)
+        D=np.diag([lambda1,lambda2])
         return(D)
     
     
-    def M_(self,x,y,xo,yo,a,b):
-        E=self.E_(x,xo,y,yo,a,b)
+    def M_(self,x,y,xo,yo,r,rho):
+        E=self.E_(x,xo,y,yo,r)
         Einv=np.linalg.inv(E)
-        G=self.Gamma(x,y,xo,yo,a,b)
-        D=self.D_(G)
+        G=self.Gamma(x,y,xo,yo,r)
+        D=self.D_(G,rho)
         M=E@D@Einv
         return(M)
 
 
-    def field3(self,x,y,xo,yo,a,b,xs,ys):
-        #zeta1=np.zeros((len(y),len(x)))
-        #zeta2=np.zeros((len(y),len(x)))
-        #for i in range(len(y)):
-        #for j in range(len(x)):
-        M=self.M_(x,y,xo,yo,a,b)
-        f=np.array([[-(x-xs)],[-(y-ys)]])
+    def field3(self,x,y,xo,yo,xg,yg,r,rho_):
+        M=self.M_(x,y,xo,yo,r,rho_)
+        f=np.array([[-(x-xg)],[-(y-yg)]])
+        #r_=np.sqrt(((x-xo)**2 + (y-yo)**2))
+        # if r_<r:
+        #     f=np.array([[0],[0]])
+        #     temp=M@f
+        #     temp=temp.flatten()
+        #     zeta1=temp[0]
+        #     zeta2=temp[1]
+        # else:
         temp=M@f
         temp=temp.flatten()
         zeta1=temp[0]
         zeta2=temp[1]
-        return(zeta1,zeta2)    
+        return(zeta1,zeta2)  
     
+    def field4(self,x,y,xo,yo,xg,yg,r,rho):
+        zeta1=np.zeros((len(y),len(x)))
+        zeta2=np.zeros((len(y),len(x)))
+        for i in range(len(y)):
+            for j in range(len(x)):
+                r_=np.sqrt(((x[j]-xo)**2 + (y[i]-yo)**2))
+                M=self.M_(x[j],y[i],xo,yo,r,rho)
+                f=np.array([[-(x[j]-xg)],[-(y[i]-yg)]])
+                if r_<r:
+                    f=np.array([[0],[0]])
+                    temp=M@f
+                    temp=temp.flatten()
+                    zeta1[i,j]=temp[0]
+                    zeta2[i,j]=temp[1]
+                else:
+                    temp=M@f
+                    temp=temp.flatten()
+                    zeta1[i,j]=temp[0]
+                    zeta2[i,j]=temp[1]
+        return(zeta1,zeta2)  
+    # def field3(self,x,y,xo,yo,a,b,xs,ys):
+    #     #zeta1=np.zeros((len(y),len(x)))
+    #     #zeta2=np.zeros((len(y),len(x)))
+    #     #for i in range(len(y)):
+    #     #for j in range(len(x)):
+    #     r_=np.sqrt(((x-xo)**2 + (y-yo)**2))
+    #     M=self.M_(x,y,xo,yo,a,b)
+    #     f=np.array([[-(x-xs)],[-(y-ys)]])
+    #     if r_<a:
+    #         f=np.array([[0],[0]])
+    #         temp=M@f
+    #         temp=temp.flatten()
+    #         zeta1=temp[0]
+    #         zeta2=temp[1]
+    #     else:
+    #         temp=M@f
+    #         temp=temp.flatten()
+    #         zeta1=temp[0]
+    #         zeta2=temp[1]
+    #     return(zeta1,zeta2)  
     
+    def FxGraspEpsilon(self,x,y,t,nojam):
+        if nojam==False:
+            if t<=self.tcut2:
+                Fx1 = self.Fx_point(x,y,self.xc2,self.yc2)
+            elif t>self.tcut2:
+            
+                Fx1 = self.dphix_segments(x,y,self.segments_jam)        
+        if nojam==True:
+            Fx1 = self.Fx_point(x,y,self.xc2,self.yc2)    
+        return(Fx1)
+    
+    def FyGraspEpsilon(self,x,y,t,nojam):
+        if nojam==False:
+            if t<=self.tcut2:
+                Fy1 = self.Fy_point(x,y,self.xc2,self.yc2)
+            elif t>self.tcut2:
+            
+                Fy1 = self.dphiy_segments(x,y,self.segments_jam)        
+        if nojam==True:
+            Fy1 = self.Fy_point(x,y,self.xc2,self.yc2)    
+              
+        return(Fy1)
+
     def FxGraspU(self,x,y,t,trig):
-        if t<=self.tcut2 or trig==0:
-            ft_=self.ft2(t,self.tcut1,self.p) 
-            theta=(1-ft_)*np.pi/2 + ft_*0
+        
+        if trig==0:
+            #ft_=self.ft2(t,self.tcut1,self.p) 
+            #theta=(1-ft_)*np.pi/2 + ft_*0
+            theta=np.pi/2
             x_=[]
             y_=[]
             self.lengtho2_grasp = self.lengtho_grasp + 2*self.width_grasp*np.tan((np.pi/2 - theta)/2)
@@ -6021,17 +6188,21 @@ class R_functions():
             #     phi_=self.C_morphx(phi1,phi2,dphi1x,dphi2x,ft2_)
             # elif t>=self.tcut1:
             phi_=self.dphix_segments(x,y,self.segements) 
-            
-        if t>self.tcut2 or trig==1:
-            phi_=self.dphix_oval(x,y,self.xcenter_grasp2,self.ycenter_grasp2,0.1,0.1)
+        if trig==1:
+            fx,fy=self.field3(x,y,self.xc1,self.yc1,self.xc2,self.yc2,self.rtilda,self.rho_)
+            phi_=-fx
+        #if t>self.tcut2 or trig==1:
+            #phi_=self.dphix_oval(x,y,self.xcenter_grasp2,self.ycenter_grasp2,0.1,0.1)
 
         return(phi_)  
     
     
     def FyGraspU(self,x,y,t,trig):
-        if t<=self.tcut2 or trig==0:
-            ft_=self.ft2(t,self.tcut1,self.p) 
-            theta=(1-ft_)*np.pi/2 + ft_*0
+        
+        if trig==0:
+            #ft_=self.ft2(t,self.tcut1,self.p) 
+            #theta=(1-ft_)*np.pi/2 + ft_*0
+            theta=np.pi/2
             x_=[]
             y_=[]
             self.lengtho2_grasp = self.lengtho_grasp + 2*self.width_grasp*np.tan((np.pi/2 - theta)/2)
@@ -6075,15 +6246,17 @@ class R_functions():
             # elif t>=self.tcut1:
             phi_=self.dphiy_segments(x,y,self.segements) 
             
-        if t>self.tcut2 or trig==1:
-            phi_=self.dphiy_oval(x,y,self.xcenter_grasp2,self.ycenter_grasp2,0.1,0.1)
-
+        if trig==1:
+            fx,fy=self.field3(x,y,self.xc1,self.yc1,self.xc2,self.yc2,self.rtilda,self.rho_)
+            phi_=-fy
         return(phi_)  
       
     def FGraspU(self,x,y,t,trig):
-        if t<=self.tcut2 or trig==0:
-            ft_=self.ft2(t,self.tcut1,self.p*3) 
-            theta=(1-ft_)*np.pi/2 + ft_*0
+        
+        if trig==0:
+            #ft_=self.ft2(t,self.tcut1,self.p*3) 
+            #theta=(1-ft_)*np.pi/2 + ft_*0
+            theta=np.pi/2
             x_=[]
             y_=[]
             self.lengtho2_grasp = self.lengtho_grasp + 2*self.width_grasp*np.tan((np.pi/2 - theta)/2)
@@ -6125,9 +6298,9 @@ class R_functions():
             # elif t>=self.tcut1:
             phi_=self.phi_segments(x,y,self.segements) 
             
-        if t>self.tcut2 or trig==1:
-            phi_=0
-            phi_=np.sqrt((x-self.xcenter)**2 + (y-self.ycenter)**2)
+        if trig==1:
+            phi_=np.sqrt((x-self.xc2)**2 + (y-self.yc2)**2)
+            #phi_=np.sqrt((x-self.xcenter)**2 + (y-self.ycenter)**2)
         return(phi_)  
     
     
@@ -6642,7 +6815,7 @@ class import_data:
          self.ns=self.parameters['ns']
          self.nm=self.nb*self.ns # total membrane particles 
          self.bot_width=self.parameters['bot_width']
-         self.geom = self.parameters['ball_geometry']
+         #self.geom = self.parameters['ball_geometry']
          self.particle_width=self.parameters['particle_width']
          self.particle_width2=self.parameters['particle_width2']
          self.radius2=self.particle_width/2 # radius of particles
@@ -6650,7 +6823,11 @@ class import_data:
          self.control_mode=self.parameters['control_mode']
          self.skin_width=self.parameters['skin_width']
          self.height=self.parameters['bot_height']
-         
+         if self.control_mode=="target_chasing":
+             self.tunnel_geom = self.parameters['tunnel_geom']
+             self.xtarget = self.parameters['xc']
+             self.ytarget = self.parameters['yc']
+         #self.geom = self.parameters['ball_geometry']
          # if control mode is shape formation
          if self.control_mode=="shape_formation":
              self.geometry = self.parameters['geometry']
@@ -6668,7 +6845,7 @@ class import_data:
              self.yp=data2['yp']
          
          # if control mode is grasping  
-         if self.control_mode=="grasping" or self.control_mode=="grasping_explore":
+         if self.control_mode=="grasping" or self.control_mode=="grasping_explore" :
              self.a2 = self.parameters['a2']
              self.b2 = self.parameters['b2']
              self.xc2 = self.parameters['xc2']     
@@ -6725,14 +6902,17 @@ class import_data:
          self.control_forces_z=self.control_forces[self.nb+1:2*self.nb+1,:]
        
         
-         #### Ball contact forces
-         # These were saved directly from chrono.; It calculuaedc the sum of contact forces on the ball
-         self.ball_contact_forces=np.genfromtxt(self.files[self.files.index('ball_contact_forces.csv') ] ,delimiter=',')
-         (m,n)=np.shape(self.ball_contact_forces)
-         self.ball_contact_forces=self.ball_contact_forces[:,1:n]
-         self.bFx=self.ball_contact_forces[1,:]
-         self.bFy=self.ball_contact_forces[2,:]
-         #self.bFz=self.ball_contact_forces[3,:]
+         if self.control_mode=="grasping" or self.control_mode=="grasping_u":
+             #### Ball contact forces
+             # These were saved directly from chrono.; It calculuaedc the sum of contact forces on the ball
+             self.ball_contact_forces=np.genfromtxt(self.files[self.files.index('ball_contact_forces.csv') ] ,delimiter=',')
+             (m,n)=np.shape(self.ball_contact_forces)
+             self.ball_contact_forces=self.ball_contact_forces[:,1:n]
+             self.bFx=self.ball_contact_forces[1,:]
+             self.bFy=self.ball_contact_forces[2,:]
+             self.ballx_ = self.parameters['ballx']
+             self.ballz_ = self.parameters['ballz']
+             #self.bFz=self.ball_contact_forces[3,:]
          
          
          
@@ -6851,7 +7031,12 @@ class import_data:
              if self.control_mode=="grasping_epsilon" or self.control_mode=="grasping_u":
                  self.epsilon_tilda=np.genfromtxt(self.files[self.files.index('epsilon_tilda.csv') ] ,delimiter=',')
                  self.time_tilda=np.genfromtxt(self.files[self.files.index('time_tilda.csv')] ,delimiter=',')
-  
+                 self.xc2=self.parameters['xc2']
+                 self.yc2=self.parameters['yc2']
+                 self.tcut1 = self.parameters['tcut1']
+                 self.tcut2 = self.parameters['tcut2']
+                 self.tcut3 = self.parameters['tcut3']
+                 
              if self.control_mode=="grasping_u":
                 self.lengtho_grasp=self.parameters["lengtho_grasp"]
                 self.length_grasp=self.parameters["length_grasp"]
@@ -6861,6 +7046,14 @@ class import_data:
                 self.xcenter_grasp2=self.parameters["xcenter_grasp2"]
                 self.ycenter_grasp2=self.parameters["ycenter_grasp2"]
                 self.p=self.parameters["p"]
+                self.xc1 = self.parameters['xc1']     
+                self.yc1 = self.parameters['yc1']
+                self.xc2 = self.parameters['xc2']     
+                self.yc2 = self.parameters['yc2']   
+                self.rho_ = self.parameters['rho_']
+                self.rtilda = self.parameters['rtilda']
+                
+                
                 self.Field_value=np.genfromtxt(self.files[self.files.index('field_values.csv') ] ,delimiter=',')
                 (m,n)=np.shape(self.Field_value)
                 self.Field_value=self.Field_value[1:m,1:n]
@@ -6869,6 +7062,11 @@ class import_data:
                 for i in range(len(self.time)):
                     self.Field_value_sum.append(np.sum(abs(self.Field_value[:,i])))
          
+             if self.control_mode=="grasping_epsilon":
+                 self.xjam=np.genfromtxt(self.files[self.files.index('xjam.csv')] ,delimiter=',')  
+                 self.yjam=np.genfromtxt(self.files[self.files.index('yjam.csv')] ,delimiter=',') 
+                 self.nojam=self.parameters['nojam']
+                 
              self.mu = self.parameters['lateralFriction']
              self.ballx = self.parameters['ballx'] 
              self.ballz = self.parameters['ballz'] 
@@ -7197,8 +7395,6 @@ class import_data:
              
              print("grasp analysis")
              self.Grasp_analysis()
-
-
 
 
      def angle(self,x, y):
@@ -7554,9 +7750,9 @@ class import_data:
                 y0_=yb
 
             if self.geom=="c_shape":
-                #x0b,y0b=self.ballx_position[i],self.ballz_position[i]
-                x0b=self.ballx_
-                y0b=self.ballz_
+                x0b,y0b=self.ballx_position[i],self.ballz_position[i]
+                #x0b=self.ballx_
+                #y0b=self.ballz_
                 w=self.w/2
                 l=self.l/2
                 t=self.t
@@ -9015,8 +9211,8 @@ class import_data:
          axs.legend()
          plt.tight_layout()
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon4_value.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon4_value.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon4_value.pdf')          
+        # plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon4_value.svg')    
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon4_value.pdf')          
          plt.close('all')
     
         
@@ -9034,8 +9230,8 @@ class import_data:
          axs.legend()
          plt.tight_layout()
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_value.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_value.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_value.pdf')          
+        # plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_value.svg')    
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_value.pdf')          
          plt.close('all')
      
         
@@ -9057,8 +9253,8 @@ class import_data:
          axs.legend()
          plt.tight_layout()
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_valuedx.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_valuedx.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_valuedx.pdf')          
+        # plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_valuedx.svg')    
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'epsilon5_valuedx.pdf')          
          plt.close('all')
         
      def plot_Qcm(self): 
@@ -9564,8 +9760,8 @@ class import_data:
          #fig.suptitle('Control forces', fontsize=16)        
          plt.tight_layout()
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum.pdf')   
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum.svg')    
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum.pdf')   
          plt.close('all') 
          
          dx=np.gradient(self.Field_value_sum,self.time)
@@ -9585,22 +9781,48 @@ class import_data:
          #fig.suptitle('Control forces', fontsize=16)        
          plt.tight_layout()
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum_dx.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum_dx.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum_dx.pdf')   
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum_dx.svg')    
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sum_dx.pdf')   
          plt.close('all') 
+         
+         
+         fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(5,4),dpi=300)
+         axs.plot(self.time,np.dot(1/self.nb,self.Field_value_sum),color='tab:red',linewidth=1)
+         axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
+         axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
+         axs.set_title('$\Sigma\phi$'+" vs time" )
+         plt.tight_layout()
+         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sumbar.jpg')
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sumbar.svg')    
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field_sumbar.pdf')   
+         plt.close('all') 
+         
     
      def plot_potential_Field_value_individual(self):
          ''' plot the control forces'''
         #direct = os.path.join(self.mainDirectory+'/'+self.name+'/'+'_potential_Field_individual')    
          #if not os.path.isdir(direct):
          #    os.makedirs(direct)      
-    
-         NB_=np.linspace(0,self.nb,self.nb,endpoint=True)
+         
+         #time_label=(self.time[len(self.time)]-self.time[0])/dx +1
+         #nb_label=np.linspace(1,30,30,endpoint=True)
+         #vi=np.linspace(vimax,vimin,stepsv,endpoint=True)
+         #vi_1=vi
+         #stepsnb=(self.nb-1) + 1
+         
+         
+         #nb_label=np.linspace(1,30,stepsnb,endpoint=True)
+         #NB=np.linspace(1,self.nb,self.nb,endpoint=True)         
+         
+         NB_=np.linspace(0,self.nb-1,self.nb,endpoint=True)
          T,NB__ = np.meshgrid(self.time,NB_)
          fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(5,5),dpi=300)
          im1=axs.pcolormesh(T,NB__,self.Field_value, cmap='jet',shading='auto')
+         #axs.set_xticklabels(x, minor=True)
+         #axs.set_yticks(NB_, minor=False)
+         #axs.set_yticklabels(nb_label, minor=False)
          #axs.set_xticklabels(self.time, minor=True)
-         axs.set_yticks(NB_, minor=False)
+         #axs.set_yticks(NB_, minor=False)
          axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
          axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
          axs.set_title('$\phi$'+" vs time" )
@@ -9610,8 +9832,8 @@ class import_data:
          #fig.suptitle('Control forces', fontsize=16)        
          plt.tight_layout()
          plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field.jpg')
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field.svg')    
-         plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field.pdf')   
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field.svg')    
+         #plt.savefig(self.mainDirectory+'/'+self.name+'/'+'potential_field.pdf')   
          plt.close('all') 
          
          
@@ -10326,7 +10548,7 @@ class import_data:
         if save==True:
             plt.savefig(Directory+'/'+name+'_'+'time'+str(np.round(self.time[i],2))+name+'.jpg')
             plt.savefig(Directory+'/'+name+'_'+'time'+str(np.round(self.time[i],2))+name+'.svg')    
-            plt.savefig(Directory+'/'+name+'_'+'time'+str(np.round(self.time[i],2))+name+'.pdf')
+            #plt.savefig(Directory+'/'+name+'_'+'time'+str(np.round(self.time[i],2))+name+'.pdf')
         
             
             plt.close('all')          
@@ -12759,13 +12981,21 @@ class import_data:
             os.makedirs(direct)
         count=0
  
+        a = self.rtilda
+        b = self.rtilda
+        delta = .01
+        #x = np.arange(wxmin,wxmax, delta)
+        #y = np.arange(wymin,wymax, delta)
+        #X,Y=np.meshgrid(x,y)
+        #zeta1,zeta2=self.Psi.field4(x,y,self.xc1,self.yc1,self.xc2,self.yc2,self.rtilda,self.Psi.rho_)
+
         for i in range(len(self.time)-2):
             #theta=(1-self.tanh(t))*np.pi/2 + self.tanh(t)*0
             x_=[]
             y_=[]
 
-            
-            theta=(1-self.Psi.ft2(self.time[i],self.tcut1,self.p))*np.pi/2 + self.Psi.ft2(self.time[i],self.tcut1,self.p)*0
+            theta=np.pi/2
+            #theta=(1-self.Psi.ft2(self.time[i],self.tcut1,self.p))*np.pi/2 + self.Psi.ft2(self.time[i],self.tcut1,self.p)*0
             
             self.lengtho2_grasp = self.lengtho_grasp + 2*self.width_grasp*np.tan((np.pi/2 - theta)/2)
             self.length2_grasp = self.length_grasp +self.width_grasp*np.tan((np.pi/2 - theta)/2)
@@ -12800,61 +13030,67 @@ class import_data:
         
   
             fig, axs = plt.subplots(nrows=2, ncols=2,figsize=(6.5,6.5),dpi=300)
-            
+            bx=self.ballx_position
          #x_ticks = np.linspace(self.time[0], self.time[-2],5,endpoint=True)
-            epsilon=self.EPSILON_
-            axs[0,1].plot(self.time[:i],epsilon[:i],color='tab:blue',linewidth=1)
-            axs[0,1].plot(self.time_tilda[:i],self.epsilon_tilda[:i],color='tab:green',linewidth=2,label=r"$\bar{\epsilon}$")
-            axs[0,1].scatter(self.time[i-1],epsilon[i-1],color='k',s=30)
-            axs[0,1].scatter(self.time_tilda[i-1],self.epsilon_tilda[i-1],color='k',s=30)
-            axs[0,1].set_title(r'$\epsilon_{1}$='+str(np.round(epsilon[i-1],2)))
-            axs[0,1].set_ylabel('$\epsilon_{1}$',labelpad=1)
+            #epsilon=self.EPSILON_
+            axs[0,1].plot(self.time[:i],bx[:i],color='tab:blue',linewidth=1)
+            
+            #axs[0,1].plot(self.time_tilda[:i],self.epsilon_tilda[:i],color='tab:green',linewidth=2,label=r"$\bar{\epsilon}$")
+            axs[0,1].scatter(self.time[i-1],bx[i-1],color='k',s=30)
+            #axs[0,1].scatter(self.time_tilda[i-1],self.epsilon_tilda[i-1],color='k',s=30)
+            axs[0,1].set_title(r'ballx='+str(np.round(bx[i-1],2)))
+            axs[0,1].set_ylabel('ballx',labelpad=1)
             axs[0,1].set_xlabel('time [s]',labelpad=-2)
             axs[0,1].xaxis.set_tick_params(width=.25,length=2,pad=1)
             axs[0,1].yaxis.set_tick_params(width=.25,length=2,pad=1)
             axs[0,1].grid(True) 
             
-            dx=np.gradient(self.Field_value_sum,self.time)
             
-            axs[1,1].plot(self.time[:i],dx[:i],color='tab:orange',linewidth=1)
-            axs[1,1].scatter(self.time[i-1],dx[i-1],color='k',s=30)
-            #x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-            #y_ticks = np.linspace(np.min(self.bFx), np.max(self.bFx),5,endpoint=True)
+            
+            # dx=np.gradient(self.Field_value_sum,self.time)
+            # axs[1,1].plot(self.time[:i],dx[:i],color='tab:orange',linewidth=1)
+            # axs[1,1].scatter(self.time[i-1],dx[i-1],color='k',s=30)
+            # #x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
+            # #y_ticks = np.linspace(np.min(self.bFx), np.max(self.bFx),5,endpoint=True)
+            # axs[1,1].xaxis.set_tick_params(width=.25,length=2,pad=1)
+            # axs[1,1].yaxis.set_tick_params(width=.25,length=2,pad=1)
+            # #axs[0].set_ylim([0,100])
+         
+            # #axs[0].set_xticks(np.round(x_ticks,2))
+            # #axs[0].set_yticks(np.round(y_ticks,2))
+            # axs[1,1].set_title('D$\Sigma \phi$'+str(np.round(dx[i],2)))
+            # #axs[0].set_ylabel('ball Force  [x]',labelpad=1)         
+            # axs[1,1].grid(True) 
+            
+            axs[1,1].plot(self.time[:i],self.Field_value_sum[:i],color='tab:orange',linewidth=1)
+            axs[1,1].scatter(self.time[i-1],self.Field_value_sum[i-1],color='k',s=30)
             axs[1,1].xaxis.set_tick_params(width=.25,length=2,pad=1)
             axs[1,1].yaxis.set_tick_params(width=.25,length=2,pad=1)
-            #axs[0].set_ylim([0,100])
-         
-            #axs[0].set_xticks(np.round(x_ticks,2))
-            #axs[0].set_yticks(np.round(y_ticks,2))
-            axs[1,1].set_title('D$\Sigma \phi$'+str(np.round(dx[i],2)))
+            axs[1,1].set_title('$\Sigma \phi$'+str(np.round(self.Field_value_sum[i],2)))
             #axs[0].set_ylabel('ball Force  [x]',labelpad=1)         
             axs[1,1].grid(True) 
+                      
             
             
-            
-            axs[1,0].plot(self.time[:i],self.Field_value_sum[:i],color='tab:red',linewidth=1)
-            axs[1,0].scatter(self.time[i-1],self.Field_value_sum[i-1],color='k',s=30)
-            #x_ticks = np.linspace(self.time[0], self.time[-1],5,endpoint=True)
-            #y_ticks = np.linspace(np.min(self.bFx), np.max(self.bFx),5,endpoint=True)
+            axs[1,0].plot(self.time[:i],np.dot(self.Field_value_sum[:i],1/self.nb),color='tab:red',linewidth=1)
+            axs[1,0].scatter(self.time[i-1],np.dot(self.Field_value_sum[i-1],1/self.nb),color='k',s=30)
+
             axs[1,0].xaxis.set_tick_params(width=.25,length=2,pad=1)
             axs[1,0].yaxis.set_tick_params(width=.25,length=2,pad=1)
-            #axs[0].set_ylim([0,100])
-         
-            #axs[0].set_xticks(np.round(x_ticks,2))
-            #axs[0].set_yticks(np.round(y_ticks,2))
-            axs[1,0].set_title('$\Sigma \phi$'+str(np.round(self.Field_value_sum[i],2)))
+            axs[1,0].set_title('$\phi_{avg}$'+str(np.round(self.Field_value_sum[i]/self.nb,2)))
             #axs[0].set_ylabel('ball Force  [x]',labelpad=1)         
             axs[1,0].grid(True) 
             
             
-            if self.time[i]<=self.tcut1 or self.TRIG1_[i]==0:
+            if self.TRIG1_[i]==0:
+                patch = plt.Circle((self.xc2,self.yc2),.1, fc='tab:red')
+                axs[0,0].add_patch(patch)
                 axs[0,0].plot(x_,y_,color='tab:red',linestyle='dashed',linewidth=1,zorder=2)
+                #axs[0,0].plot(x_,y_,color='tab:red',linestyle='dashed',linewidth=1,zorder=2)
             else:
-                theta_=np.linspace(0,2*np.pi,300)
-                x_=0.1*np.cos(theta_)+self.xcenter_grasp2
-                y_=0.1*np.sin(theta_)+self.ycenter_grasp2
-                axs[0,0].plot(x_,y_,color='tab:red',linewidth=2,zorder=2)
-            #epsilon=np.asarray(self.EPSILON)
+                #axs[0,0].streamplot(X, Y, zeta1, zeta2, color = 'tab:red', density = 1, linewidth = 0.25, arrowsize = 0.5, arrowstyle ='->')
+                patch = plt.Circle((self.xc2,self.yc2),.05, fc='m')
+                axs[0,0].add_patch(patch)
             xcenter=self.ballx_position[i]
             ycenter=self.ballz_position[i]
             
@@ -12935,17 +13171,17 @@ class import_data:
                         
                 
                 if self.geom=="c_shape":
-                    difx=self.ballx_position[0]-self.ballx_
+                    #difx=self.ballx_position[0]-self.ballx_
                    
-                    dify=self.ballz_position[0]-self.ballz_
+                    #dify=self.ballz_position[0]-self.ballz_
                     
-                    if self.PHI(x0+(x0b-difx),y0+(x0b-difx),self.segments)<.1:
-                        patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
-                        axs[0,0].add_patch(patch)
+                    #if self.PHI(x0+(x0b-difx),y0+(x0b-difx),self.segments)<.1:
+                       # patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
+                        #axs[0,0].add_patch(patch)
                    
-                    else:
-                        patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
-                        axs[0,0].add_patch(patch)    
+                    #else:
+                    patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
+                    axs[0,0].add_patch(patch)    
                         
                 if self.geom=="circle":
                     
@@ -13012,7 +13248,7 @@ class import_data:
                    
                    x__=x__+np.ones(len(x__))*(x0b-difx)
                    y__=y__+np.ones(len(x__))*(y0b-dify)
-                   axs[0,0].plot(x__,y__)
+                   axs[0,0].plot(x__,y__,color='k')
                    
                 if self.geom=="import":  
                    x0b,y0b=self.ballx_position[i],self.ballz_position[i] 
@@ -13036,8 +13272,292 @@ class import_data:
             plt.close('all')          
         self.create_video('_frames_combinedu3','_frames_combinedu3') 
 
+     def create_frames_target(self,membrane,wxmin,wxmax,wymin,wymax):
+        ''' Create frames to show the robot and the pull force and epsilon metric in one plot'''
+        fm._rebuild()
+        plt.rcParams['font.family'] = 'Times New Roman'
+        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
+        plt.rcParams['font.size'] = 8
+        plt.rcParams['axes.linewidth'] = .1
+        
+        direct = os.path.join(self.mainDirectory+self.name,'_frames_combined')    
+        if not os.path.isdir(direct):
+            os.makedirs(direct)
+        count=0
+        for i in range(len(self.time)):
+            ratio  = (wymax-wymin)/(wxmax-wxmin)
+            fsx=5
+            fsy=5*ratio
+            fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(fsx,fsy),dpi=300)
+            for j in range(0,self.nb):
+                x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]
+                patch = plt.Circle((-x0, y0),self.bot_width/2, fc='k')
+                axs.add_patch(patch) 
+                        
+                
+            if membrane==True:
+                for j in range(0,self.nm):
+                    
+                    x0,y0=self.membrane_position_x[j,i],self.membrane_position_z[j,i]  
+                    patch = plt.Circle((-x0, y0),self.skin_width/2, fc='tab:red')
+                    axs.add_patch(patch)
+                
+                
+
+            for j in range(self.ni):
+                x0,y0=self.particle_position_x[j,i],self.particle_position_z[j,i]
+
+                if np.round(self.Rm[j],4)==0.0508:
+                    c='tab:blue'
+                else:
+                    c='tab:green'
+                patch = plt.Circle((-x0, y0),self.Rm[j], fc=c)
+                axs.add_patch(patch)  
+                
+            if self.tunnel_geom == "tanh":
+                c1=0
+                c2=10            
+                x2=np.linspace(c1,c2,100)
+                x1=np.linspace(c1,c2,100)                
+                line1=np.tanh(x1-5)-3.75-.25
+                line2=np.tanh(x2-5)-2.25+.25 
+                axs.fill_between(np.flipud(x1),np.flipud(line2),color='tab:grey',alpha=1)
+                axs.fill_between(np.flipud(x1),np.flipud(line1),-6.25,color='tab:grey',alpha=1)            
+                #axs.plot(np.flipud(x1),np.flipud(line2),color='k',linewidth=1)
+                #axs.plot(np.flipud(x1),np.flipud(line1),color='k',linewidth=1) 
+            if self.tunnel_geom == "sin":
+                c1=0
+                c2=10 
+                x2=np.linspace(c1,c2,1000)
+                x1=np.linspace(c1,c2,1000)                
+                line1=np.sin(1.745*x1)-4
+                line2=np.sin(1.745*x1)-1.5
+                axs.fill_between(np.flipud(x1),np.flipud(line2),color='tab:grey',alpha=1)
+                axs.fill_between(np.flipud(x1),np.flipud(line1),-6.25,color='tab:grey',alpha=1) 
+                
+            
+            
+            axs.set_xlim([wxmin,wxmax])
+            axs.set_ylim([wymin,wymax])
+            axs.set_title('Time= ' + str(np.round(self.time[i],0)),fontsize=12)
+            print(str(i)+ "of"+ str(len(self.time-1)))
+            plt.savefig(direct+"/frame%04d.jpg" % count)
+                 
+            count=count+1 
+            
+            plt.close('all')          
+        self.create_video('_frames_combined','_frames_combined') 
+
+     def create_frames_target_snapshot(self,entry,membrane,wxmin,wxmax,wymin,wymax,fsx,fsy):
+        ''' Create frames to show the robot and the pull force and epsilon metric in one plot'''
+        fm._rebuild()
+        plt.rcParams['font.family'] = 'Times New Roman'
+        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
+        plt.rcParams['font.size'] = 8
+        plt.rcParams['axes.linewidth'] = .1
+        
+        #direct = os.path.join(self.mainDirectory+self.name,'_frames_combined')    
+       # if not os.path.isdir(direct):
+            #os.makedirs(direct)
+        #count=0
+        fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(fsx,fsy),dpi=300)
+        axs.scatter(-self.xtarget,self.ytarget,color='tab:cyan',s=80,marker='*') 
+        
+        if self.tunnel_geom == "tanh":
+            c1=0
+            c2=10            
+            x2=np.linspace(c1,c2,100)
+            x1=np.linspace(c1,c2,100)                
+            line1=np.tanh(x1-5)-3.75-.25
+            line2=np.tanh(x2-5)-2.25+.25 
+            axs.fill_between(np.flipud(x1),np.flipud(line2),color='tab:grey',alpha=1)
+            axs.fill_between(np.flipud(x1),np.flipud(line1),-6.25,color='tab:grey',alpha=1)            
+            #axs.plot(np.flipud(x1),np.flipud(line2),color='k',linewidth=1)
+            #axs.plot(np.flipud(x1),np.flipud(line1),color='k',linewidth=1) 
+            axs.set_xlim([wxmin,wxmax])
+            axs.set_ylim([wymin,wymax])
+        if self.tunnel_geom == "sin":
+            c1=0
+            c2=10 
+            x2=np.linspace(c1,c2,1000)
+            x1=np.linspace(c1,c2,1000)                
+            line1=np.sin(1.745*x1)-4
+            line2=np.sin(1.745*x1)-1.5
+            axs.fill_between(np.flipud(x1),np.flipud(line2),color='tab:grey',alpha=1)
+            axs.fill_between(np.flipud(x1),np.flipud(line1),-6.25,color='tab:grey',alpha=1) 
 
 
+        for i in entry:
+            for j in range(0,self.nb):
+                x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]
+                patch = plt.Circle((-x0, y0),self.bot_width/2, fc='k')
+                axs.add_patch(patch) 
+                        
+                
+            if membrane==True:
+                for j in range(0,self.nm):
+                    x0,y0=self.membrane_position_x[j,i],self.membrane_position_z[j,i]  
+                    patch = plt.Circle((-x0, y0),self.skin_width/2, fc='tab:red')
+                    axs.add_patch(patch)
+                
+                
+
+            for j in range(self.ni):
+                x0,y0=self.particle_position_x[j,i],self.particle_position_z[j,i]
+
+                if np.round(self.Rm[j],4)==0.0508:
+                    c='tab:blue'
+                else:
+                    c='tab:green'
+                patch = plt.Circle((-x0, y0),self.Rm[j], fc=c)
+                axs.add_patch(patch) 
+            axs.text(-self.bot_position_x[0,i],self.bot_position_z[0,i], 'T = '+str(np.round(self.time[i],0))+' s', color='k',fontsize=8,horizontalalignment='center',verticalalignment='center')
+        
+        
+        axs.text(-self.bot_position_x[0,entry[0]],self.bot_position_z[0,entry[0]], 'Start', color='k',fontsize=8,horizontalalignment='center',verticalalignment='center')
+        axs.text(-self.bot_position_x[0,entry[-1]],self.bot_position_z[0,entry[-1]], 'End', color='k',fontsize=8,horizontalalignment='center',verticalalignment='center')
+        axs.text(11, -5.5, '1 m', color='k',fontsize=8,horizontalalignment='center',verticalalignment='center')
+
+        
+        axs.annotate('', xy=(11,-5), xytext=(12,-5),arrowprops=dict(arrowstyle='|-|', color='k',linewidth=0.5))
+        axs.set_xlim([wxmin,wxmax])
+        axs.set_ylim([wymin,wymax])
+        plt.axis('off')
+        axs.set_aspect('equal')
+        plt.savefig(self.mainDirectory+self.name+"/snap_shots_"+".svg")
+        plt.savefig(self.mainDirectory+self.name+"/snap_shots_"+".png")
+        plt.close('all')   
+        #plt.savefig(direct+"/frame%04d.jpg" % count)
+                 
+
+
+     def create_frames_u3_snapshots(self,membrane,wxmin,wxmax,wymin,wymax,fsx,fsy,xticks,yticks,entry):
+        ''' Create frames to show the robot and the pull force and epsilon metric in one plot'''
+        fm._rebuild()
+        plt.rcParams['font.family'] = 'Times New Roman'
+        plt.rcParams['mathtext.fontset'] = 'dejavuserif'
+        plt.rcParams['font.size'] = 9
+        plt.rcParams['axes.linewidth'] = .1  
+        count=0
+        ratio  = (wymax-wymin)/(wxmax-wxmin)
+        
+        for i in entry:
+            #theta=(1-self.tanh(t))*np.pi/2 + self.tanh(t)*0
+            x_=[]
+            y_=[]
+
+            theta=np.pi/2
+            self.lengtho2_grasp = self.lengtho_grasp + 2*self.width_grasp*np.tan((np.pi/2 - theta)/2)
+            self.length2_grasp = self.length_grasp +self.width_grasp*np.tan((np.pi/2 - theta)/2)
+
+            x_.append(self.length_grasp*np.cos(theta) + self.xcenter_grasp)
+            y_.append(self.length_grasp*np.sin(theta) + self.lengtho_grasp/2 + self.ycenter_grasp)
+
+            x_.append(0 + self.xcenter_grasp)
+            y_.append(self.lengtho_grasp/2 + self.ycenter_grasp)
+
+            x_.append(0 + self.xcenter_grasp)
+            y_.append(-self.lengtho_grasp/2 + self.ycenter_grasp)
+
+            x_.append(self.length_grasp*np.cos(-theta) + self.xcenter_grasp)
+            y_.append(self.length_grasp*np.sin(-theta) - self.lengtho_grasp/2 + self.ycenter_grasp)
+
+
+            x_.append(self.length2_grasp*np.cos(-theta) + self.xcenter_grasp - self.width_grasp)
+            y_.append(self.length2_grasp*np.sin(-theta) - self.lengtho2_grasp/2 + self.ycenter_grasp)
+        
+            x_.append(0 + self.xcenter_grasp - self.width_grasp)
+            y_.append(-self.lengtho2_grasp/2 + self.ycenter_grasp)
+   
+            x_.append(0 + self.xcenter_grasp - self.width_grasp)
+            y_.append(self.lengtho2_grasp/2 + self.ycenter_grasp)
+   
+            x_.append(self.length2_grasp*np.cos(theta) - self.width_grasp + self.xcenter_grasp)
+            y_.append(self.length2_grasp*np.sin(theta) + self.lengtho2_grasp/2 + self.ycenter_grasp)
+        
+            x_.append(self.length_grasp*np.cos(theta) + self.xcenter_grasp)
+            y_.append(self.length_grasp*np.sin(theta) + self.lengtho_grasp/2 + self.ycenter_grasp)
+        
+  
+            fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(fsx,fsy),dpi=300)
+            
+            if self.TRIG1_[i]==0:
+                axs.plot(x_,y_,color='m',linestyle='dashed',linewidth=0.5,zorder=-5)
+            else:    
+                patch = plt.Circle((self.xc2,self.yc2),.1, fc='m')
+                axs.add_patch(patch)
+            
+            xcenter=self.ballx_position[i]
+            ycenter=self.ballz_position[i]
+            
+            x0b=self.ballx_position[2]
+            y0b=self.ballz_position[2]
+
+            axs.set_xlim([wxmin,wxmax])
+            axs.set_ylim([wymin,wymax])
+            #### Square
+            if self.geom=="square":
+                const=self.ball_radius*2
+                rx=const
+                ry=const
+                w=rx/2
+                h=ry/2                    
+                x=[w+xcenter,-w+xcenter,-w+xcenter,w+xcenter,w+xcenter]
+                y=[h+ycenter,h+ycenter,-h+ycenter,-h+ycenter,h+ycenter]
+                (self.segments)=self.create_segment(x,y) 
+            
+      
+  
+            
+            #ax.plot(x,y)
+            for j in range(0,self.nb):
+                x0,y0=self.bot_position_x[j,i],self.bot_position_z[j,i]
+                patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
+                axs.add_patch(patch) 
+
+            if membrane==True:
+                for j in range(0,self.nm):
+                    x0,y0=self.membrane_position_x[j,i],self.membrane_position_z[j,i]  
+                    patch = plt.Circle((x0, y0),self.skin_width/2, fc='tab:red')
+                    axs.add_patch(patch)
+
+            for j in range(self.ni):
+                x0,y0=self.particle_position_x[j,i],self.particle_position_z[j,i]
+
+                if np.round(self.Rm[j],4)==0.0508:
+                    c='tab:blue'
+                else:
+                    c='tab:green'
+                patch = plt.Circle((x0, y0),self.Rm[j], fc=c)
+                axs.add_patch(patch)         
+     
+            if self.control_mode=="grasping" or self.control_mode=="grasping_explore" or self.control_mode=="grasping_u":
+
+                if self.geom=="circle":
+                    x0,y0=self.ballx_position[i]+self.ballx,self.ballz_position[i]+self.ballz
+                    patch = plt.Circle((x0, y0),self.ball_radius,fc='none',edgecolor='black',linewidth=1)
+                    axs.add_patch(patch)
+            
+                if self.geom=="square":
+                    const_=self.ball_radius*2
+                    x0,y0=self.ballx_position[i] - const_/2,self.ballz_position[i] - const_/2
+                    patch = matplotlib.patches.Rectangle((x0, y0),const_, const_,fc='none',edgecolor='black',linewidth=1)     
+                    axs.add_patch(patch) 
+                    
+            axs.set_yticks(yticks)
+            axs.set_xticks(xticks)
+            axs.set_ylabel("$y$ (m)",labelpad=-1)
+            axs.set_xlabel("$x$(m)",labelpad=-1)
+            axs.xaxis.set_tick_params(width=.25,length=2)
+            axs.yaxis.set_tick_params(width=.25,length=2)
+            plt.axis('off')
+            axs.set_title('T= ' + str(np.floor(self.time[i]))+" s",fontsize=8)
+            print(str(count)+ "of"+ str(len(entry)))
+            count=count+1
+            plt.gca().set_aspect('equal', adjustable='box')
+            plt.savefig(self.mainDirectory+self.name+"/snap_shot_"+str(self.time[i])+".svg")
+            plt.savefig(self.mainDirectory+self.name+"/snap_shot_"+str(self.time[i])+".png")
+            plt.close('all')
      def create_frames_pull_potfield(self,membrane,wxmin,wxmax,wymin,wymax):
         ''' Create frames to show the robot and the pull force and epsilon metric in one plot'''
         fm._rebuild()
@@ -14495,21 +15015,30 @@ class import_data:
         Num_contact2=[]
         for i in range(len(self.temp_id2)):
             Num_contact1.append(len(self.temp_id2[i]))
-            
+
         for i in range(len(self.time)-2):    
   
             fig, axs = plt.subplots(nrows=2, ncols=2,figsize=(8,8),dpi=300)
-            
+            if self.time[i]>=self.tcut2-1 and self.nojam==False:
+                axs[0,0].plot(self.xjam,self.yjam,color='m',linestyle='dashed',linewidth=2,zorder=-5)
+            else:
+                patch = plt.Circle((self.xc2,self.yc2),.05, fc='m')
+                axs[0,0].add_patch(patch)
+                
+            #axs[0,0].scatter(self.xjam,self.yjam,color='m',s=3)
             #### PULL FORCE
-            #axs[1].plot(self.FB[:i],self.PX[:i],color='tab:green',linewidth=1)
-            #axs[1].scatter(self.FB[i-1],self.PX[i-1],color='tab:red',s=30)
-            
-            axs[1,0].plot(self.time[:i],self.FB[:i],color='tab:green',linewidth=1)
-            axs[1,0].scatter(self.time[i-1],self.FB[i-1],color='tab:green',s=30)
-            axs[1,0].set_title('FB='+str(np.round(self.FB[i-1],2)))
-            axs[1,0].set_ylabel('Pull Force [N]',labelpad=1)  
-            axs[1,0].set_xlabel('time [s]',labelpad=1) 
-            axs[1,0].grid(True) 
+            axs[1,0].plot(self.FB[:i],self.PX[:i],color='tab:green',linewidth=1)
+            axs[1,0].scatter(self.FB[i-1],self.PX[i-1],color='tab:red',s=30)
+            axs[1,0].set_xlabel('Pull Force [N]',labelpad=1)  
+            axs[1,0].set_ylabel('Ball Position [m]',labelpad=1)  
+            axs[1,0].grid(True)   
+            axs[1,0].set_ylim([-0.25,1])
+            # axs[1,0].plot(self.time[:i],self.FB[:i],color='tab:green',linewidth=1)
+            # axs[1,0].scatter(self.time[i-1],self.FB[i-1],color='tab:green',s=30)
+            # axs[1,0].set_title('FB='+str(np.round(self.FB[i-1],2)))
+            # axs[1,0].set_ylabel('Pull Force [N]',labelpad=1)  
+            # axs[1,0].set_xlabel('time [s]',labelpad=1) 
+            # axs[1,0].grid(True) 
             
             axs[1,1].plot(self.time[:i],self.PX[:i],color='tab:red',linewidth=1)
             axs[1,1].scatter(self.time[i-1],self.PX[i-1],color='tab:red',s=30)
@@ -14517,7 +15046,7 @@ class import_data:
             axs[1,1].set_ylabel('Ball Position [m]',labelpad=1)  
             axs[1,1].set_xlabel('time [s]',labelpad=1) 
             axs[1,1].grid(True) 
-                 
+            axs[1,1].set_ylim([-0.25,3])
             
             #### EPSILON
             epsilon=np.asarray(self.EPSILON_)
@@ -14599,15 +15128,8 @@ class import_data:
                         axs[0,0].add_patch(patch)                         
                         
                 if self.geom=="circle":
-                    
-                    q=np.sqrt((x0-self.ballx_position[i])**2 + (y0-self.ballz_position[i])**2)
-                    if q<=(2 * self.bot_width/2 + self.ball_radius):
-                        patch = plt.Circle((x0, y0),self.bot_width/2, fc='tab:red')
-                        axs[0,0].add_patch(patch)
-                   
-                    else:
-                        patch = plt.Circle((x0, y0),self.bot_width/2, fc='k')
-                        axs[0,0].add_patch(patch)  
+                    patch = plt.Circle((x0, y0),self.bot_width/2,fc='none',edgecolor='black')
+                    axs[0,0].add_patch(patch)  
                         
                         
                 

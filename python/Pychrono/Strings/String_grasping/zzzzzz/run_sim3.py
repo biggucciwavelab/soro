@@ -8,7 +8,7 @@ import pychrono as chrono
 import timeit
 start=timeit.default_timer()
 #import objects_2 as sim_obj
-import objects4 as sim_obj
+import objects_square_pull as sim_obj
 #from config import *
 import numpy as np
 import random
@@ -32,7 +32,7 @@ chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.00001)
 chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.00001)
 
 path = os.path.dirname(__file__)
-path=path+"/Experiments/grasping_u/"
+path=path+"/Experiments/square_pull/"
 os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 name = files[-1]
@@ -61,18 +61,14 @@ Psi=sim_obj.R_functions(name,path)
 controls=sim_obj.controller(name,my_system,bots,Psi,Ball,path)
 
 # Create simulation
-sim = sim_obj.simulate(name,my_system,bots,interior,Ball,controls,my_rep,path,Psi)
+sim = sim_obj.simulate(name,my_system,bots,interior,Ball,controls,my_rep,path)
 
 # Run the simulation 
 sim.simulate()
 print("simulation run:",np.round((sim.sim_end-sim.sim_start)/60,2)," minutes")
+print("name =",str(name))
 # export data
 data_export=sim_obj.export_data(my_system,bots,controls,interior,Ball,sim,Psi,my_rep,path,name)
-#%%  
-sim_export_start=timeit.default_timer()  
+#%%    
 data_export.export_data()
-
-sim_export_end=timeit.default_timer()
-print("export_time:",np.round((sim_export_end-sim_export_start)/60,2)," minutes")
-print("name =",str(name))
 

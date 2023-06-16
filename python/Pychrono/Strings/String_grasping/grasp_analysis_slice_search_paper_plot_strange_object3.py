@@ -78,11 +78,11 @@ name21 = "07_05_2023_11_54_45"
 name22 = "07_05_2023_11_54_09"
 name23 = "07_05_2023_11_54_16"
 name24 = "07_05_2023_21_30_16"
-name25 = "07_05_2023_21_30_25"
-name26 = "08_05_2023_09_30_44"
-name27 = "08_05_2023_09_30_51"
-name28 = "08_05_2023_09_30_57"
-name29= "08_05_2023_09_31_04"
+#name25 = "07_05_2023_21_30_25"
+#name26 = "08_05_2023_09_30_44"
+#name27 = "08_05_2023_09_30_51"
+#name28 = "08_05_2023_09_30_57"
+#name29= "08_05_2023_09_31_04"
 plt.close('all')
 # %% Test 1
 #Psi=sim_obj.R_functions(name1)  
@@ -411,61 +411,61 @@ max_epsilon24 = sim_data24.max_epsilon
 median_epsilon24 = sim_data24.median_epsilon
 
 
-#%% Test 25
-sim_data25 = sim_obj.select_import_data(name25,path,dxmin,dxmax,dymin,dymax,None)
-sim_data25.sort_epsilon_and_theta(count_range)
-epsilon_section25 = sim_data25.epsilon_section
-epsilon_theta_section_max25 = sim_data25.epsilon_theta_section_max
-epsilon_theta_section_mean25 = sim_data25.epsilon_theta_section_mean
-epsilon_theta_section_median25 = sim_data25.epsilon_theta_section_median
-average_epsilon25 = sim_data25.average_epsilon
-max_epsilon25 = sim_data25.max_epsilon
-median_epsilon25 = sim_data25.median_epsilon
+# #%% Test 25
+# sim_data25 = sim_obj.select_import_data(name25,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data25.sort_epsilon_and_theta(count_range)
+# epsilon_section25 = sim_data25.epsilon_section
+# epsilon_theta_section_max25 = sim_data25.epsilon_theta_section_max
+# epsilon_theta_section_mean25 = sim_data25.epsilon_theta_section_mean
+# epsilon_theta_section_median25 = sim_data25.epsilon_theta_section_median
+# average_epsilon25 = sim_data25.average_epsilon
+# max_epsilon25 = sim_data25.max_epsilon
+# median_epsilon25 = sim_data25.median_epsilon
 
-#%% Test 26
-sim_data26 = sim_obj.select_import_data(name26,path,dxmin,dxmax,dymin,dymax,None)
-sim_data26.sort_epsilon_and_theta(count_range)
-epsilon_section26 = sim_data26.epsilon_section
-epsilon_theta_section_max26 = sim_data26.epsilon_theta_section_max
-epsilon_theta_section_mean26 = sim_data26.epsilon_theta_section_mean
-epsilon_theta_section_median26 = sim_data26.epsilon_theta_section_median
-average_epsilon26 = sim_data26.average_epsilon
-max_epsilon26 = sim_data26.max_epsilon
-median_epsilon26 = sim_data26.median_epsilon
+# #%% Test 26
+# sim_data26 = sim_obj.select_import_data(name26,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data26.sort_epsilon_and_theta(count_range)
+# epsilon_section26 = sim_data26.epsilon_section
+# epsilon_theta_section_max26 = sim_data26.epsilon_theta_section_max
+# epsilon_theta_section_mean26 = sim_data26.epsilon_theta_section_mean
+# epsilon_theta_section_median26 = sim_data26.epsilon_theta_section_median
+# average_epsilon26 = sim_data26.average_epsilon
+# max_epsilon26 = sim_data26.max_epsilon
+# median_epsilon26 = sim_data26.median_epsilon
 
-#%% Test 27
-sim_data27 = sim_obj.select_import_data(name27,path,dxmin,dxmax,dymin,dymax,None)
-sim_data27.sort_epsilon_and_theta(count_range)
-epsilon_section27 = sim_data27.epsilon_section
-epsilon_theta_section_max27 = sim_data27.epsilon_theta_section_max
-epsilon_theta_section_mean27 = sim_data27.epsilon_theta_section_mean
-epsilon_theta_section_median27 = sim_data27.epsilon_theta_section_median
-average_epsilon27 = sim_data27.average_epsilon
-max_epsilon27 = sim_data27.max_epsilon
-median_epsilon27 = sim_data27.median_epsilon
+# #%% Test 27
+# sim_data27 = sim_obj.select_import_data(name27,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data27.sort_epsilon_and_theta(count_range)
+# epsilon_section27 = sim_data27.epsilon_section
+# epsilon_theta_section_max27 = sim_data27.epsilon_theta_section_max
+# epsilon_theta_section_mean27 = sim_data27.epsilon_theta_section_mean
+# epsilon_theta_section_median27 = sim_data27.epsilon_theta_section_median
+# average_epsilon27 = sim_data27.average_epsilon
+# max_epsilon27 = sim_data27.max_epsilon
+# median_epsilon27 = sim_data27.median_epsilon
 
-#%% Test 28
-sim_data28 = sim_obj.select_import_data(name28,path,dxmin,dxmax,dymin,dymax,None)
-sim_data28.sort_epsilon_and_theta(count_range)
-epsilon_section28 = sim_data28.epsilon_section
-epsilon_theta_section_max28 = sim_data28.epsilon_theta_section_max
-epsilon_theta_section_mean28 = sim_data28.epsilon_theta_section_mean
-epsilon_theta_section_median28 = sim_data28.epsilon_theta_section_median
-average_epsilon28 = sim_data28.average_epsilon
-max_epsilon28 = sim_data28.max_epsilon
-median_epsilon28 = sim_data28.median_epsilon
+# #%% Test 28
+# sim_data28 = sim_obj.select_import_data(name28,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data28.sort_epsilon_and_theta(count_range)
+# epsilon_section28 = sim_data28.epsilon_section
+# epsilon_theta_section_max28 = sim_data28.epsilon_theta_section_max
+# epsilon_theta_section_mean28 = sim_data28.epsilon_theta_section_mean
+# epsilon_theta_section_median28 = sim_data28.epsilon_theta_section_median
+# average_epsilon28 = sim_data28.average_epsilon
+# max_epsilon28 = sim_data28.max_epsilon
+# median_epsilon28 = sim_data28.median_epsilon
 
 
-#%% Test 29
-sim_data29 = sim_obj.select_import_data(name29,path,dxmin,dxmax,dymin,dymax,None)
-sim_data29.sort_epsilon_and_theta(count_range)
-epsilon_section29 = sim_data29.epsilon_section
-epsilon_theta_section_max29 = sim_data29.epsilon_theta_section_max
-epsilon_theta_section_mean29 = sim_data29.epsilon_theta_section_mean
-epsilon_theta_section_median29 = sim_data29.epsilon_theta_section_median
-average_epsilon29 = sim_data29.average_epsilon
-max_epsilon29 = sim_data29.max_epsilon
-median_epsilon29 = sim_data29.median_epsilon
+# #%% Test 29
+# sim_data29 = sim_obj.select_import_data(name29,path,dxmin,dxmax,dymin,dymax,None)
+# sim_data29.sort_epsilon_and_theta(count_range)
+# epsilon_section29 = sim_data29.epsilon_section
+# epsilon_theta_section_max29 = sim_data29.epsilon_theta_section_max
+# epsilon_theta_section_mean29 = sim_data29.epsilon_theta_section_mean
+# epsilon_theta_section_median29 = sim_data29.epsilon_theta_section_median
+# average_epsilon29 = sim_data29.average_epsilon
+# max_epsilon29 = sim_data29.max_epsilon
+# median_epsilon29 = sim_data29.median_epsilon
 # %%
 max_epsilon_={}
 for i in range(count_range):
@@ -494,11 +494,11 @@ for i in range(count_range):
     temp22=np.asarray(epsilon_theta_section_max22[str(i)])  
     temp23=np.asarray(epsilon_theta_section_max23[str(i)])  
     temp24=np.asarray(epsilon_theta_section_max24[str(i)]) 
-    temp25=np.asarray(epsilon_theta_section_max25[str(i)])  
-    temp26=np.asarray(epsilon_theta_section_max26[str(i)])  
-    temp27=np.asarray(epsilon_theta_section_max27[str(i)])  
-    temp28=np.asarray(epsilon_theta_section_max28[str(i)])  
-    temp29=np.asarray(epsilon_theta_section_max29[str(i)])  
+    #temp25=np.asarray(epsilon_theta_section_max25[str(i)])  
+    #temp26=np.asarray(epsilon_theta_section_max26[str(i)])  
+    # temp27=np.asarray(epsilon_theta_section_max27[str(i)])  
+    # temp28=np.asarray(epsilon_theta_section_max28[str(i)])  
+    # temp29=np.asarray(epsilon_theta_section_max29[str(i)])  
     #temp3=[temp,temp2]
     
     temp = np.concatenate((temp1,
@@ -524,12 +524,12 @@ for i in range(count_range):
                            temp21,
                            temp22,
                            temp23,
-                           temp24,
-                           temp25,
-                           temp26,
-                           temp27,
-                           temp28,
-                           temp29))
+                           temp24))
+                           #temp25,
+                           #temp26))
+                           # temp27,
+                           # temp28,
+                           # temp29))
           
                            #temp25,
                            #temp26,
@@ -547,7 +547,7 @@ for i in range(count_range):
 
 c="tab:red"
 name="searching_square_bar_plot_max"
-fig1, axs2 = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
+#fig1, axs2 = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 y=[]
 ymean=[]
 for i in range(len(max_epsilon_)):
@@ -565,11 +565,11 @@ for i in range(len(max_epsilon_)):
     #y__=[]
     #print(y_)
     #for j in res2:
-    #for j in range(len(y_)):
-        #if y_[j]<10:
-        #y__.append(y_[j])
-    y.append(y_)
-    x=entry*np.ones(len(y_))
+    for j in range(len(y_)):
+        if y_[j]<2.3:
+            y__.append(y_[j])
+    y.append(y__)
+    x=entry*np.ones(len(y__))
     #axs2.scatter(x,y__,linewidths = 0.25,edgecolor ="k", color="w",s=5,zorder=5)
     #axs2.scatter(x,y__,linewidths = 0.25,edgecolor ="k", color="w",s=5,zorder=5)
     mean = np.mean(y_)
@@ -584,24 +584,24 @@ for i in range(len(max_epsilon_)):
     #print(x)
     #print([x[1],x[1]],error)
     #print(i)
-    if len(x)>1:
-        axs2.plot([x[1],x[1]],error,color="k",linewidth=1,zorder=3)
-        axs2.scatter(x,y_,linewidths = 0.25,edgecolor ="k", color="w",s=5,zorder=5)
+    #if len(x)>1:
+        #axs2.plot([x[1],x[1]],error,color="k",linewidth=1,zorder=3)
+        #axs2.scatter(x,y_,linewidths = 0.25,edgecolor ="k", color="w",s=5,zorder=5)
         #axs2.scatter(x,y__,color=c,marker='s',s=3,zorder=3)
     ymean.append(mean)
 positions=[0,1,2,3,4,5,6,7,8,9,10,11]
 #positions=[0,1,2,3,4,5,6,7]
-axs2.set_xticks(positions)
+#axs2.set_xticks(positions)
 #axs2.set_yticks([0,1,2,3,4,5])
-axs2.set_xticklabels(labels,color='k',fontsize=8)
-axs2.bar(labels,ymean,color="tab:blue",zorder=3)
+#axs2.set_xticklabels(labels,color='k',fontsize=8)
+#axs2.bar(labels,ymean,color="tab:blue",zorder=3)
 #print(np.max(ymean)-np.min(ymean))
-axs2.set_ylabel('$\epsilon$',labelpad=-1,fontsize=9)
-axs2.set_xlabel('angle (rad)',labelpad=-2,fontsize=9)
-axs2.set_title(r'$(a)$',fontsize=9)
-axs2.xaxis.set_tick_params(width=.25,length=2,pad=1)
-axs2.yaxis.set_tick_params(width=.25,length=2,pad=1)
-axs2.yaxis.grid(True,linewidth=0.1,zorder=3)
+#axs2.set_ylabel('$\epsilon$',labelpad=-1,fontsize=9)
+# axs2.set_xlabel('angle (rad)',labelpad=-2,fontsize=9)
+# axs2.set_title(r'$(a)$',fontsize=9)
+# axs2.xaxis.set_tick_params(width=.25,length=2,pad=1)
+# axs2.yaxis.set_tick_params(width=.25,length=2,pad=1)
+# axs2.yaxis.grid(True,linewidth=0.1,zorder=3)
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
@@ -636,24 +636,26 @@ print("mu2=",np.mean(ytemp1_))
 
 #res=np.where(ytemp1==0)
 #print(len(res[0])/len(ytemp1))
-
+ytemp1_=np.round(ytemp1_,1)
 res=np.where(ytemp1_==0)
 print("failed_cases=",len(res[0])/len(ytemp1_))
 
 
 #res=np.where(ytemp12==0)
 #print(len(res[0])/len(ytemp12))
-num_bins=25
+num_bins=15
 
 # %%
 name="face"
 fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 #heights, bins = np.histogram(data, bins = len(list(set(data))))
+n=plt.hist(ytemp1,num_bins, weights=np.ones(len(ytemp1)) / len(ytemp1),color="tab:blue",zorder=3)
 axs.hist(ytemp1,num_bins, weights=np.ones(len(ytemp1)) / len(ytemp1),color="tab:blue",zorder=3)
 #percent = [i/sum(ytemp1)*100 for i in ytemp1]
 #vals = axs.get_yticks()
 #axs.set_yticklabels(['%1.2f' %i for i in vals])
 axs.set_yticks([0,0.1,0.2,0.3,0.4,0.5])
+axs.set_xticks([0,0.5,1,1.5,2])
 #plt.gca().yaxis.set_major_formatter(PercentFormatter(1))
 axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
@@ -670,15 +672,16 @@ textstr = '\n'.join((
 props = dict(boxstyle='round', facecolor='white', alpha=0.5)
 axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
         verticalalignment='top', bbox=props)
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 
 
 name="sides"
 fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
 #heights, bins = np.histogram(data, bins = len(list(set(data))))
+nn=plt.hist(ytemp1_,num_bins, weights=np.ones(len(ytemp1_)) / len(ytemp1_),color="tab:blue",zorder=3)
 axs.hist(ytemp1_,num_bins, weights=np.ones(len(ytemp1_)) / len(ytemp1_),color="tab:orange",zorder=3)
 axs.set_yticks([0,0.1,0.2,0.3,0.4,0.5])
 axs.set_xticks([0,0.5,1,1.5,2])
@@ -698,7 +701,7 @@ textstr = '\n'.join((
 props = dict(boxstyle='round', facecolor='white', alpha=0.5)
 axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
         verticalalignment='top', bbox=props)
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")

@@ -34,7 +34,7 @@ os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 count_range=8
 plt.close('all')
-#path="D:/dmulroy/Experiments/circle_search/"
+path="D:/dmulroy/Experiments/circle_search3/"
 plt.close('all')
 labels=['0',
         r'$\frac{\pi}{4}$',
@@ -714,7 +714,7 @@ for i in range(len(max_epsilon_)):
 # %%
 
 c="tab:red"
-name="searching_circle_guassian2"
+name="searching_circle_guassian3"
 num_bins=20
 x_=np.linspace(0,5,200)  
 fig1, axs = plt.subplots(nrows=1, ncols=1,figsize=(3.25,1.5),dpi=300)
@@ -726,7 +726,8 @@ axs.yaxis.set_tick_params(width=.25,length=2,pad=1)
 axs.set_title('(a)')
 axs.set_xlabel(r'$\epsilon$')
 axs.set_yticks([0,0.05,0.1,0.15,0.2])
-axs.set_xticks([0,1,2,3,4,5])
+axs.set_xticks([0,1,2,3,4,5,6])
+#axs.set_xlim([0,5])
 axs.grid(True,linewidth=0.1,zorder=-3)
 x_=np.linspace(0,2,200)  
 mean = statistics.mean(y)
@@ -738,10 +739,10 @@ textstr = '\n'.join((
 props = dict(boxstyle='round', facecolor='white', alpha=0.5)
 axs.text(0.75, 0.95, textstr, transform=axs.transAxes, fontsize=9,
         verticalalignment='top', bbox=props)
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
 # plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
-# plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
+plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 
 #num_bins=25
 #x_=np.linspace(0,5,200)  

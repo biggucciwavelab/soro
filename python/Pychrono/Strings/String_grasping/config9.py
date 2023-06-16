@@ -253,7 +253,7 @@ if control_mode=="grasping":
     
     #ball_geometry = "triangle"
     
-    ball_geometry = "c_shape"
+    #ball_geometry = "c_shape"
     # circle
     br=.5
     if ball_geometry=="circle":

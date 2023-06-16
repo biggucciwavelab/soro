@@ -4882,11 +4882,12 @@ class MyReportContactCallback(chrono.ReportContactCallback):
 
 class R_functions():  
     """ R-function Class """
-    def __init__(self,name):
+    def __init__(self,name,path):
         self.direct = os.path.dirname(__file__)
         self.name = name
         ###### Imported Variables #########
-        self.mainDirectory = self.direct+"/Experiments/"
+        #self.mainDirectory = self.direct+"/Experiments/"
+        self.mainDirectory = path
         parameters = np.load(self.mainDirectory+self.name+'/Parameters.npy',allow_pickle=True)
         self.parameters = parameters.tolist()
         self.control_mode=self.parameters['control_mode']  # control mode

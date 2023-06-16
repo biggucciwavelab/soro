@@ -17,11 +17,11 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-time_end = 60
+time_end = 250
 #time_end = 25
 #time_end = 40
 #time_end = 100
-save_rate = 50 #save every n number of steps
+save_rate = 200 #save every n number of steps
 visual = 'pov'
 
 #xcenter = 2.25
@@ -39,7 +39,8 @@ shape_morphing: transfinte morphing
 control_mode = "grasping_explore"
 control_mode = "grasping"
 control_mode = "grasping_u"
-control_mode = "grasping_epsilon"
+control_mode = "target_chasing"
+#control_mode = "grasping_epsilon"
 #control_mode = "Verify"
 #### GEOMETRIES ####
 """
@@ -62,28 +63,26 @@ convert_mass = 1 # if its grams or kg
 
 
 #### ROBOT VARIABLES #####
-nb = 30# number of bots
+nb = 30 # number of bots
 bot_mass = .200  # mass of bot kg 
 bot_geom = 'cylinder'
 bot_width = 0.09525  #  bot width  [m]
 bot_height = 0.09525/2 # bot height    [m]
 membrane_type = 1
-skin_width = 0.03# diameter of membrane particles
+skin_width = 0.035# diameter of membrane particles
 ns = 7# number of skin particles 
 membrane_width = ns*skin_width # cloth width [m]
-spring_stiffness = 100 # spring stiffness
+spring_stiffness = 50 # spring stiffness
 spring_damping = 0 # spring damping 
 theta = 2*np.pi/nb 
 cord_length = membrane_width + bot_width*np.cos(theta/2) # Cord length between bot centers
 print(np.pi*((nb*cord_length/np.pi)/2)**2)
 R = np.sqrt((cord_length**2)/(2*(1-np.cos(theta)))) # radius [m]
 print(np.pi*(R)**2)
-membrane_density = 2200
-
-ns=7
-
-
-
+membrane_density = 2000
+skin_width = 0.035# diameter of membrane particles
+ns=5
+pwm = 50
 #### INTERIOR PROPERTIES ####
 '''
 
@@ -104,11 +103,11 @@ particle_geom = 'cylinder'
 interior_mode = "bidispersion" # interior particle mode
 #interior_mode = "Verify"
 scale_radius = 1.01
-offset_radius = .7
+offset_radius = 0.78
 
 Rbar = scale_radius*R
 #### FLOOR PARAMETERS ####
-floor_length=10 # Length of the body floor
+floor_length=30 # Length of the body floor
 floor_height=1     # height of the body floor
 
 
@@ -118,19 +117,19 @@ spinningFriction = 0.1
 rollingFriction = 0.1
 dampingterm = 0.001
 #dampingterm = 0
-# Ct=1e-08
-# C=1e-08
-# Cr=1e-08
-# Cs=1e-08
-restituition=0.00
-# Ct=0
-# C=0
-# Cr=0
-# Cs=0
 Ct=0
 C=0
 Cr=0
 Cs=0
+restituition=0.05
+# Ct=0
+# C=0
+# Cr=0
+# Cs=0
+#Ct=0
+#C=0
+#Cr=0
+#Cs=0
 
 
 
@@ -171,6 +170,35 @@ if control_mode=="shape_morphing":
     alpha = 1.0
     beta = 0
 
+#### CONTROL MODE -- TARGET CHASING ####
+if control_mode=="target_chasing":
+    alpha1 = 0.5
+    alpha2 = 0.5
+    beta = 0
+    xc = -12
+    yc = -2
+    xcenter =2
+    zcenter = -4
+    #xcenter =2
+    #zcenter = -2.5
+    #xc = -12
+    #yc = -3 
+    tunnel_geom = 'tanh'
+    tunnel_geom = 'sin'
+    if tunnel_geom =='tanh':
+        xc = -12
+        yc = -2
+        xcenter = 2.15
+        zcenter = -4
+    if tunnel_geom == 'sin':
+        xcenter = 2.15
+        zcenter = -3
+        xc = -12
+        yc = -4     
+    
+    
+    floor_friction = .01
+    particle_mix = False
 #### CONTROL MODE -- GRASPING EXPLORE ####
 if control_mode=="grasping_explore":
     ball_geometry = "circle"
@@ -260,11 +288,14 @@ if control_mode=="grasping_u":
     
     
     p=0.07
-    width_grasp = 0.75
-    lengtho_grasp = 0.5
+    width_grasp = 0.9
+    lengtho_grasp = .36*2
     #atilda=np.round(np.pi * ((cord_length * nb / np.pi) / 2)**2,2)
     #print("atilda=",atilda)
-    atilda=4.2/.92
+    pack=1
+    a=1.63
+    a=4.81
+    atilda=a/pack
     print("atilda=",atilda)
     length_grasp = atilda/(2*width_grasp) - lengtho_grasp/2
     print("length_grasp=",length_grasp)
@@ -274,16 +305,17 @@ if control_mode=="grasping_u":
     #print("Asquare=",np.round(width_grasp*(2*length_grasp+lengtho_grasp),2))
     #length_grasp = 3.25
     #lengtho_grasp = 0.5
-    floor_friction = .01
-    particle_mix = True
+    floor_friction = .03
+    particle_mix = False
     ball_fixed=False
     ballx = 0
     ballz = 0 
     ball_mass = 5
     fb_rate=1*dt
-
-
-    xcenter = -(ball_radius+R+.1)
+    update_rate = 1
+    rho = 10
+    rtilda = 1.5*ball_radius
+    xcenter = -(ball_radius+R+.3)
     zcenter = 0 
     
     xcenter_grasp = -3*br
@@ -296,16 +328,16 @@ if control_mode=="grasping_u":
     xc1 = ballx
     yc1 = ballz
     
-    xc2 = ballx+2
+    xc2 = ballx+rtilda
     yc2 = ballz
     
-    tcut1 = 200
-    tcut2 = 300
+    tcut1 = 45
+    tcut2 = 30
     tcut3 = 150
-    alpha1 = 2
-    alpha2 = 2
+    alpha1 = 1.5
+    alpha2 = 1.5
     beta = 0
-    
+    error = .5
     
 #### CONTROL MODE -- GRASPING ####
 if control_mode=="grasping":
@@ -390,15 +422,13 @@ if control_mode=="grasping":
     beta = 0
     
 #### CONTROL MODE -- GRASPING EPSILON ####
-
 if control_mode=="grasping_epsilon":
     
     ball_geometry = "circle"
      
-    ball_geometry = "square" 
+    #ball_geometry = "square" 
     
     #ball_geometry = "triangle"
-    #ball_geometry="rectangle"
     # circle
     br = .36
     if ball_geometry=="circle":
@@ -409,10 +439,6 @@ if control_mode=="grasping_epsilon":
         br=(2*br)*np.pi/4
         ball_radius=br/2	
         
-    if ball_geometry=="rectangle":	
-        br=(2*br)*np.pi/4
-        ball_radius=br/2	
-        ball_length=3*br
     # triangle
     if ball_geometry=="triangle":   
         br=br
@@ -421,12 +447,9 @@ if control_mode=="grasping_epsilon":
     if ball_geometry=="import":
         ball_radius=3
     #ball_radius = R*0.3
-    nojam=False
-    particle_mix = False
+    particle_mix = True
     ball_fixed = True
-
-
-    ballx=0 
+    ballx = ball_radius+R+.3
     ballz = 0 
     ball_mass = 5
     a1 = .01*ball_radius
@@ -442,15 +465,14 @@ if control_mode=="grasping_epsilon":
     xc1 = ballx+1
     yc1 = ballz
     
-    xc2 = ballx 
+    xc2 = ballx
     yc2 = ballz
-    xcenter = -(ball_radius+R+.1)
-    zcenter = 0 
-    tcut1 = 21
-    tcut2 = 25
-    tcut3 = 30
-    alpha1 = 2.5
-    alpha2 = 2.5
+    
+    tcut1 = 2
+    tcut2 = 10
+    tcut3 = 15
+    alpha1 = 3
+    alpha2 = 3
     beta = 0 
     
     
@@ -459,7 +481,7 @@ now = datetime.now()
 dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
 #mainDirectory = "F:/Soro_chrono/python/Pychrono/Strings/String_grasping/"
 mainDirectory =os.path.abspath(os.getcwd())
-savefile = mainDirectory +'/Experiments/'+str(control_mode)+'/'+ dt_string
+savefile = mainDirectory +'/Experiments/'+'target_chasing/'+ dt_string
 os.makedirs(savefile, exist_ok=True)
 txtFile = savefile+'/Parameters.csv'
     
@@ -478,20 +500,29 @@ envParams['convert_mass'] = convert_mass
 envParams['visual'] = visual
 envParams['xcenter'] = xcenter
 envParams['zcenter'] = zcenter
-
+envParams['restituition'] = restituition
 # control mode
 envParams['control_mode'] = control_mode
-envParams['alpha1'] = alpha1
-envParams['alpha2'] = alpha2
-envParams['beta'] = beta
+
+if control_mode=="target_chasing":
+    envParams['alpha1'] = alpha1
+    envParams['alpha2'] = alpha2
+    envParams['beta'] = beta
+    envParams['xc'] = xc
+    envParams['yc'] = yc
+    envParams['tunnel_geom'] = tunnel_geom
+    envParams['floor_friction'] = floor_friction
+    envParams['pwm'] = pwm
 
 if control_mode=='shape_formation':
     envParams['geometry'] = geometry
     envParams['scale'] = scale
     envParams['a'] = a
     envParams['b'] = b
+    envParams['alpha1'] = alpha1
+    envParams['alpha2'] = alpha2
     
-    
+
 if control_mode=='shape_morphing':
     envParams['geometry1'] = geometry1
     envParams['geometry2'] = geometry2
@@ -526,14 +557,14 @@ if control_mode=="grasping" or control_mode=="grasping_epsilon":
     envParams['ball_mass'] = ball_mass
     envParams['ball_fixed'] = ball_fixed
     envParams['floor_friction'] = floor_friction
-#$    envParams['ball_length'] = ball_length
+    envParams['alpha1'] = alpha1
+    envParams['alpha2'] = alpha2
     if ball_geometry=="c_shape":
         envParams['w']=w
         envParams['l']=l
         envParams['t']=t
         
-if control_mode=="grasping_epsilon":
-    envParams['nojam'] = nojam
+        
         
 if control_mode=="grasping_u":   
     envParams['ball_fixed'] = ball_fixed
@@ -550,7 +581,7 @@ if control_mode=="grasping_u":
     envParams['tcut1'] = tcut1
     envParams['tcut2'] = tcut2
     envParams['tcut3'] = tcut3   
-    
+    envParams['update_rate'] = update_rate
     envParams['ballx'] = ballx
     envParams['ballz'] = ballz 
     
@@ -564,7 +595,12 @@ if control_mode=="grasping_u":
 
     envParams['xc2'] = xc2
     envParams['yc2'] = yc2 
-        
+    envParams['rho'] = rho
+    envParams['error'] = error
+    envParams['rtilda'] = rtilda
+    
+    envParams['alpha1'] = alpha1
+    envParams['alpha2'] = alpha2
 if control_mode=="grasping_explore":
     envParams['a1'] = a1
     envParams['b1'] = b1    
@@ -635,7 +671,6 @@ envParams['Ct'] = Ct
 envParams['C'] = C
 envParams['Cr'] = Cr
 envParams['Cs'] = Cs
-envParams['restituition'] = restituition
 envParams['number_parameters'] = len(envParams)
 
 np.save(savefile+'/Parameters.npy',envParams)

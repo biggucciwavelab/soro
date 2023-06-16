@@ -73,7 +73,8 @@ class robots:
         self.bot_width = self.convert_dist*self.parameters['bot_width']
         self.bot_height = self.convert_dist*self.parameters['bot_height']
         self.bot_geom = self.parameters['bot_geom']
-        self.R = self.convert_dist*self.parameters['R']
+        self.R = self.parameters['R']
+        self.Rbar = self.parameters['Rbar']
         self.bot_volume=np.pi*self.bot_height*(self.bot_width/2)**2   # calculate volume
         self.membrane_width = self.convert_dist*self.parameters['membrane_width']
         self.membrane_type = self.parameters['membrane_type']
@@ -177,9 +178,9 @@ class robots:
         
             # postion 
             theta=i*2*np.pi/self.nb # set angle
-            x = self.R*np.cos(theta)+self.xcenter  # set x positon 
+            x = self.Rbar*np.cos(theta)+self.xcenter  # set x positon 
             y = self.bot_height/2                     # set y position 
-            z = self.R*np.sin(theta)+self.zcenter  # set z position 
+            z = self.Rbar*np.sin(theta)+self.zcenter  # set z position 
             # create body
             #### geometry of the robots to be cylinders
             if self.bot_geom=="cylinder":
@@ -218,7 +219,7 @@ class robots:
                 botforcez.SetMode(chrono.ChForce.FORCE) # set the mode
                 botforcez.SetDir(chrono.VECT_Z) # set direction 
                 self.force.append(botforcez) # add to force list
-                
+# In[]      
                 
                 
                 # set max speed (Not always needed but it helps)
@@ -257,70 +258,16 @@ class robots:
                 
                 
             
-
-            # #t = (2*np.pi/self.nb)/(self.ns+1)
-            # for j in range(1,self.ns+1,1):
-            #     b_ang=2*np.pi/self.nb                   # angle between centers of bots
-            #     o_ang=np.arctan((self.skin_width*1.01)/self.R)   # angle offset for radius of bot
-            #     p_ang=np.arctan((self.skin_width*1.01)/self.R)    
-            #     theta=i*b_ang + j*(b_ang-o_ang-p_ang)/(self.ns) + p_ang 
-            #     x=self.R*np.cos(theta)+self.xcenter # x position 
-            #     y=self.bot_height/2              # y position 
-            #     z=self.R*np.sin(theta)+self.zcenter # z position  
-            #     # create them and set position
-            #     #skinm = chrono.ChBodyEasySphere(self.skind/2,self.skinrho,True,True)
-            #     skinm = chrono.ChBodyEasyCylinder(self.skin_width/2, .95*self.bot_height,self.membrane_density,True,True) # create particle
-            #     skinm.SetPos(chrono.ChVectorD(x,y,z)) # set position 
-            #     skinm.SetMaterialSurface(self.membrane_material) # add material 
-            #     skinm.SetNoGyroTorque(True) # no gyro toruqe 
-            #     skinm.SetName('skin'+str(i)) # create name 
-            #     skinm.SetId(i) # set id 
-            #     skinm.SetBodyFixed(self.fixed)
-            #                 # link to floor
-            #     #pt=chrono.ChLinkMatePlane()
-            #     #pt.Initialize(self.body_floor,skinm,False,chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,-1, 0),chrono.ChVectorD(0,1, 0))
-            #     # add link to the system 
-            #     #self.my_system.AddLink(pt)
-            #     # rotate them bout y axis
-            #     rotation1 = chrono.ChQuaternionD()
-            #     rotation1.Q_from_AngAxis(-theta, chrono.ChVectorD(0, 1, 0));  
-            #     skinm.SetRot(rotation1)
-            #     self.skin_xposition["skin_xposition{0}".format(self.countm)]=[]  #x position
-            #     self.skin_yposition["skin_yposition{0}".format(self.countm)]=[]  # y position
-            #     self.skin_zposition["skin_zposition{0}".format(self.countm)]=[]  # z position
-                
-            #     self.skin_x_contact_forces["skin_x_contact_forces{0}".format(self.countm)]=[]  #x position
-            #     self.skin_y_contact_forces["skin_y_contact_forces{0}".format(self.countm)]=[]  # y position
-            #     self.skin_z_contact_forces["skin_z_contact_forces{0}".format(self.countm)]=[]  # z position
-                                        
-            #     self.skin_x_total_forces["skin_x_total_forces{0}".format(self.countm)]=[]  #x position
-            #     self.skin_y_total_forces["skin_y_total_forces{0}".format(self.countm)]=[]  # y position
-            #     self.skin_z_total_forces["skin_z_total_forces{0}".format(self.countm)]=[]  # z position
-            #     self.my_system.Add(skinm)
-            #     self.skinM.append(skinm)                                                           
     
             
             
             
             
             if self.membrane_type==1:
-                #b_ang=2*np.pi/self.nb                   # angle between centers of bots
-                #o_ang=np.arctan((self.bot_width) / self.R)   # angle offset for radius of bot
-                #p_ang=np.arctan((self.skin_width) / self.R)           # angle offset for radius of skin particle
-                #b_ang=2*np.pi/self.nb                   # angle between centers of bots
-                #o_ang=np.arctan((self.bot_width/2)/self.R)   # angle offset for radius of bot
-                #p_ang=np.arctan((self.skin_width/2)/self.R)           # angle offset for radius of skin particle       
-                #b_ang=2*np.pi/self.nb                   # angle between centers of bots
-                
-                # skin_width=0.03
-                # b_ang=2*np.pi/self.nb                   # angle between centers of bots
-                # o_ang=np.arctan((self.bot_width*.66)/self.R)   # angle offset for radius of bot
-                # p_ang=np.arctan((self.skin_width*1.1)/self.R)           # angle offset for radius of skin particle
-                
-                # skin_width=0.035
+
                 b_ang=2*np.pi/self.nb                   # angle between centers of bots
-                o_ang=np.arctan((self.bot_width*.66)/self.R)   # angle offset for radius of bot
-                p_ang=np.arctan((self.skin_width*0.8)/self.R)           # angle offset for radius of skin particle
+                o_ang=np.arctan((self.bot_width*.66)/self.Rbar)   # angle offset for radius of bot
+                p_ang=np.arctan((self.skin_width*0.8)/self.Rbar)           # angle offset for radius of skin particle
                 
                 
                 # Between this bot and last bot
@@ -328,9 +275,9 @@ class robots:
                     for j in range(1,self.ns+1,1):
                         # Initial postion of each particle
                         theta=i*b_ang + j*(b_ang - o_ang -  p_ang)/(self.ns) + p_ang 
-                        x=self.R*np.cos(theta)+self.xcenter # x position 
+                        x=self.Rbar*np.cos(theta)+self.xcenter # x position 
                         y=self.bot_height/2              # y position 
-                        z=self.R*np.sin(theta)+self.zcenter # z position  
+                        z=self.Rbar*np.sin(theta)+self.zcenter # z position  
                         
                         # create them and set position
                         #skinm = chrono.ChBodyEasySphere(self.skind/2,self.skinrho,True,True)
@@ -407,9 +354,9 @@ class robots:
                     for j in range(1,self.ns+1,1):
                         # Initial postion of each particle
                         theta=(i+1)*b_ang + j*(b_ang - o_ang - p_ang)/(self.ns) + p_ang
-                        x=self.R*np.cos(theta)+self.xcenter
+                        x=self.Rbar*np.cos(theta)+self.xcenter
                         y=self.bot_height/2
-                        z=self.R*np.sin(theta)+self.zcenter
+                        z=self.Rbar*np.sin(theta)+self.zcenter
                         
                         self.skin_xposition["skin_xposition{0}".format(self.countm)]=[]  #x position
                         self.skin_yposition["skin_yposition{0}".format(self.countm)]=[]  # y position
@@ -421,11 +368,7 @@ class robots:
                                                 
                         self.skin_x_total_forces["skin_x_total_forces{0}".format(self.countm)]=[]  #x position
                         self.skin_y_total_forces["skin_y_total_forces{0}".format(self.countm)]=[]  # y position
-                        self.skin_z_total_forces["skin_z_total_forces{0}".format(self.countm)]=[]  # z position
-                                                  
-        # In[]              
-                        
-                        
+                        self.skin_z_total_forces["skin_z_total_forces{0}".format(self.countm)]=[]  # z position  
                         self.countm=self.countm+1
                         # Create particles
                         #skinm = chrono.ChBodyEasySphere(self.skind/2,self.skinrho,True,True)
@@ -619,11 +562,13 @@ class Interiors:
         self.particle_geom = self.parameters['particle_geom']
         #self.R = self.convert_dist*self.parameters['R']
         self.scale_radius = self.parameters['scale_radius']
-        self.R =  self.scale_radius*self.convert_dist*self.parameters['R']
-        
+        self.offset_radius = self.parameters['offset_radius']
+        self.R =  self.convert_dist*self.parameters['R']
+        self.R = self.R * self.offset_radius
+        self.Rbar=self.parameters['Rbar']
         self.interior_mode = self.parameters['interior_mode']
         self.offset_radius=self.parameters['offset_radius']
-        
+        self.particle_mix=self.parameters['particle_mix']
         self.lateralFriction = self.parameters['lateralFriction']
         self.spinningFriction = self.parameters['spinningFriction']
         self.rollingFriction = self.parameters['rollingFriction']
@@ -639,13 +584,13 @@ class Interiors:
         #(self.n,self.Ri) = self.MaxValues()
         (self.n,self.Ri) = self.MaxValues2()
         self.total_particles = np.sum(self.n)
-        self.particle_material = self.Material(0.01)
+        self.particle_material = self.Material(self.lateralFriction)
         
-        
+        self.diff = self.Rbar - self.Ri[0] - self.bot_width/2 - self.particle_width2/2 
         self.parameters['n'] = self.n
         self.parameters['total_particles'] = self.total_particles
         self.parameters['Ri'] = self.Ri
-        
+        self.parameters["diff"] = self.diff
         
         self.number_parameters = self.parameters['number_parameters']
         #print(len(self.parameters),self.number_parameters+4)
@@ -663,22 +608,7 @@ class Interiors:
             for key in self.parameters.keys():
                 f.write("%s, %s\n" % (key, self.parameters[key]))
         
-        
-        
-        
-        # with open(self.mainDirectory+name+"/Parameters.csv", 'a') as f_object:
-        #     # Pass this file object to csv.writer()
-        #     # and get a writer object
-        #     writer_object = writer(f_object)
-        #     #Pass the list as an argument into
-        #     #the writerow()
-        #     writer_object.writerow(['ring configuration',self.n])
-        #     writer_object.writerow(['total number of particles',self.total_particles])
-        #     #Close the file object
-        #     f_object.close()        
-        
-        
-        
+
         self.particle_xposition = {}
         self.particle_yposition = {}
         self.particle_zposition = {}
@@ -739,8 +669,9 @@ class Interiors:
                     
                 self.radius2=self.particle_width/2 - self.offset_radius
                 
-                R2=self.radius2*self.n[i]/(np.pi) + const   
-                
+                #R2=self.radius2*self.n[i]/(np.pi) + const   
+                R2=self.Ri[i]+self.diff
+                thetahat=random.uniform(-np.pi/12, np.pi/12)
                 for j in range(self.n[i]):
                      
                     self.particle_xposition["particle_xposition{0}".format(count)]=[] # x position  
@@ -760,6 +691,8 @@ class Interiors:
                     y = .5*self.particle_height                         # y position 
                     z = R2*np.sin(j*2*np.pi/self.n[i])+self.zcenter # z position 
                     
+                    xp=np.cos(thetahat)*x - np.sin(thetahat)*z
+                    zp=np.sin(thetahat)*x + np.cos(thetahat)*z
                     # create granular
                     gran = chrono.ChBodyEasyCylinder(self.radius2, self.particle_height,self.particle_density,True,True)
                     gran.SetMaterialSurface(self.particle_material) # add material 
@@ -799,15 +732,17 @@ class Interiors:
                     self.radius2 = (self.particle_width2/2)                    
                     con = 'b'
                     const = 0
-                    self.N1 = 1+self.N1
                 else:
                     self.radius2 = self.particle_width/2 
                     con = 'a'
                     const = 0
-                    self.N2 = 1+self.N2
                     
                     
-                R2=self.radius2*self.n[i]/(np.pi) + const
+                #R2=self.radius2*self.n[i]/(np.pi) + const
+                
+
+                R2=self.Ri[i]+self.diff
+                thetahat=random.uniform(-np.pi/12, np.pi/12)
                 # empty arrays of variables
                 for j in range(self.n[i]):
                     self.particle_xposition["particle_xposition{0}".format(count)]=[] # x position  
@@ -829,13 +764,24 @@ class Interiors:
                     
                     
                     
-                    
+
                     #R2=self.radius2*self.n[i]/(np.pi) + const# raidus of ring 
                     # x,y,z positions
-                    x=R2*np.cos(j*2*np.pi/self.n[i])+self.xcenter
-                    y=.5*self.particle_height 
-                    z=R2*np.sin(j*2*np.pi/self.n[i])+self.zcenter
+                    x = R2*np.cos(j*2*np.pi/self.n[i])#+self.xcenter
+                    y = .5*self.particle_height 
+                    z = R2*np.sin(j*2*np.pi/self.n[i])#+self.zcenter
                     #print("j=",str(j),str(np.round(self.radius2,3)),"x,y",str(np.round(x,2)),str(np.round(z,2)))
+                    if self.particle_mix==True:
+                        
+                        xp=np.cos(thetahat)*z - np.sin(thetahat)*x
+                        zp=np.sin(thetahat)*z + np.cos(thetahat)*x
+                        xp=xp+self.xcenter
+                        zp=zp+self.zcenter
+                    if self.particle_mix==False:
+                        xp=x+self.xcenter
+                        zp=z+self.zcenter
+                    
+                    
                     self.Rm.append(self.radius2)
                     self.Area = self.Area + (np.pi)*(self.radius2)**2
                     if i%2==0:
@@ -852,7 +798,7 @@ class Interiors:
                     gran = chrono.ChBodyEasyCylinder(self.radius2 , self.particle_height ,self.particle_density,True,True)
                     
       
-                    gran.SetPos(chrono.ChVectorD(x,y,z))
+                    gran.SetPos(chrono.ChVectorD(xp,y,zp))
                     gran.SetMaterialSurface(self.particle_material)
                     gran.SetName('gran'+str(con)+str(count))
                     gran.SetId(i)
@@ -897,157 +843,6 @@ class Interiors:
                 f.write("%s, %s\n" % (key, self.parameters[key]))             
 
 
-
-
-
-
-
-
-
-
-
-
-        #### bi_dispersion_ring #####
-        if self.interior_mode=="bi_dispersion_ring":  
-            count=0
-            for i in range(self.n.size):
-
-                self.radius2 = self.particle_width/2 - self.offset_radius  
-                
-                R2=self.radius2*self.n[i]/(np.pi) 
-                
-                for j in range(self.n[i]):
-                    radii1=self.radius2*.25
-                    radii2=0
-                    r_m = np.random.choice([radii1,radii2])
-                    if r_m==radii1:
-                        color=self.col_r
-                        con='a'
-                        self.N1=1+self.N1
-                    else:
-                        color=self.col_g
-                        con='b'
-                        self.N2=1+self.N2
-                        
-                    self.particle_xposition["particle_xposition{0}".format(count)]=[] # x position  
-                    self.particle_yposition["particle_yposition{0}".format(count)]=[] # y position 
-                    self.particle_zposition["particle_zposition{0}".format(count)]=[] # z position 
-                    
-                    self.particle_xvelocity["particle_xvelocity{0}".format(count)]=[] # x velocity
-                    self.particle_yvelocity["particle_yvelocity{0}".format(count)]=[] # y velocity
-                    self.particle_zvelocity["particle_zvelocity{0}".format(count)]=[] # z velocity
-                    
-                    count=count+1
-                    # position
-                    x = R2*np.cos(j*2*np.pi/self.n[i])+self.xcenter # x position 
-                    y = .5*self.particle_height                         # y position 
-                    z = R2*np.sin(j*2*np.pi/self.n[i])+self.zcenter # z position 
-                    self.Rm.append(self.radius2 - r_m)
-                    self.Area = self.Area + (np.pi)*(self.radius2 - r_m)**2
-                    # create granular
-                    gran = chrono.ChBodyEasyCylinder(self.radius2 - r_m, self.particle_height,self.particle_density,True,True)
-                    gran.SetMaterialSurface(self.particle_material) # add material 
-                    gran.SetPos(chrono.ChVectorD(x,y,z))
-                    gran.SetName("gran"+con+str(i))                   # set name 
-                    gran.SetId(i)                          # add id 
-                    gran.SetCollide(True)                  # create collision   
-                    gran.SetBodyFixed(self.fixed)          # Add body fixed 
-    
-                    # add color
-                    gran.AddAsset(color)
-                    
-                    # mate to floor
-                    #pt=chrono.ChLinkMatePlane() 
-                    #pt.Initialize(self.body_floor,gran,False,chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,-1, 0),chrono.ChVectorD(0,1, 0))
-                    #self.my_system.AddLink(pt)
-                    
-                    # set speed limit ( Helps but not always needed)
-                    #gran.SetMaxSpeed(2)
-                    #gran.SetLimitSpeed(False)
-                    
-                    # add to system
-                    self.my_system.Add(gran) # add object to system 
-                    self.particles.append(gran) 
-                    
-            np.savez(self.mainDirectory+self.name+'/Radii'+self.name+'.npz',Rm=self.Rm)     
-            self.parameters['Area'] = self.Area
-            self.parameters['N1(smaller)'] = self.N1
-            self.parameters['N2(larger)'] = self.N2
-        
-        np.save(self.mainDirectory+self.name+'/Parameters.npy',self.parameters)
-        
-        
-        with open(self.mainDirectory+name+"/Parameters.csv", 'w') as f:
-            for key in self.parameters.keys():
-                f.write("%s, %s\n" % (key, self.parameters[key]))
-        
-        
-
-        
-        
-        #### bi_dispersion_uniform_ring #####
-        if self.interior_mode=="bi_dispersion_uniform_ring":  
-            count=0
-            for i in range(self.n.size):
-
-                self.radius2 = self.particle_width/2 - self.offset_radius  
-                
-                R2=self.radius2*self.n[i]/(np.pi) 
-                
-                for j in range(self.n[i]):
-                    radii1=self.radius2
-                    radii2=0
-                    r_m =(1-radii1) + np.random.uniform(0, radii1)
-                    if r_m==radii1:
-                        color=self.col_r
-                        con='a'
-                    else:
-                        color=self.col_g
-                        con='b'
-                        
-                        
-                    self.particle_xposition["particle_xposition{0}".format(count)]=[] # x position  
-                    self.particle_yposition["particle_yposition{0}".format(count)]=[] # y position 
-                    self.particle_zposition["particle_zposition{0}".format(count)]=[] # z position 
-                    
-                    self.particle_xvelocity["particle_xvelocity{0}".format(count)]=[] # x velocity
-                    self.particle_yvelocity["particle_yvelocity{0}".format(count)]=[] # y velocity
-                    self.particle_zvelocity["particle_zvelocity{0}".format(count)]=[] # z velocity
-                    
-                    count=count+1
-                    # position
-                    x = R2*np.cos(j*2*np.pi/self.n[i])+self.xcenter # x position 
-                    y = .5*self.particle_height                         # y position 
-                    z = R2*np.sin(j*2*np.pi/self.n[i])+self.zcenter # z position 
-                    self.Rm.append(self.radius2*r_m)
-                    
-                    # create granular
-                    gran = chrono.ChBodyEasyCylinder(self.radius2*r_m, self.particle_height,self.particle_density,True,True)
-                    gran.SetMaterialSurface(self.particle_material) # add material 
-                    gran.SetPos(chrono.ChVectorD(x,y,z))
-                    gran.SetName("gran"+con+str(i))                   # set name 
-                    gran.SetId(i)                          # add id 
-                    gran.SetCollide(True)                  # create collision   
-                    gran.SetBodyFixed(self.fixed)          # Add body fixed 
-    
-                    # add color
-                    gran.AddAsset(color)
-                    
-                    # mate to floor
-                    pt=chrono.ChLinkMatePlane() 
-                    pt.Initialize(self.body_floor,gran,False,chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,0,0),chrono.ChVectorD(0,-1, 0),chrono.ChVectorD(0,1, 0))
-                    self.my_system.AddLink(pt)
-                    
-                    # set speed limit ( Helps but not always needed)
-                    #gran.SetMaxSpeed(2)
-                    #gran.SetLimitSpeed(False)
-                    
-                    # add to system
-                    self.my_system.Add(gran) # add object to system 
-                    self.particles.append(gran) 
-                    
-            np.savez(self.mainDirectory+self.name+'/Radii'+self.name+'.npz',Rm=self.Rm)   
-        
 
 
     def Material(self,lateralFriction):
@@ -1159,23 +954,6 @@ class Interiors:
             for i in range(P):
                 N.append(int((np.pi*2*Ri[2*i])/(2*radius3)))
                 N.append(int((np.pi*2*Ri[2*i+1])/(2*radius2)))
-
-        if self.interior_mode=="monodispersion":
-            Rin=self.R-radius-radius2
-            ngrans1=int(Rin/(2*radius2))
-            Ri=np.zeros((1,ngrans1))
-            ni=np.zeros((1,ngrans1))
-            radii=Rin-(2*radius2)
-            for i in range(ngrans1):
-                remainder=((2*radius2))*i
-                Ri[:,i]=radii-remainder
-                ni[:,i]=np.floor(((Ri[:,i]*np.pi)/radius2))
-            n=np.asarray(ni,dtype=int)
-            N=n[0]
-            
-        # if self.interior_mode=="Verify":
-        #     N=0
-        #     Ri=[0]
             
         return(N,Ri)
      
@@ -1776,6 +1554,7 @@ class simulate:
         self.centroidx = []
         self.centroidz = []
         self.Qcm = []
+        self.calc_type=[]
         # if self.geom=="square":
         #     self.k=(self.ball_radius*2)/(2*np.sqrt(3))
          
@@ -2258,15 +2037,18 @@ class simulate:
           
         #print(str(i)+ "of"+ str(len(self.temp_wrenches))+"  "+str(len(self.temp_id[i])))
             if len(temp_id)==0:
+                self.calc_type.append(1)
                 self.calcultation_time.append(0)
                 self.EPSILON4.append(0)
                 print("epsilon=0"," nc= ",len(temp_position_x)," try1") 
             elif len(temp_id)==1:
+                self.calc_type.append(2)
                 self.calcultation_time.append(0)
                 self.EPSILON4.append(0)
                 print("epsilon=0"," nc= ",len(temp_position_x),"try2") 
              
             elif np.all((temp_wrenches_norm==0)):
+                self.calc_type.append(3)
                 self.calcultation_time.append(0)
                 self.EPSILON4.append(0)
                 print("epsilon=0"," nc= ",len(temp_position_x)," try3")     
@@ -2276,6 +2058,7 @@ class simulate:
                 wrench_norm=np.asarray(temp_wrenches_norm)
                 try:
                    # print(wrench_norm)
+                   
                     hull = ConvexHull(wrench_norm)
                     sim_start=timeit.default_timer() 
                     (epsilon,hullwrenchnorm,hullwrenchmags)=self.ferrari_canny_metric(wrench_norm)
@@ -2285,10 +2068,12 @@ class simulate:
                     epsilon=np.round(epsilon,3)
                     p=[0,0,0]
                     if self.in_hull(p,wrench_norm)==False:
+                        self.calc_type.append(4)
                         self.calcultation_time.append(np.round(sim_end-sim_start,3))
                         self.EPSILON4.append(0)
                         print("epsilon=0"," nc= ",len(temp_position_x)," try4") 
                     else:
+                        self.calc_type.append(5)
                         self.calcultation_time.append(np.round(sim_end-sim_start,3))
                         epsilon=np.round(epsilon,3)
                         print("epsilon="+str(epsilon)," nc= ",len(self.position_x_contact_ball_)," try5") 
@@ -2298,9 +2083,11 @@ class simulate:
                     print("epsilon=0"," nc= ",len(self.position_x_contact_ball_)," try6")   
                     self.calcultation_time.append(0)
                     self.EPSILON4.append(0)
+                    self.calc_type.append(6)
         else:
             print("epsilon=0","try7") 
             self.EPSILON4.append(0)
+            self.calc_type.append(7)
             self.calcultation_time.append(0)          
 
     def save_contacts(self):
@@ -3499,6 +3286,7 @@ class controller():
         for i in range(self.nb):
             #Fx1=self.Psi.FXGRASP(self.bot_position_x[i],self.bot_position_z[i],time)
             #Fz1=self.Psi.FYGRASP(self.bot_position_x[i],self.bot_position_z[i],time)
+            
             #Fx1 = self.Psi.Fx_point(self.bot_position_x[i]+random.uniform(-.01, 0.01),self.bot_position_z[i]+random.uniform(-.01, 0.01),self.xc2,self.zc2)
             #Fz1 = self.Psi.Fy_point(self.bot_position_x[i]+random.uniform(-.01, 0.01),self.bot_position_z[i]+random.uniform(-.01, 0.01),self.xc2,self.zc2)
             
@@ -3567,6 +3355,7 @@ class controller():
         #     self.Ball.balls[1].SetBodyFixed(False) 
         #     self.Ball.balls[2].SetBodyFixed(False) 
         noise=random.uniform(-.01, 0.01)
+        noise=0
         if self.t<self.tcut1:
             print("approach")
         
@@ -3597,8 +3386,8 @@ class controller():
             #self.Rr = 2
             self.Rr = self.Rr2
             self.alpha_=self.alpha2
-            self.a=self.parameters['R']
-            self.b=self.parameters['R']
+            self.a=self.parameters['R']#+.05
+            self.b=self.parameters['R']#+.05
             
         # move to next position 
         elif self.t>self.tcut2 and self.t<self.tcut3 and self.trig2!=0:
@@ -3608,8 +3397,8 @@ class controller():
             #self.Rr = 2
             self.Rr = self.Rr2
             self.alpha_=self.alpha2
-            self.a=self.parameters['R']
-            self.b=self.parameters['R']
+            self.a=self.parameters['R']#+.05
+            self.b=self.parameters['R']#+.05
             
         elif self.t>=self.tcut3:
             self.t = 0
@@ -3805,7 +3594,7 @@ class export_data():
             (self.bq0,self.bq1,self.bq2,self.bq3)=self.ball.return_angle_data()
             self.THETA=self.simulation.THETA
             self.Rr_=self.simulation.Rr_
-            
+            self.calc_type=self.simulation.calc_type
         self.Field_value=self.controls.Field_value
         
         self.F_controller_x=self.controls.F_controller_x
@@ -4504,7 +4293,10 @@ class export_data():
             file_name=self.results_dir+'/Qcm.csv' 
             savetxt(file_name,self.Qcm, delimiter=',')    
 
-            
+            #### calc_type
+            file_name=self.results_dir+'/calc_type.csv' 
+            savetxt(file_name,self.calc_type, delimiter=',') 
+
 class MyReportContactCallback(chrono.ReportContactCallback):
     """ Class for reporting and storing the the contact forces and postions  """
     def __init__(self):
@@ -4672,11 +4464,13 @@ class MyReportContactCallback(chrono.ReportContactCallback):
 
 class R_functions():  
     """ R-function Class """
-    def __init__(self,name):
+    def __init__(self,name,path):
         self.direct = os.path.dirname(__file__)
         self.name = name
+        self.path=path
+        self.mainDirectory = path
         ###### Imported Variables #########
-        self.mainDirectory = self.direct+"/Experiments/"
+        #self.mainDirectory = self.direct+"/Experiments/"
         parameters = np.load(self.mainDirectory+self.name+'/Parameters.npy',allow_pickle=True)
         self.parameters = parameters.tolist()
         self.control_mode=self.parameters['control_mode']  # control mode
@@ -5474,10 +5268,7 @@ def create_segment(x,y):
         segments[i,3]=y[i+1]
     return(segments)     
 
-
-
-
-
+         
 class import_data:
      def __init__(self,name,path,wxmin,wxmax,wymin,wymax,Psi=None):
          self.name=name
@@ -8504,6 +8295,7 @@ class import_data:
         fig, ax = plt.subplots(figsize=(fxs,fys),dpi=300)
         ax = plt.axes(xlim=(wxmin,wxmax), ylim=(wymin, wymax))
         plt.axis('off')
+
         xcenter=self.ballx_position[i]
         ycenter=self.ballz_position[i]
         
@@ -12636,4 +12428,127 @@ class import_data:
         sum1=sum1 + vertices[0,i]*(vertices[1,0]-vertices[1,i-1])
 
         A=.5*abs(sum1)
-        return (A)      
+        return (A)     
+    
+    
+class select_import_data:
+     def __init__(self,name,path,wxmin,wxmax,wymin,wymax,Psi=None):  
+         self.name=name
+         self.path=path
+         self.mainDirectory = path   # main directory 
+         parameters=np.load(self.mainDirectory+self.name+'/Parameters.npy',allow_pickle=True)
+         #print(parameters)
+         data=np.load(self.mainDirectory+self.name+'/Radii'+self.name+'.npz',allow_pickle=True)
+         self.Rm=data['Rm'] 
+         self.wxmin = wxmin 
+         self.wxmax = wxmax
+         self.wymin = wymin
+         self.wymax = wymax
+         d=1
+         self.m=8
+         self.wxmin2 = -d
+         self.wxmax2 = d
+         self.wymin2 = -d
+         self.wymax2 = d
+
+         self.Psi=Psi
+         self.parameters=parameters.tolist()    # loads saved parameters      
+         #print(self.parameters)
+         self.nb=self.parameters['nb'] # number of bots
+         self.ni=self.parameters['total_particles']
+         self.ns=self.parameters['ns']
+         self.nm=self.nb*self.ns # total membrane particles 
+         self.bot_width=self.parameters['bot_width']
+         self.geom = self.parameters['ball_geometry']
+         self.particle_width=self.parameters['particle_width']
+         self.particle_width2=self.parameters['particle_width2']
+         self.radius2=self.particle_width/2 # radius of particles
+         self.radius3=self.particle_width2/2 # radius of particles
+         self.control_mode=self.parameters['control_mode']
+         self.skin_width=self.parameters['skin_width']
+         self.height=self.parameters['bot_height']
+         
+         
+         
+         self.path=self.path+self.name+"/results/"
+         os.chdir(self.path)
+         self.files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
+         
+         #### EPSILON_
+         self.EPSILON_ = np.genfromtxt(self.files[self.files.index('EPSILON.csv') ] ,delimiter=',')  
+         
+         #### CALCULATION TIME
+         self.calcultation_time  = np.genfromtxt(self.files[self.files.index('calcultation_time.csv') ] ,delimiter=',')
+             
+             
+         #### RHO
+         self.rho = self.parameters['rho'] 
+             
+         #### Qcm
+         self.Qcm = np.genfromtxt(self.files[self.files.index('Qcm.csv') ] ,delimiter=',')
+         
+         #### THETA
+         self.THETA=np.genfromtxt(self.files[self.files.index('THETA.csv') ] ,delimiter=',')
+         
+         #### Rr_
+         self.Rr_=np.genfromtxt(self.files[self.files.index('Rr_.csv') ] ,delimiter=',')
+         
+        
+         self.angle_entries=[]
+         self.epsilon_section={}
+         self.epsilon_theta_section_max={}
+         self.epsilon_theta_section_mean={}
+         self.epsilon_theta_section_median={}
+         
+         
+         
+         self.average_epsilon=[]
+         self.max_epsilon=[]
+         self.median_epsilon=[]
+         
+         
+         
+     def sort_epsilon_and_theta(self):
+        theta=self.THETA#[0:-2] 
+        epsilon=self.EPSILON_
+        
+        res0=np.where(epsilon<50)
+        epsilon=epsilon[res0[0]]
+        theta=theta[res0[0]]
+        for k, g in itertools.groupby(theta):
+            self.angle_entries.append(k) 
+            self.epsilon_section["theta:"+str(k)]=[]
+            
+        for i in range(12):
+            self.epsilon_theta_section_max[str(i)]=[]
+            self.epsilon_theta_section_mean[str(i)]=[]
+            self.epsilon_theta_section_median[str(i)]=[]
+            
+            
+        for i in range(len(self.angle_entries)):
+            res=np.where(theta==self.angle_entries[i])
+            self.epsilon_section["theta:"+str(self.angle_entries[i])].append(epsilon[res[0]])
+            epsilon2=epsilon[res[0]]
+            res2=np.nonzero(epsilon[res[0]])
+            res2=res2[0]
+            self.average_epsilon.append(np.mean(epsilon2[res2]))
+            self.max_epsilon.append(max(epsilon[res[0]]))
+            self.median_epsilon.append(np.median(epsilon2[res2]))
+        
+        count=0
+        for i in range(len(self.max_epsilon)):
+            
+            if count==12:
+                count=0
+            else:
+                count=count
+            
+            #self.epsilon_theta_section[str(count)].append(self.max_epsilon[i])
+            self.epsilon_theta_section_max[str(count)].append(self.max_epsilon[i])
+            self.epsilon_theta_section_mean[str(count)].append(self.average_epsilon[i])
+            self.epsilon_theta_section_median[str(count)].append(self.median_epsilon[i])
+            count=count+1
+            
+            
+
+         

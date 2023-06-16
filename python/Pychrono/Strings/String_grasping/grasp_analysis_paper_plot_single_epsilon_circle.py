@@ -28,7 +28,7 @@ plt.rcParams['axes.linewidth'] = .1
 path = os.path.dirname(__file__)
 path=path+"/Experiments/"
 #os.chdir(path)
-path="D:/dmulroy/Experiments/circle_pull/"
+path="D:/dmulroy/Experiments/circle_pull2/"
 def moving_average(a, n=3) :
     ret = np.cumsum(a, dtype=float)
     ret[n:] = ret[n:] - ret[:-n]
@@ -44,9 +44,10 @@ dxmax=d
 dymin=-d
 dymax=d
 name1 = "17_01_2023_18_49_15"
+name1 = '25_04_2023_18_10_21'
 #Psi=sim_obj.R_functions(name1)  
 sim_data1=sim_obj.import_data(name1,path,dxmin,dxmax,dymin,dymax,None)
-
+#sim_data1.create_frames_pull_epsilon2(True,d)
 
 # %% In[extract data]
 epsilon1=sim_data1.EPSILON_
@@ -68,7 +69,8 @@ while entry==0:
 tzero=len(epsilon1)-count+1
 tcut=epsilon1[tzero+1]
 #tzero.append(len(epsilon_[i])-count+1)
-entry=[0,30,75,100,tzero+1]
+entry=[0,50,75,100,125,tzero+1,140,145]
+entry=[0,50,75,100,125,tzero+1,139,140,141,142,143,144,145]
 # %% In[epsilon_three_shapes_legend]
 name="epsilon_single_shape"
 fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(7.5,1.5),dpi=300)
@@ -77,7 +79,7 @@ axs.plot(time1[nn-1:],epsilon1_clean,color='tab:red',linewidth=2,label='Circle')
 for i in entry:
     axs.scatter(time1[i],epsilon1[i],marker='o',color='tab:red',edgecolors='k',zorder=3)
 axs.axvline(x = 0, color = 'k')
-axs.axvline(x = 6, color = 'k')
+axs.axvline(x = 10, color = 'k')
 axs.axvline(x = 15, color = 'k')
 p1 = patches.FancyArrowPatch((0, 7), (6, 7), arrowstyle='<->', mutation_scale=10)
 axs.add_patch(p1) 
@@ -96,8 +98,8 @@ axs.grid(True,linewidth=0.1,zorder=-1)
 
 #plt.tight_layout()
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
-plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
-plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
+#plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
+#plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 plt.close('all')
 
@@ -106,7 +108,7 @@ plt.close('all')
 membrane=True
 directory="C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"
 time_=1
-entry=[0,30,75,100,tzero+1]
+entry=[0,50,75,100,125,tzero+1,139,140,141,142,143,144,145]
 wxmin=-2
 wxmax=4
 wymin=-2
@@ -115,7 +117,7 @@ fxs=1.25
 fys=.8325
 name="circle"
 for i in entry:
-    sim_data1.create_frames_snapshot(name,True,membrane,directory,i,wxmin,wxmax,wymin,wymax,fxs,fys)
+    sim_data1.create_frames_snapshot(name,True,membrane,directory,i,wxmin,wxmax,wymin,wymax,fxs,fys,True)
 
 
 

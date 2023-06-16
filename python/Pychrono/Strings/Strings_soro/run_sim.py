@@ -45,24 +45,24 @@ bots = sim_obj.robots(name,my_system,body_floor,path)
 # Create the interiors
 interior = sim_obj.Interiors(name,my_system,body_floor,path)
 
-# Create object to be chases
+# # Create object to be chases
 
-ball=sim_obj.Ball(name,my_system,body_floor,path)
+# ball=sim_obj.Ball(name,my_system,body_floor,path)
 
-# Report contact class
-my_rep = sim_obj.MyReportContactCallback()
+# # Report contact class
+# my_rep = sim_obj.MyReportContactCallback()
 
-# Potential Fields
-Psi=sim_obj.Potential_fields(name)
+# # Potential Fields
+# Psi=sim_obj.Potential_fields(name)
 
-controls=sim_obj.controller(name,my_system,bots,Psi,path,ball,interior=interior)
+# controls=sim_obj.controller(name,my_system,bots,Psi,path,ball,interior=interior)
 
-# Create simulation
-sim = sim_obj.simulate(name,my_system,bots,interior,controls,my_rep,path,ball)
+# # Create simulation
+# sim = sim_obj.simulate(name,my_system,bots,interior,controls,my_rep,path,ball)
 
-# Run the simulation 
-sim.simulate()
+# # Run the simulation 
+# sim.simulate()
 
-# export data
-data_export=sim_obj.export_data(my_system,bots,controls,interior,ball,sim,Psi,my_rep,path,name)
-data_export.export_data()
+# # export data
+# data_export=sim_obj.export_data(my_system,bots,controls,interior,ball,sim,Psi,my_rep,path,name)
+# data_export.export_data()
