@@ -17,9 +17,10 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-time_end = 180*10
+#time_end = 180*4
+time_end = 160*5
 save_rate = 100 #save every n number of steps
-visual = 'irr'
+visual = 'pov'
 
 #xcenter = 2.25
 xcenter = 0
@@ -96,9 +97,11 @@ particle_height = bot_height # meters
 particle_geom = 'cylinder'
 interior_mode = "bidispersion" # interior particle mode
 #interior_mode = "Verify"
-scale_radius =1
+scale_radius = 1.02
 offset_radius = 0
 
+
+Rbar = scale_radius*R
 #### FLOOR PARAMETERS ####
 floor_length=10 # Length of the body floor
 floor_height=1     # height of the body floor
@@ -157,7 +160,7 @@ if control_mode=="shape_morphing":
 if control_mode=="grasping_explore":
     ball_geometry = "circle"
      
-    #ball_geometry = "square" 
+    ball_geometry = "square" 
     
     #ball_geometry = "triangle"
     # circle
@@ -187,7 +190,7 @@ if control_mode=="grasping_explore":
     ball_mass = 5
     a1 = .01*ball_radius
     b1 = 5*ball_radius
-    
+    increment = np.pi/4
     
     const=.01
     a2 = const
@@ -201,22 +204,30 @@ if control_mode=="grasping_explore":
     xc2 = ballx
     yc2 = ballz
     
+    particle_mix = True
     
-    xcenter = ball_radius+R+.3
+    xcenter = (ball_radius+R+.3)
     zcenter = 0 
     
     
     Rr1=0
-    Rr2=xcenter
+    Rr2=abs(xcenter)
     #xcenter = 2.25
     #xcenter = 0
     #zcenter = 0
     
-    tcut1 = 5
-    tcut2 = 10
-    tcut3 = 15
-    alpha1 = 2.25
-    alpha2 = 2.25
+    # tcut1 = 10
+    # tcut2 = 15
+    # tcut3 = 20
+    
+    tcut1 = 10
+    tcut2 = 15
+    tcut3 = 20
+    
+
+    
+    alpha1 = 2.5
+    alpha2 = 2.5
     beta = 0
     
     
@@ -248,7 +259,7 @@ if control_mode=="grasping":
     if ball_geometry=="import":
         ball_radius=3
     #ball_radius = R*0.3
-
+    particle_mix = True
     ballx = ball_radius+R+.3
     ballz = 0 
     ball_mass = 5
@@ -283,7 +294,7 @@ now = datetime.now()
 dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
 #mainDirectory = "F:/Soro_chrono/python/Pychrono/Strings/String_grasping/"
 mainDirectory =os.path.abspath(os.getcwd())
-savefile = mainDirectory +'/Experiments/'+ dt_string
+savefile = mainDirectory +'/Experiments/square_search/'+ dt_string
 os.makedirs(savefile, exist_ok=True)
 txtFile = savefile+'/Parameters.csv'
     
@@ -362,7 +373,7 @@ if control_mode=="grasping_explore":
 
     envParams['xc2'] = xc2
     envParams['yc2'] = yc2    
-
+    envParams['increment'] = increment
     envParams['tcut1'] = tcut1
     envParams['tcut2'] = tcut2
     envParams['tcut3'] = tcut3   
@@ -398,12 +409,13 @@ envParams['particle_width'] = particle_width
 envParams['particle_width2'] = particle_width2
 envParams['particle_height'] = particle_height 
 envParams['particle_geom'] = particle_geom
+envParams['particle_mix'] = particle_mix
 envParams['offset_radius'] = offset_radius
 envParams['scale_radius'] = scale_radius
 # floor parameters
 envParams['floor_length'] = floor_length
 envParams['floor_height'] = floor_height
-
+envParams['Rbar'] = Rbar
 
 
 # Physical Paramters

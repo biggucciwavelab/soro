@@ -324,6 +324,11 @@ name = "09_06_2023_11_31_33"
 name = "09_06_2023_12_01_14"
 name = "09_06_2023_12_01_23"
 name = "09_06_2023_12_01_32"
+name = "08_07_2023_13_14_12"
+
+
+name = "08_07_2023_14_24_56"
+name = "08_07_2023_14_55_06"
 d=3
 snap_shot=False
 membrane=True
@@ -342,24 +347,26 @@ wymin=dymin
 wymax=dymax
 Psi=sim_obj.R_functions(name,path)  
 sim_data=sim_obj.import_data(name,path,dxmin,dxmax,dymin,dymax,Psi)
+ball_angle=sim_data.ball_angle
+yaw=sim_data.yaw
+pitch=sim_data.pitch
+roll=sim_data.roll
+# print('plot_epsilon4')
+# sim_data.plot_epsilon4()
 
+# print('plot_epsilon5dx')
+# sim_data.plot_epsilon5dx()
 
-print('plot_epsilon4')
-sim_data.plot_epsilon4()
+# print('plot_epsilon5')
+# sim_data.plot_epsilon5()
 
-print('plot_epsilon5dx')
-sim_data.plot_epsilon5dx()
+# print('plot_potential_Field_value_sum')
+# sim_data.plot_potential_Field_value()
 
-print('plot_epsilon5')
-sim_data.plot_epsilon5()
+# print('plot_potential_Field_value')
+# sim_data.plot_potential_Field_value_individual()
 
-print('plot_potential_Field_value_sum')
-sim_data.plot_potential_Field_value()
-
-print('plot_potential_Field_value')
-sim_data.plot_potential_Field_value_individual()
-
-print('create_frames_u3')
-sim_data.create_frames_u3(membrane,wxmin,wxmax,wymin,wymax)
+# print('create_frames_u3')
+# sim_data.create_frames_u3(membrane,wxmin,wxmax,wymin,wymax)
 
 

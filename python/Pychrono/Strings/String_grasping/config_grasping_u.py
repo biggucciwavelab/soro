@@ -17,11 +17,10 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-time_end = 30
+time_end = 20
 #time_end = 25
 #time_end = 40
-#time_end = 100
-save_rate = 100 #save every n number of steps
+save_rate = 50 #save every n number of steps
 visual = 'pov'
 
 #xcenter = 2.25
@@ -80,7 +79,7 @@ R = np.sqrt((cord_length**2)/(2*(1-np.cos(theta)))) # radius [m]
 print(np.pi*(R)**2)
 membrane_density = 2000
 
-ns=8
+ns=7
 
 
 
@@ -254,31 +253,32 @@ if control_mode=="grasping_explore":
 if control_mode=="grasping_u":
     
     ball_geometry = "circle"
-    #ball_geometry = "square"
-    #ball_geometry = "c_shape"
-    br=0.5
-    br2=br
+    ball_geometry = "square"
+    ball_geometry = "c_shape"
+    br=0.36
+    br2=0.36
     if ball_geometry=="circle":
         ball_radius=br
         print("perimeter object=",str(2*br*np.pi))
-    # square     
+
+        
     if ball_geometry=="square":	
         
         br=(2*br)*np.pi/4
-        ball_radius=br/2	  
+        ball_radius=br/2	 
         #print("perimeter object=",str(2*br*np.pi))
     if ball_geometry=="c_shape":	
         
         br=(2*br)*np.pi/4
         
         ball_radius=br/2
-        w=2*ball_radius
-        l=6*ball_radius
-        t=.2
+        w=4*ball_radius
+        l=2*ball_radius
+        t=.1
     
     p=0.07
     width_grasp = 0.9
-    lengtho_grasp = 2*br
+    lengtho_grasp = .36*2
     #atilda=np.round(np.pi * ((cord_length * nb / np.pi) / 2)**2,2)
     #print("atilda=",atilda)
     pack=1
@@ -287,7 +287,7 @@ if control_mode=="grasping_u":
     print("atilda=",atilda)
     length_grasp = atilda/(2*width_grasp) - lengtho_grasp/2
     print("length_grasp=",length_grasp)
-    print("perimeter grasp=",str(length_grasp+lengtho_grasp))
+    
     #print("Area_act=",np.round(np.pi*R**2,2))
     
     #print("Asquare=",np.round(width_grasp*(2*length_grasp+lengtho_grasp),2))
@@ -302,11 +302,13 @@ if control_mode=="grasping_u":
     fb_rate=1*dt
     update_rate = 1
     rho_ = 10
-    rtilda = br*1.5
+    rtilda = 1.5*br2
+    #xcenter, -2.207794544559873
+    #xcenter, -2.2850512057367918
     xcenter = -(ball_radius+R+.3)
     zcenter = 0 
     
-    xcenter_grasp = -2*br2
+    xcenter_grasp = -3*br2
     ycenter_grasp = zcenter
     
     xcenter_grasp2 = ballx
@@ -322,11 +324,10 @@ if control_mode=="grasping_u":
     tcut1 = 45
     tcut2 = 30
     tcut3 = 150
-    alpha1 = 2.0
+    alpha1 = 2.5
     alpha2 = 1
     beta = 0
     error = .01
-    
 #### CONTROL MODE -- GRASPING ####
 if control_mode=="grasping":
     
