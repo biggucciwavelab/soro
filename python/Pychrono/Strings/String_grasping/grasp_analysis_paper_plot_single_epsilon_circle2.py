@@ -26,9 +26,10 @@ plt.rcParams['mathtext.fontset'] = 'dejavuserif'
 plt.rcParams['font.size'] = 9
 plt.rcParams['axes.linewidth'] = .1
 path = os.path.dirname(__file__)
-path=path+"/Experiments/"
-#os.chdir(path)
-path="D:/dmulroy/Experiments/circle_pull2/"
+
+
+path="C:/soro/python/Pychrono/Strings/String_grasping/Experiments/grasping_u/"
+
 def moving_average(a, n=3) :
     ret = np.cumsum(a, dtype=float)
     ret[n:] = ret[n:] - ret[:-n]
@@ -45,6 +46,8 @@ dymin=-d
 dymax=d
 name1 = "17_01_2023_18_49_15"
 name1 = '25_04_2023_18_10_21'
+
+name1 = "30_12_2023_13_22_06" # circle
 #Psi=sim_obj.R_functions(name1)  
 sim_data1=sim_obj.import_data(name1,path,dxmin,dxmax,dymin,dymax,None)
 #sim_data1.create_frames_pull_epsilon2(True,d)
@@ -63,14 +66,15 @@ tzero=[]
 #for i in range(len(epsilon1_clean)):
 entry=0
 count=0
-while entry==0:
-    entry=epsilon1[len(epsilon1)-1-count] 
-    count=count+1
-tzero=len(epsilon1)-count+1
-tcut=epsilon1[tzero+1]
+#while entry==0:
+    #entry=epsilon1[len(epsilon1)-1-count] 
+    #count=count+1
+#tzero=len(epsilon1)-count+1
+#tcut=epsilon1[tzero+1]
 #tzero.append(len(epsilon_[i])-count+1)
-entry=[0,50,75,100,125,tzero+1,140,145]
-entry=[0,50,75,100,125,tzero+1,139,140,141,142,143,144,145]
+#entry=[0,50,75,100,125,tzero+1,140,145]
+#entry=[0,50,75,100,125,tzero+1,139,140,141,142,143,144,145]
+entry=[0,24,54,80,120,300,400,520]
 # %% In[epsilon_three_shapes_legend]
 name="epsilon_single_shape"
 fig, axs = plt.subplots(nrows=1, ncols=1,figsize=(7.5,1.5),dpi=300)
@@ -78,18 +82,18 @@ axs.plot(time1,epsilon1,color='tab:red',linewidth=2,alpha=0.5)
 axs.plot(time1[nn-1:],epsilon1_clean,color='tab:red',linewidth=2,label='Circle')
 for i in entry:
     axs.scatter(time1[i],epsilon1[i],marker='o',color='tab:red',edgecolors='k',zorder=3)
-axs.axvline(x = 0, color = 'k')
-axs.axvline(x = 10, color = 'k')
-axs.axvline(x = 15, color = 'k')
-p1 = patches.FancyArrowPatch((0, 7), (6, 7), arrowstyle='<->', mutation_scale=10)
-axs.add_patch(p1) 
-p1 = patches.FancyArrowPatch((6, 7), (15, 7), arrowstyle='<->', mutation_scale=10)
-axs.add_patch(p1) 
+#axs.axvline(x = 0, color = 'k')
+#axs.axvline(x = 10, color = 'k')
+#axs.axvline(x = 15, color = 'k')
+#p1 = patches.FancyArrowPatch((0, 7), (6, 7), arrowstyle='<->', mutation_scale=10)
+#axs.add_patch(p1) 
+#p1 = patches.FancyArrowPatch((6, 7), (15, 7), arrowstyle='<->', mutation_scale=10)
+#axs.add_patch(p1) 
 #xticks=[0,5,10,15,20,25,30]#,50,55,60]#,65,70,75,80,85,90]
 #yticks=[0,2,4,6,8]
 #axs.set_xticks(np.round(xticks,2))
 #axs.set_yticks(np.round(yticks,2))
-#axs.set_title('(a)')
+axs.set_title('(a)')
 axs.set_ylabel('$\epsilon$',labelpad=-1)
 axs.set_xlabel('Time (s)',labelpad=-2)
 axs.xaxis.set_tick_params(width=.25,length=2,pad=1)
@@ -98,28 +102,30 @@ axs.grid(True,linewidth=0.1,zorder=-1)
 
 #plt.tight_layout()
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".svg")
-#plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".pdf")
-#plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".eps")
 plt.savefig("C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"+name+".jpeg")
 plt.close('all')
 
 
 # %%
-membrane=True
+#membrane=True
 directory="C:/soro/python/Pychrono/Strings/String_grasping/paper_plots/"
-time_=1
-entry=[0,50,75,100,125,tzero+1,139,140,141,142,143,144,145]
-wxmin=-2
+# time_=1
+# entry=[0,50,75,100,125,tzero+1,139,140,141,142,143,144,145]
+
+
+wxmin=-4
 wxmax=4
-wymin=-2
-wymax=2
-fxs=1.25
-fys=.8325
+wymin=-3
+wymax=3
+fsx=1.25
+fsy=.8325
+xticks=[-4,-2,0,4]
+yticks=[-3,0,3]
 name="circle"
-for i in entry:
-    sim_data1.create_frames_snapshot(name,True,membrane,directory,i,wxmin,wxmax,wymin,wymax,fxs,fys,True)
-
-
+sim_data1.create_frames_u4_snapshots(membrane,wxmin,wxmax,wymin,wymax,fsx,fsy,xticks,yticks,entry,directory,name)
+#for i in entry:
+    #sim_data1.create_frames_snapshot(name,True,membrane,directory,i,wxmin,wxmax,wymin,wymax,fxs,fys,True)
+    #sim_data1.create_frames_u3_snapshots(membrane,wxmin,wxmax,wymin,wymax,fsx,fsy,xticks,yticks,entry)
 
 
 

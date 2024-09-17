@@ -65,13 +65,19 @@ name = "09_07_2023_20_32_09"
 
 name = "09_07_2023_20_31_57"
 #entry=[0,100,109,180]
+
+name = "30_12_2023_13_22_06" # circle
+
+name = "30_12_2023_13_21_58" # square
+
+
 d=4
 snap_shot=False
 membrane=False
 dxmin=-4
-dxmax=2
-dymin=-3
-dymax=3
+dxmax=3
+dymin=-4
+dymax=4
 
 wxmin=dxmin
 wxmax=dxmax
@@ -88,11 +94,11 @@ fsy=1.
 # entry=[0,165,166,180,250] # circle
 sim_data.create_frames_u3_only_robot(membrane,wxmin,wxmax,wymin,wymax)
 
-xticks=[-4,-2,0,2]
-yticks=[-3,0,3]
+# xticks=[-4,-2,0,4]
+# yticks=[-3,0,3]
 
-entry=[0,85,120,198]
-sim_data.create_frames_u3_snapshots(membrane,wxmin,wxmax,wymin,wymax,fsx,fsy,xticks,yticks,entry)
+# entry=[0,25,54,80,120]
+# sim_data.create_frames_u3_snapshots(membrane,wxmin,wxmax,wymin,wymax,fsx,fsy,xticks,yticks,entry)
 
 
 

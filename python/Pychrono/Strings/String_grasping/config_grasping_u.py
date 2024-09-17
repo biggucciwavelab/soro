@@ -17,7 +17,7 @@ from shutil import copyfile
 #### SIMULATION MODES ####
 dimension = '2D' #2D: 2D sim   3D: 3D sim
 dt = 0.002 # time step 
-time_end = 20
+time_end = 30
 #time_end = 25
 #time_end = 40
 save_rate = 50 #save every n number of steps
@@ -321,7 +321,7 @@ if control_mode=="grasping_u":
     xc2 = ballx+rtilda
     yc2 = ballz
     
-    tcut1 = 45
+    tcut1 = 5 
     tcut2 = 30
     tcut3 = 150
     alpha1 = 2.5
